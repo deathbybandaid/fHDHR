@@ -302,18 +302,24 @@ class Config():
 
         if not value:
             value = None
-        elif value.lower() in ["none"]:
-            value = None
-        elif value.lower() in ["false"]:
-            value = False
-        elif value.lower() in ["true"]:
-            value = True
+        elif key == "xmltv_offset":
+            value = str(value)
+        elif str(value) in ["0"]:
+            value = 0
         elif isint(value):
             value = int(value)
         elif isfloat(value):
             value = float(value)
+        elif is_arithmetic(value):
+            value = eval(value)
         elif isinstance(value, list):
             ",".join(value)
+        elif str(value).lower() in ["none", ""]:
+            value = None
+        elif str(value).lower() in ["false"]:
+            value = False
+        elif str(value).lower() in ["true"]:
+            value = True
 
         self.dict[section][key] = value
 
