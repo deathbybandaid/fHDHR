@@ -22,6 +22,7 @@ class Tuners():
     def get(self, *args):
 
         client_address = request.remote_addr
+        base_url = request.url_root[:-1]
 
         accessed_url = request.args.get('accessed', default=request.url, type=str)
 
@@ -98,6 +99,7 @@ class Tuners():
                             "origin_quality": self.fhdhr.config.dict["streaming"]["origin_quality"],
                             "transcode_quality": transcode_quality or self.fhdhr.config.dict["streaming"]["transcode_quality"],
                             "accessed": accessed_url,
+                            "base_url": base_url,
                             "client": client_address,
                             "client_id": session["session_id"]
                             }
