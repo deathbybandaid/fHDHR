@@ -14,6 +14,10 @@ class Direct_RTP_Stream():
 
         self.bytes_per_read = int(self.fhdhr.config.dict["streaming"]["bytes_per_read"])
 
+        print(self.stream_args)
+
+        self.address = self.fhdhr.api
+
         self.fhdhr.logger.info("Setting up socket to listen on.")
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind(('', 0))
