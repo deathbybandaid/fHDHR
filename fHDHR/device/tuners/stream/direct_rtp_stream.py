@@ -17,9 +17,7 @@ class Direct_RTP_Stream():
         self.fhdhr.logger.info("Setting up socket to listen on.")
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind(('', 0))
-        self.socket.listen(1)
-        port = self.socket.getsockname()[1]
-        print(port)
+        print(self.socket.getsockname())
         self.socket.close()
 
     def get(self):
