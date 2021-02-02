@@ -13,14 +13,15 @@ from fHDHR.tools import isint, isfloat, is_arithmetic, is_docker
 
 class Config():
 
-    def __init__(self, filename, script_dir, fHDHR_web):
+    def __init__(self, args, script_dir, fHDHR_web):
         self.fHDHR_web = fHDHR_web
 
         self.internal = {}
         self.conf_default = {}
         self.dict = {}
         self.internal["versions"] = {}
-        self.config_file = filename
+        self.config_file = args.cfg
+        self.iliketobreakthings = args.iliketobreakthings
 
         self.core_setup(script_dir)
 
@@ -258,7 +259,7 @@ class Config():
                 import_val = True
                 if each_section in list(self.conf_default.keys()):
                     if each_key in list(self.conf_default[each_section].keys()):
-                        if not self.conf_default[each_section][each_key]["config_file"]:
+                        if not self.conf_default[each_section][each_key]["config_file"] or self.iliketobreakthings:
                             import_val = False
 
                 if import_val:
