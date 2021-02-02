@@ -24,6 +24,7 @@ def build_args_parser():
     """Build argument parser for fHDHR"""
     parser = argparse.ArgumentParser(description='fHDHR')
     parser.add_argument('-c', '--config', dest='cfg', type=str, required=True, help='configuration file to load.')
+    parser.add_argument('--iliketobreakthings', dest='iliketobreakthings', type=str, required=False, default=False, help='Override Config Settings not meant to be overridden.')
     return parser.parse_args()
 
 
@@ -104,6 +105,7 @@ def main(script_dir, fHDHR_web):
 
     try:
         args = build_args_parser()
+        print(args)
         while True:
             returned_code = start(args, script_dir, fHDHR_web)
             if returned_code not in ["restart"]:
