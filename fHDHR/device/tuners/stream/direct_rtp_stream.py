@@ -1,8 +1,9 @@
 import sys
 import time
 import socket
+import re
 
-# from fHDHR.exceptions import TunerError
+from fHDHR.exceptions import TunerError
 
 
 class Direct_RTP_Stream():
@@ -14,15 +15,31 @@ class Direct_RTP_Stream():
 
         self.bytes_per_read = int(self.fhdhr.config.dict["streaming"]["bytes_per_read"])
 
-        print(self.stream_args["base_url"].split("://")[1].split(":")[0])
+        self.fhdhr.logger.info("Attempting to create socket to listen on.")
+        self.address = self.get_sock_address()
+        if not self.address:
+            raise TunerError("806 - Tune Failed: Could Not Create Socket")
 
-        self.address = self.fhdhr.api
-
-        self.fhdhr.logger.info("Setting up socket to listen on.")
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind(('', 0))
-        print(self.socket.getsockname())
+        self.socket.bind((self.address, 0))
+
+        self.fhdhr.logger.info("Create socket at %s:%s." % (self.socket.getsockname()[0], self.socket.getsockname()[1]))
+
         self.socket.close()
+
+    def get_sock_address(self):
+        if self.fhdhr.config.dict["fhdhr"]["discovery_address"]:
+            return self.fhdhr.config.dict["fhdhr"]["discovery_address"]
+        else:
+            try:
+                base_url = self.stream_args["base_url"].split("://")[1].split(":")[0]
+            except IndexError:
+                return None
+            ip_match = re.match('^' + '[\.]'.join(['(\d{1,3})']*4) + '$', base_url)
+            ip_validate = bool(ip_match)
+            if ip_validate:
+                return base_url
+        return None
 
     def get(self):
 
