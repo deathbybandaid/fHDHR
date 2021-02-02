@@ -98,7 +98,10 @@ def start(args, script_dir, fHDHR_web):
     return run(settings, logger, db, script_dir, fHDHR_web, plugins)
 
 
-def config_setup(args):
+def config_setup(args, script_dir, fHDHR_web):
+    if not os.path.isfile(args.cfg):
+        raise fHDHR.exceptions.ConfigurationNotFound(filename=args.cfg)
+    settings = fHDHR.config.Config(args, script_dir, fHDHR_web)
     return ERR_CODE
 
 
@@ -113,7 +116,7 @@ def main(script_dir, fHDHR_web):
         print(args)
 
         if args.setup:
-            return config_setup()
+            return config_setup(args, script_dir, fHDHR_web)
 
         while True:
             returned_code = start(args, script_dir, fHDHR_web)
