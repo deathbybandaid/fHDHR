@@ -24,8 +24,8 @@ def build_args_parser():
     """Build argument parser for fHDHR"""
     parser = argparse.ArgumentParser(description='fHDHR')
     parser.add_argument('-c', '--config', dest='cfg', type=str, required=True, help='configuration file to load.')
-    parser.add_argument('--setup', dest='setup', type=str, required=False, default=False, help='Setup Configuration file.')
-    parser.add_argument('--iliketobreakthings', dest='iliketobreakthings', type=str, const=False, required=False, default=False, help='Override Config Settings not meant to be overridden.')
+    parser.add_argument('--setup', dest='setup', type=str, required=False, nargs='?', const=False, default=False, help='Setup Configuration file.')
+    parser.add_argument('--iliketobreakthings', dest='iliketobreakthings', type=str, nargs='?', const=False, required=False, default=False, help='Override Config Settings not meant to be overridden.')
     return parser.parse_args()
 
 
