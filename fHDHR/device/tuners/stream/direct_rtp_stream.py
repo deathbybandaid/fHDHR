@@ -51,7 +51,7 @@ class Direct_RTP_Stream():
         if self.stream_args["transcode_quality"]:
             self.fhdhr.logger.info("Client requested a %s transcode for stream. Direct Method cannot transcode." % self.stream_args["transcode_quality"])
 
-        self.socket.send(str.encode(self.stream_args["stream_info"]["url"]))
+        self.socket.send("GET", self.stream_args["stream_info"]["url"])
 
         def generate():
 
