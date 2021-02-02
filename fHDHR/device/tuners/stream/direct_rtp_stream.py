@@ -14,7 +14,7 @@ class Direct_RTP_Stream():
 
         self.bytes_per_read = int(self.fhdhr.config.dict["streaming"]["bytes_per_read"])
 
-        print(self.stream_args["base_url"])
+        print(self.stream_args["base_url"].split("://")[1].split(":")[0])
 
         self.address = self.fhdhr.api
 
