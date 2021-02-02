@@ -101,7 +101,12 @@ def start(args, script_dir, fHDHR_web):
 def config_setup(args, script_dir, fHDHR_web):
     if not os.path.isfile(args.cfg):
         raise fHDHR.exceptions.ConfigurationNotFound(filename=args.cfg)
+
     settings = fHDHR.config.Config(args, script_dir, fHDHR_web)
+    fHDHR.plugins.PluginsHandler(settings)
+
+    settings.setup_user_config()
+
     return ERR_CODE
 
 

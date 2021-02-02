@@ -127,6 +127,39 @@ class Config():
         print("Loading Configuration File: %s" % self.config_file)
         self.read_ini_config(self.config_file)
 
+    def setup_user_config(self):
+
+        current_conf = {}
+
+        config_handler = configparser.ConfigParser()
+        config_handler.read(self.config_file)
+        for each_section in config_handler.sections():
+            if each_section.lower() not in list(current_conf.keys()):
+                current_conf[each_section.lower()] = {}
+            for (each_key, each_val) in config_handler.items(each_section):
+                each_val = self.get_real_conf_value(each_key, each_val)
+
+                import_val = True
+                if each_section in list(self.conf_default.keys()):
+                    if each_key in list(self.conf_default[each_section].keys()):
+                        if not self.conf_default[each_section][each_key]["config_file"] or self.iliketobreakthings:
+                            import_val = False
+
+                if import_val:
+                    current_conf[each_section.lower()][each_key.lower()] = each_val
+
+        for config_section in list(self.conf_default.keys()):
+            if config_section not in list(current_conf.keys()):
+                current_conf[config_section] = {}
+            for config_item in list(self.conf_default[config_section].keys()):
+                writeval = True
+                if config_item in list(current_conf[config_section].keys()):
+                    writeval = False
+
+                if writeval:
+                    value = self.conf_default[config_section][config_item]["value"]
+                    self.write(config_item, value, config_section)
+
     def config_verification_plugins(self):
         required_missing = {}
         # create dict and combine items
