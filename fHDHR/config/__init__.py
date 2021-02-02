@@ -302,7 +302,7 @@ class Config():
 
         if not value:
             value = None
-        if value.lower() in ["none"]:
+        elif value.lower() in ["none"]:
             value = None
         elif value.lower() in ["false"]:
             value = False
