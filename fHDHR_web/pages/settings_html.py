@@ -37,7 +37,7 @@ class Settings_HTML():
                 del web_settings_dict[config_section]
 
         conf_sections = list(web_settings_dict.keys())
-        config_section = request.args.get('source', default=conf_sections[0], type=str)
+        config_section = request.args.get('section', default=conf_sections[0], type=str)
         if config_section not in conf_sections:
             config_section = conf_sections[0]
 
