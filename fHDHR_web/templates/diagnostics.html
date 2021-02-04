@@ -5,8 +5,8 @@
   <h4 style="text-align: center;">fHDHR Diagnostic Links</h4>
 
   <p>
-    {% for route_groups in route_groupss %}
-      <button onclick="location.href='/diagnostics?section={{ route_groups }}'" type="button">{{ route_groups }}</button>
+    {% for route_group in route_groups %}
+      <button onclick="location.href='/diagnostics?section={{ route_group }}'" type="button">{{ route_group }}</button>
     {% endfor %}
   </p>
 
