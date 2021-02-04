@@ -16,7 +16,6 @@
     <table class="table-scroll">
       <thead>
         <tr>
-          <th>Config Section</th>
           <th>Config Name</th>
           <th>Config Default Value</th>
           <th>Config Value</th>
@@ -29,11 +28,6 @@
         {% for config_section in list(web_settings_dict.keys()) %}
           <tr>
             <td>{{ config_section }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
           </tr>
 
           {% for config_item in list(web_settings_dict[config_section].keys()) %}
@@ -85,6 +79,9 @@
                 <td></td>
               {% endif %}
 
+            </tr>
+            <tr>
+              <td></td>
             </tr>
             <input type="hidden" name="id" class="help" value="dummy">
           {% endfor %}
