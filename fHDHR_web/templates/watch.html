@@ -3,6 +3,9 @@
 {% block content %}
 
   <h4 style="text-align: center;">fHDHR Channel Watch</h4>
-  <img src="{{ watch_url }}">
+  <video width="320" height="240" autoplay>
+    <source src="{{ watch_url }}" type="video/mp4"> Your browser does not support the video tag.
+  </video>
+
 
 {% endblock %}
