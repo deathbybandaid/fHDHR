@@ -16,17 +16,24 @@
     <table class="table-scroll">
       <thead>
         <tr>
-          <th>Helpful Info</th>
+          <th>Config Section</th>
           <th>Config Name</th>
           <th>Config Default Value</th>
           <th>Config Value</th>
           <th>Action</th>
+          <th>Helpful Info</th>
         </tr>
       </thead>
 
       <tbody class="body-half-screen">
         {% for config_section in list(web_settings_dict.keys()) %}
-          <h4 style="text-align: center;">{{ config_section }}</h4>
+          <tr>
+            <td>{{ config_section }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
 
           {% for config_item in list(web_settings_dict[config_section].keys()) %}
             <tr>
@@ -35,14 +42,7 @@
               <input type="hidden" name="Valid Options" class="help" value="{{ web_settings_dict[config_section][config_item]["valid_options"] }}">
               <input type="hidden" name="Default Value" class="help" value="{{ web_settings_dict[config_section][config_item]["value_default"] }}">
 
-              {% if web_settings_dict[config_section][config_item]["valid_options"] or web_settings_dict[config_section][config_item]["description"] %}
-                <td>
-                  <button type="entry" id="settings_help" value="[{{ config_section }}]{{ config_item }}">Help</button>
-                </td>
-              {% else %}
-                <td></td>
-              {% endif %}
-
+              <td></td>
               <td>{{ config_item }}</td>
               <td>{{ web_settings_dict[config_section][config_item]["value_default"] }}</td>
 
@@ -75,6 +75,15 @@
                 <td></td>
                 <td></td>
               {% endif %}
+
+              {% if web_settings_dict[config_section][config_item]["valid_options"] or web_settings_dict[config_section][config_item]["description"] %}
+                <td>
+                  <button type="entry" id="settings_help" value="[{{ config_section }}]{{ config_item }}">Help</button>
+                </td>
+              {% else %}
+                <td></td>
+              {% endif %}
+
             </tr>
             <input type="hidden" name="id" class="help" value="dummy">
           {% endfor %}
