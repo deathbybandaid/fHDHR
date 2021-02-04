@@ -12,23 +12,21 @@
   </div>
   <br>
 
-  {% for config_section in list(web_settings_dict.keys()) %}
+  <div class="container">
+    <table class="table-scroll">
+      <thead>
+        <tr>
+          <th>Helpful Info</th>
+          <th>Config Name</th>
+          <th>Config Default Value</th>
+          <th>Config Value</th>
+          <th>Action</th>
+        </tr>
+      </thead>
 
-    <h4 style="text-align: center;">{{ config_section }}</h4>
-
-    <div class="container">
-      <table class="table-scroll center text-edit-cols">
-        <thead>
-          <tr>
-            <th>Helpful Info</th>
-            <th>Config Name</th>
-            <th>Config Default Value</th>
-            <th>Config Value</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody class="body-half-screen">
+      <tbody class="body-half-screen">
+        {% for config_section in list(web_settings_dict.keys()) %}
+          <h4 style="text-align: center;">{{ config_section }}</h4>
 
           {% for config_item in list(web_settings_dict[config_section].keys()) %}
             <tr>
@@ -77,14 +75,12 @@
                 <td></td>
                 <td></td>
               {% endif %}
-
             </tr>
+            <input type="hidden" name="id" class="help" value="dummy">
           {% endfor %}
-        </tbody>
-      </table>
-      <input type="hidden" name="id" class="help" value="dummy">
-    </div>
-
-  {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
 {% endblock %}
