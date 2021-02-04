@@ -20,6 +20,6 @@ class Watch_HTML():
         origin = self.fhdhr.origins.valid_origins[0]
         channel_id = [x["id"] for x in self.fhdhr.device.channels.get_channels(origin)][0]
 
-        watch_url = '%s/api/tuners?method=stream&channel=%s&origin=%s' % (base_url, channel_id, origin)
+        watch_url = '%s/api/tuners?method=watch&channel=%s&origin=%s' % (base_url, channel_id, origin)
 
         return render_template('watch.html', request=request, session=session, fhdhr=self.fhdhr, watch_url=watch_url)
