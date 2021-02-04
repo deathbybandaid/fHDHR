@@ -13,7 +13,7 @@
   <br>
 
   <p>
-    {% for conf_section in epg_methods %}
+    {% for conf_section in conf_sections %}
       <button onclick="location.href='/guide?section={{ conf_section }}'" type="button">{{ conf_section }}</button>
     {% endfor %}
   </p>
