@@ -41,4 +41,4 @@ class Settings_HTML():
         if config_section not in conf_sections:
             config_section = conf_sections[0]
 
-        return render_template('settings.html', request=request, session=session, fhdhr=self.fhdhr, web_settings_dict=web_settings_dict, config_section=config_section, list=list)
+        return render_template('settings.html', request=request, session=session, fhdhr=self.fhdhr, web_settings_dict=web_settings_dict, config_section=config_section, conf_sections=conf_sections, list=list)
