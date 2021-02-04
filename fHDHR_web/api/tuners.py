@@ -36,7 +36,7 @@ class Tuners():
         if origin and origin not in origin_methods:
             return "%s Invalid channels origin" % origin
 
-        if method == "stream":
+        if method in ["stream", "watch"]:
 
             channel_number = request.args.get('channel', None, type=str)
             if not channel_number:
@@ -140,7 +140,10 @@ class Tuners():
                 tuner.close()
                 abort(response)
 
-            return Response(stream_with_context(stream.get()), mimetype=stream_args["content_type"])
+            if method == "stream":
+                return Response(stream_with_context(stream.get()), mimetype=stream_args["content_type"])
+            elif method == "watch":
+                return Response(stream_with_context(stream.get()), mimetype="multipart/x-mixed-replace; boundary=frame")
 
         elif method == "close":
 
