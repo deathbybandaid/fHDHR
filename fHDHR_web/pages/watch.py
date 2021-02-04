@@ -1,7 +1,7 @@
 from flask import request, render_template, session
 
 
-class Version_HTML():
+class Watch_HTML():
     endpoints = ["/watch", "/watch.html"]
     endpoint_name = "page_watch_html"
     endpoint_access_level = 0
