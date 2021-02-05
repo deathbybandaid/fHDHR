@@ -45,13 +45,13 @@
             </td>
             <td>
               <select name="enabled">
-                {% if not channelslist[channel]["chan_match"]  %}
+                {% if not channelslist[chan_dict]["chan_match"]  %}
                   <option class="epg_channels" value="None" placeholder="None" selected>None</option>
                   {% for uorigin in unmatched_origins %}
                     <option value="{{ unmatched_origins[uorigin]["id"] }}">{{ uorigin }} {{ unmatched_origins[uorigin]["number"] }}</option>
                   {% endfor %}
                 {% else %}
-                  <option value="{{ channelslist[channel]["chan_match"]["fhdhr_id"] }}">{{ channelslist[channel]["chan_match"]["origin"] }} {{ channelslist[channel]["chan_match"]["number"] }} {{ channelslist[channel]["chan_match"]["name"] }}</option>
+                  <option value="{{ channelslist[chan_dict]["chan_match"]["fhdhr_id"] }}">{{ channelslist[chan_dict]["chan_match"]["origin"] }} {{ channelslist[chan_dict]["chan_match"]["number"] }} {{ channelslist[chan_dict]["chan_match"]["name"] }}</option>
                   {% for uorigin in unmatched_origins %}
                     <option value="{{ unmatched_origins[uorigin]["id"] }}">{{ uorigin }} {{ unmatched_origins[uorigin]["number"] }} {{ unmatched_origins[uorigin]["name"] }}</option>
                   {% endfor %}
