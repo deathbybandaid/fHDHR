@@ -17,7 +17,7 @@ def epg_chanmap_data(items, channel_id):
     chandict = {}
 
     for element in items:
-        if element.name == "epg_id":
+        if element.name == "id":
             if len(chandict.keys()) >= 2 and "id" in list(chandict.keys()):
                 chanlist.append(chandict)
             chandict = {"id": element.value}
