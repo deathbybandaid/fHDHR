@@ -62,7 +62,7 @@ def chan_edit_data(items, channel_id):
                 chandict[element.name] = save_val
 
     if channel_id != "all":
-        chanlist == [x for x in chanlist if x["id"] == channel_id]
+        chanlist = [x for x in chanlist if x["id"] == channel_id]
 
     return chanlist
 
@@ -96,6 +96,7 @@ def chan_edit_reset(evt):
 
 @bind("#Chan_Edit_Modify", "submit")
 def chan_edit_modify(evt):
+    print(evt.currentTarget)
     chanlist = chan_edit_data(
                               document.select(".channels"),
                               str(evt.currentTarget.children[0].id).replace("update_", ""))
