@@ -35,13 +35,13 @@ class Guide_HTML():
 
         whatson_all = self.fhdhr.device.epg.whats_on_allchans(source)
 
-        sorted_channel_list = channel_sort([x for x in list(whatson_all.keys())])
-
         if source in origin_methods:
+
+            sorted_channel_list = channel_sort([self.fhdhr.device.channels.list[source][x].number for x in list(self.fhdhr.device.channels.list[source].keys())])
 
             for channel in sorted_channel_list:
 
-                channel_obj = self.fhdhr.device.channels.get_channel_obj("id", whatson_all[channel]["id"], source)
+                channel_obj = self.fhdhr.device.channels.get_channel_obj("number", channel, source)
 
                 now_playing = whatson_all[channel]["listing"][0]
 
@@ -73,6 +73,8 @@ class Guide_HTML():
                 channelslist[channel_obj.number] = channel_dict
 
         elif source in epg_methods:
+
+            sorted_channel_list = channel_sort([x for x in list(whatson_all.keys())])
 
             for origin in origin_methods:
                 unmatched_origins[origin] = self.fhdhr.device.epg.get_epg_chan_unmatched(origin, source)
