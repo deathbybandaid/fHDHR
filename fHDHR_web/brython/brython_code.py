@@ -11,7 +11,7 @@ def epg_chan_map(event):
     InfoDialog(channel_id, channel_info, ok="Got it")
 
 
-def epg_chanmap_data(items, help_id):
+def epg_chanmap_data(items, channel_id):
 
     chanlist = []
     chandict = {}
@@ -24,7 +24,8 @@ def epg_chanmap_data(items, help_id):
         if element.name != "id":
             chandict[element.name] = element.value
 
-    chanlist = [x for x in chanlist if x["id"] == help_id]
+    chanlist = [x for x in chanlist if x["id"] == channel_id]
+    print(chanlist)
 
     return chanlist
 
