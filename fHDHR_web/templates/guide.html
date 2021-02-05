@@ -35,6 +35,7 @@
           <input type="hidden" name="id" class="epg_channels" value="{{ channelslist[chan_number]["id"] }}">
           <tr>
             <td>
+              <a>{{ channelslist[chan_number]["m3u_url"] }}</a>
               {% if channelslist[chan_number]["m3u_url"] %}
                 {% if channelslist[chan_number]["enabled"] %}
                   <a href="{{ channelslist[chan_number]["m3u_url"] }}">M3U</a>
