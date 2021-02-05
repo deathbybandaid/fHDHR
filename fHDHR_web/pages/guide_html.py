@@ -56,6 +56,7 @@ class Guide_HTML():
 
                 channel_dict = {
                                 "id": channel_obj.dict["id"],
+                                "enabled": channel_obj.enabled,
                                 "name": channel_obj.dict["name"],
                                 "number": channel_obj.number,
                                 "chan_thumbnail": channel_obj.thumbnail,
@@ -113,5 +114,6 @@ class Guide_HTML():
                 channel_dict["chan_match"]["number"] = chan_obj.number
                 channel_dict["chan_match"]["name"] = chan_obj.dict["name"]
                 channel_dict["m3u_url"] = channel_obj.api_m3u_url
+                channel_dict["enabled"] = channel_obj.enabled
 
         return channel_dict, channel
