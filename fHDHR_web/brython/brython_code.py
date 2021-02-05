@@ -62,8 +62,7 @@ def chan_edit_data(items, channel_id):
                 chandict[element.name] = save_val
 
     if channel_id != "all":
-        chanlist = [x for x in chanlist if x["id"] == channel_id]
-        print(chanlist)
+        chanlist == [x for x in chanlist if x["id"] == channel_id]
 
     return chanlist
 
