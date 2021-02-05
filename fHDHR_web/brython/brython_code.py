@@ -35,6 +35,7 @@ def help_data(items, help_id):
 
 
 def chan_edit_data(items, channel_id):
+    print(channel_id)
 
     chanlist = []
     chandict = {}
