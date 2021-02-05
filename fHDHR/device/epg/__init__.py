@@ -117,7 +117,8 @@ class EPG():
 
         for method in methods_list:
             if method not in [origin for origin in list(self.origins.origins_dict.keys())]:
-                self.fhdhr.db.set_fhdhr_value("epg_channels", "list", self.epg_chan_matches[method], method)
+                if method in list(self.epg_chan_matches.keys()):
+                    self.fhdhr.db.set_fhdhr_value("epg_channels", "list", self.epg_chan_matches[method], method)
 
     def clear_epg_cache(self, method=None):
 
