@@ -96,7 +96,7 @@ def chan_edit_reset(evt):
 
 @bind("#Chan_Edit_Modify", "submit")
 def chan_edit_modify(evt):
-    print(evt.currentTarget.children[0])
+    print(evt.currentTarget.children)
     chanlist = chan_edit_data(
                               document.select(".channels"),
                               str(evt.currentTarget.children[0].id).replace("modify_", ""))
