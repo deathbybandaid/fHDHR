@@ -55,7 +55,7 @@ class xmlTV():
                     epgdict[chan_obj.number]["name"] = chan_obj.dict["name"]
                     epgdict[chan_obj.number]["callsign"] = chan_obj.dict["callsign"]
                     epgdict[chan_obj.number]["number"] = chan_obj.number
-                    epgdict[chan_obj.number]["id"] = chan_obj.dict["origin_id"]
+                    epgdict[chan_obj.number]["id"] = chan_obj.dict["id"]
                     epgdict[chan_obj.number]["thumbnail"] = chan_obj.thumbnail
 
             xmltv_xml = self.create_xmltv(base_url, epgdict, source)
@@ -123,7 +123,7 @@ class xmlTV():
                 epgdict[chan_obj.number]["name"] = chan_obj.dict["name"]
                 epgdict[chan_obj.number]["callsign"] = chan_obj.dict["callsign"]
                 epgdict[chan_obj.number]["number"] = chan_obj.number
-                epgdict[chan_obj.number]["id"] = chan_obj.dict["origin_id"]
+                epgdict[chan_obj.number]["id"] = chan_obj.dict["id"]
                 epgdict[chan_obj.number]["thumbnail"] = chan_obj.thumbnail
 
         for c in list(epgdict.keys()):
