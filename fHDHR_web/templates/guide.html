@@ -43,21 +43,23 @@
                 {% endif %}
               {% endif %}
             </td>
-            <td>
-              <select name="enabled">
-                {% if not channelslist[chan_dict]["chan_match"]  %}
-                  <option class="epg_channels" value="None" placeholder="None" selected>None</option>
-                  {% for uorigin in unmatched_origins %}
-                    <option value="{{ unmatched_origins[uorigin]["id"] }}">{{ uorigin }} {{ unmatched_origins[uorigin]["number"] }}</option>
-                  {% endfor %}
-                {% else %}
-                  <option value="{{ channelslist[chan_dict]["chan_match"]["fhdhr_id"] }}">{{ channelslist[chan_dict]["chan_match"]["origin"] }} {{ channelslist[chan_dict]["chan_match"]["number"] }} {{ channelslist[chan_dict]["chan_match"]["name"] }}</option>
-                  {% for uorigin in unmatched_origins %}
-                    <option value="{{ unmatched_origins[uorigin]["id"] }}">{{ uorigin }} {{ unmatched_origins[uorigin]["number"] }} {{ unmatched_origins[uorigin]["name"] }}</option>
-                  {% endfor %}
-                {% endif %}
-              </select>
-            </td>
+            {% if origin not in origin_methods %}
+              <td>
+                <select name="enabled">
+                  {% if not channelslist[chan_dict]["chan_match"]  %}
+                    <option class="epg_channels" value="None" placeholder="None" selected>None</option>
+                    {% for uorigin in unmatched_origins %}
+                      <option value="{{ unmatched_origins[uorigin]["id"] }}">{{ uorigin }} {{ unmatched_origins[uorigin]["number"] }}</option>
+                    {% endfor %}
+                  {% else %}
+                    <option value="{{ channelslist[chan_dict]["chan_match"]["fhdhr_id"] }}">{{ channelslist[chan_dict]["chan_match"]["origin"] }} {{ channelslist[chan_dict]["chan_match"]["number"] }} {{ channelslist[chan_dict]["chan_match"]["name"] }}</option>
+                    {% for uorigin in unmatched_origins %}
+                      <option value="{{ unmatched_origins[uorigin]["id"] }}">{{ uorigin }} {{ unmatched_origins[uorigin]["number"] }} {{ unmatched_origins[uorigin]["name"] }}</option>
+                    {% endfor %}
+                  {% endif %}
+                </select>
+              </td>
+            {% endif %}
             <td>{{ channelslist[chan_dict]["name"] }}</td>
             <td>{{ channelslist[chan_dict]["number"] }}</td>
             <td><img src="{{ channelslist[chan_dict]["chan_thumbnail"] }}" alt="{{ channelslist[chan_dict]["name"] }}" width="100" height="100"></td>

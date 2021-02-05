@@ -49,7 +49,7 @@ class EPG():
     def get_epg_chan_unmatched(self, origin, method):
         unmatch_dicts = []
         origin_matches = self.get_origin_matches(origin, method)
-        for fhdhr_id in [x["id"] for x in self.channels.get_channels(method)]:
+        for fhdhr_id in [x["id"] for x in self.channels.get_channels(origin)]:
             chan_obj = self.channels.get_channel_obj("id", fhdhr_id, origin)
             if chan_obj.dict["id"] not in origin_matches:
                 unmatch_dicts.append({
