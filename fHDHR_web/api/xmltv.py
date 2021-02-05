@@ -140,9 +140,6 @@ class xmlTV():
         else:
             for c in list(epgdict.keys()):
                 chan_match = self.fhdhr.device.epg.get_epg_chan_match(source, epgdict[c]["id"])
-                print(source)
-                print(epgdict[c]["id"])
-                print(chan_match)
                 if chan_match:
                     chan_obj = self.fhdhr.device.channels.get_channel_obj("id", chan_match["fhdhr_id"], chan_match["origin"])
                     epgdict[chan_obj.number] = epgdict.pop(c)
