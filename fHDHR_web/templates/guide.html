@@ -58,12 +58,12 @@
                       {% endfor %}
                     {% endfor %}
                   {% else %}
-                  <option value=None >None</option>
                     <option value="{{ channelslist[chan_number]["chan_match"]["fhdhr_id"] }}">{{ channelslist[chan_number]["chan_match"]["origin"] }} {{ channelslist[chan_number]["chan_match"]["number"] }} {{ channelslist[chan_number]["chan_match"]["name"] }}</option>
                     {% for uorigin in unmatched_origins %}
                       {% for uorigindict in unmatched_origins[uorigin] %}
                         <option value="{{ uorigindict["id"] }}">{{ uorigin }} {{ uorigindict["number"] }} {{ uorigindict["name"] }}</option>
                       {% endfor %}
+                      <option value=None >None</option>
                     {% endfor %}
                   {% endif %}
                 </select>
