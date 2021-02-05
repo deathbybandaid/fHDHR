@@ -13,10 +13,10 @@ def epg_chan_map(event):
 
 
 def epg_chan_map_postform(chanlist):
-    source = document["origin"].value
+    origin = document["origin"].value
     postForm = document.createElement('form')
     postForm.method = "POST"
-    postForm.action = "/api/epg?method=map&redirect=/guide&source=%s" % source
+    postForm.action = "/api/epg?method=map&redirect=/guide&source=%s" % origin
     postForm.setRequestHeader = "('Content-Type', 'application/json')"
 
     postData = document.createElement('input')
