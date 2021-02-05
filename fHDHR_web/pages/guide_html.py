@@ -53,7 +53,6 @@ class Guide_HTML():
         if source in origin_methods:
             channel_obj = self.fhdhr.device.channels.get_channel_obj("origin_id", whatson_all[channel]["id"], source)
             if channel_obj:
-                print("here")
 
                 channel_dict = {
                                 "id": channel_obj.dict["id"],

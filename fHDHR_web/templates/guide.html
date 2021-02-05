@@ -14,7 +14,9 @@
     <table class="table-scroll">
       <thead>
         <tr>
-          <th>Play</th>
+          {% if origin in origin_methods %}
+            <th>Play</th>
+          {% endif %}
           {% if origin not in origin_methods %}
             <th>Match</th>
           {% endif %}
@@ -34,15 +36,15 @@
         {% for chan_dict in channelslist %}
           <input type="hidden" name="id" class="epg_channels" value="{{ channelslist[chan_dict]["id"] }}">
           <tr>
-            <td>
-              {% if channelslist[chan_dict]["m3u_url"] %}
+            {% if origin in origin_methods %}
+              <td>
                 {% if channelslist[chan_dict]["enabled"] %}
-                  <a href="{{ channelslist[chan_dict]["m3u_url"] }}">M3U</a>
+                  <a href="{{ chan_dict["m3u_url"] }}">M3U</a>
                 {% else %}
-                  <a href="{{ channelslist[chan_dict]["m3u_url"] }}" style="visibility:hidden">M3U</a>
+                  <a href="{{ chan_dict["m3u_url"] }}" style="visibility:hidden">M3U</a>
                 {% endif %}
-              {% endif %}
-            </td>
+              </td>
+            {% endif %}
             {% if origin not in origin_methods %}
               <td>
                 <select name="enabled">
