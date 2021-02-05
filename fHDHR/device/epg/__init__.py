@@ -61,9 +61,10 @@ class EPG():
 
     def get_origin_matches(self, origin, method):
         matches = []
-        for epg_chan_id in list(self.epg_chan_matches[method].keys()):
-            if self.epg_chan_matches[method][epg_chan_id]["origin"] == origin:
-                matches.append(self.epg_chan_matches[method][epg_chan_id]["fhdhr_id"])
+        if method in list(self.epg_chan_matches.keys()):
+            for epg_chan_id in list(self.epg_chan_matches[method].keys()):
+                if self.epg_chan_matches[method][epg_chan_id]["origin"] == origin:
+                    matches.append(self.epg_chan_matches[method][epg_chan_id]["fhdhr_id"])
         return matches
 
     def set_epg_chan_match(self, method, epg_chan_id, fhdhr_id, origin):
