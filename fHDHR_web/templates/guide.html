@@ -31,22 +31,22 @@
       </thead>
 
       <tbody class="body-half-screen">
-        {% for chan_dict in channelslist %}
-          <input type="hidden" name="id" class="epg_channels" value="{{ chan_dict["id"] }}">
+        {% for chan_number in list(channelslist.keys()) %}
+          <input type="hidden" name="id" class="epg_channels" value="{{ channelslist[chan_number]["id"] }}">
           <tr>
             <td>
-              {% if chan_dict["m3u_url"] %}
-                {% if chan_dict["enabled"] %}
-                  <a href="{{ chan_dict["m3u_url"] }}">M3U</a>
+              {% if channelslist[chan_number]["m3u_url"] %}
+                {% if channelslist[chan_number]["enabled"] %}
+                  <a href="{{ channelslist[chan_number]["m3u_url"] }}">M3U</a>
                 {% else %}
-                  <a href="{{ chan_dict["m3u_url"] }}" style="visibility:hidden">M3U</a>
+                  <a href="{{ channelslist[chan_number]["m3u_url"] }}" style="visibility:hidden">M3U</a>
                 {% endif %}
               {% endif %}
             </td>
             {% if origin not in origin_methods %}
               <td>
                 <select name="enabled">
-                  {% if not chan_dict["chan_match"]  %}
+                  {% if not channelslist[chan_number]["chan_match"]  %}
                     <option class="epg_channels" value="None" placeholder="None" selected>None</option>
                     {% for uorigin in unmatched_origins %}
                       {% for uorigindict in unmatched_origins[uorigin] %}
@@ -54,7 +54,7 @@
                       {% endfor %}
                     {% endfor %}
                   {% else %}
-                    <option value="{{ chan_dict["chan_match"]["fhdhr_id"] }}">{{ chan_dict["chan_match"]["origin"] }} {{ chan_dict["chan_match"]["number"] }} {{ chan_dict["chan_match"]["name"] }}</option>
+                    <option value="{{ channelslist[chan_number]["chan_match"]["fhdhr_id"] }}">{{ channelslist[chan_number]["chan_match"]["origin"] }} {{ channelslist[chan_number]["chan_match"]["number"] }} {{ channelslist[chan_number]["chan_match"]["name"] }}</option>
                     {% for uorigin in unmatched_origins %}
                       {% for uorigindict in unmatched_origins[uorigin] %}
                         <option value="{{ uorigindict["id"] }}">{{ uorigin }} {{ uorigindict["number"] }} {{ uorigindict["name"] }}</option>
@@ -64,15 +64,15 @@
                 </select>
               </td>
             {% endif %}
-            <td>{{ chan_dict["name"] }}</td>
-            <td>{{ chan_dict["number"] }}</td>
-            <td><img src="{{ chan_dict["chan_thumbnail"] }}" alt="{{ chan_dict["name"] }}" width="100" height="100"></td>
-            <td>{{ chan_dict["listing_title"] }}</td>
-            <td><img src="{{ chan_dict["listing_thumbnail"] }}" alt="{{ chan_dict["listing_title"] }}" width="100" height="100"></td>
-            <td>{{ chan_dict["listing_description"] }}</td>
-            <td>{{ chan_dict["listing_time_start"] }}</td>
-            <td>{{ chan_dict["listing_time_end"] }}</td>
-            <td>{{ chan_dict["listing_remaining_time"] }}</td>
+            <td>{{ channelslist[chan_number]["name"] }}</td>
+            <td>{{ channelslist[chan_number]["number"] }}</td>
+            <td><img src="{{ channelslist[chan_number]["chan_thumbnail"] }}" alt="{{ channelslist[chan_number]["name"] }}" width="100" height="100"></td>
+            <td>{{ channelslist[chan_number]["listing_title"] }}</td>
+            <td><img src="{{ channelslist[chan_number]["listing_thumbnail"] }}" alt="{{ channelslist[chan_number]["listing_title"] }}" width="100" height="100"></td>
+            <td>{{ channelslist[chan_number]["listing_description"] }}</td>
+            <td>{{ channelslist[chan_number]["listing_time_start"] }}</td>
+            <td>{{ channelslist[chan_number]["listing_time_end"] }}</td>
+            <td>{{ channelslist[chan_number]["listing_remaining_time"] }}</td>
           </tr>
         {% endfor %}
       </tbody>
