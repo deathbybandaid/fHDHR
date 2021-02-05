@@ -51,9 +51,9 @@ class Guide_HTML():
         now_playing = whatson_all[channel]["listing"][0]
 
         if source in origin_methods:
-            print(whatson_all[channel]["id"])
-            channel_obj = self.fhdhr.device.channels.get_channel_obj("id", whatson_all[channel]["id"], source)
+            channel_obj = self.fhdhr.device.channels.get_channel_obj("number", channel, source)
             if channel_obj:
+                print("here")
 
                 channel_dict = {
                                 "id": channel_obj.dict["id"],
