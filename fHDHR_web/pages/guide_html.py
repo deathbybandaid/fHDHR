@@ -113,7 +113,7 @@ class Guide_HTML():
                 chan_obj = self.fhdhr.device.channels.get_channel_obj("id", channel_dict["chan_match"]["fhdhr_id"], channel_dict["chan_match"]["origin"])
                 channel_dict["chan_match"]["number"] = chan_obj.number
                 channel_dict["chan_match"]["name"] = chan_obj.dict["name"]
-                channel_dict["m3u_url"] = channel_obj.api_m3u_url
-                channel_dict["enabled"] = channel_obj.enabled
+                channel_dict["m3u_url"] = chan_obj.api_m3u_url
+                channel_dict["enabled"] = chan_obj.enabled
 
         return channel_dict, channel
