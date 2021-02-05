@@ -94,15 +94,15 @@ def chan_edit_reset(evt):
     evt.preventDefault()
 
 
-@bind("#Chan_Edit_Modify", "submit")
-def chan_edit_modify(evt):
-    print(evt.currentTarget)
+@bind("#Chan_Edit_Modify", "click")
+def chan_edit_modify(event):
+    print(event.currentTarget)
     chanlist = chan_edit_data(
                               document.select(".channels"),
-                              str(evt.currentTarget.children[0].id).replace("update_", ""))
+                              str(event.currentTarget.id).replace("update_", ""))
     postForm = chan_edit_postform(chanlist)
     postForm.submit()
-    evt.preventDefault()
+    event.preventDefault()
 
 
 @bind("#Chan_Edit_Enable_Toggle", "click")
