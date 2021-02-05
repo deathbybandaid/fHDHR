@@ -40,6 +40,32 @@ class EPG():
         self.epg_chan_matches = {}
         self.get_db_channels()
 
+    def get_epg_chan_match(self, method, epg_chan_id):
+        if method in list(self.epg_chan_matches.keys()):
+            if epg_chan_id in list(self.epg_chan_matches[method].keys()):
+                return self.epg_chan_matches[method][epg_chan_id]
+        return None
+
+    def get_epg_chan_unmatched(self, origin, method):
+        unmatch_dicts = []
+        origin_matches = self.get_origin_matches(origin, method)
+        for fhdhr_id in [x["id"] for x in self.channels.get_channels(method)]:
+            chan_obj = self.channels.get_channel_obj("id", fhdhr_id, origin)
+            if chan_obj.dict["id"] not in origin_matches:
+                unmatch_dicts.append({
+                                    "id": chan_obj.dict["id"],
+                                    "number": chan_obj.number,
+                                    "name": chan_obj.dict["name"],
+                                    })
+        return unmatch_dicts
+
+    def get_origin_matches(self, origin, method):
+        matches = []
+        for epg_chan_id in list(self.epg_chan_matches[method].keys()):
+            if self.epg_chan_matches[method][epg_chan_id]["origin"] == origin:
+                matches.append(self.epg_chan_matches[method][epg_chan_id]["fhdhr_id"])
+        return matches
+
     def set_epg_chan_match(self, method, epg_chan_id, fhdhr_id, origin):
 
         if method not in list(self.epg_chan_matches.keys()):
