@@ -37,6 +37,53 @@ class EPG():
 
         self.fhdhr.threads["epg"] = threading.Thread(target=self.run)
 
+        self.epg_chan_matches = {}
+        self.get_db_channels()
+
+    def set_epg_chan_match(self, method, epg_chan_id, fhdhr_id, origin):
+
+        if method not in list(self.epg_chan_matches.keys()):
+            self.epg_chan_matches[method] = self.fhdhr.db.get_fhdhr_value("epg_channels", "list", method) or {}
+
+        if epg_chan_id not in list(self.epg_chan_matches[method].keys()):
+            self.epg_chan_matches[method][epg_chan_id] = {
+                                                         "fhdhr_id": fhdhr_id,
+                                                         "origin": origin
+                                                         }
+
+        self.save_db_channels(method)
+
+    def get_db_channels(self, method=None):
+
+        if not method:
+            methods_list = self.epg_methods
+        else:
+            methods_list = method.lower()
+
+        if isinstance(methods_list, str):
+            methods_list = [methods_list]
+
+        for method in methods_list:
+            if method not in [origin for origin in list(self.origins.origins_dict.keys())]:
+                self.fhdhr.logger.info("Checking for %s EPG Channel Match information stored in the database." % method)
+                self.epg_chan_matches[method] = self.fhdhr.db.get_fhdhr_value("epg_channels", "list", method) or {}
+                if len(list(self.epg_chan_matches.keys())):
+                    self.fhdhr.logger.info("Found %s existing epg channel matches in the database." % len(list(self.epg_chan_matches.keys())))
+
+    def save_db_channels(self, method=None):
+
+        if not method:
+            methods_list = self.epg_methods
+        else:
+            methods_list = method.lower()
+
+        if isinstance(methods_list, str):
+            methods_list = [methods_list]
+
+        for method in methods_list:
+            if method not in [origin for origin in list(self.origins.origins_dict.keys())]:
+                self.fhdhr.db.set_fhdhr_value("epg_channels", "list", self.epg_chan_matches[method], method)
+
     def clear_epg_cache(self, method=None):
 
         if not method:
