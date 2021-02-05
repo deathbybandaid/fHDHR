@@ -70,6 +70,7 @@ def chan_edit_data(items, channel_id):
 
 def chan_edit_id(evt):
     for child in evt.currentTarget.children:
+        print(child)
         try:
             id = evt.currentTarget.children[0].id
         except AttributeError:
