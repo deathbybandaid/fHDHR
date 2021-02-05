@@ -35,15 +35,24 @@ class Guide_HTML():
 
         whatson_all = self.fhdhr.device.epg.whats_on_allchans(source)
 
+        sorted_channel_list = channel_sort([x for x in list(whatson_all.keys())])
+
+        for origin in origin_methods:
+            unmatched_origins[origin] = self.fhdhr.device.epg.get_epg_chan_unmatched(origin, source)
+
+        for channel in sorted_channel_list:
+            channel_dict, channel_number = self.create_channeldict(source, origin_methods, epg_methods, whatson_all, nowtime, channel)
+
+            channelslist[channel_number] = channel_dict
+
+        return render_template('guide.html', request=request, session=session, fhdhr=self.fhdhr, channelslist=channelslist, epg_methods=epg_methods, origin=source, origin_methods=origin_methods, unmatched_origins=unmatched_origins, list=list)
+
+    def create_channeldict(self, source, origin_methods, epg_methods, whatson_all, nowtime, channel):
+        now_playing = whatson_all[channel]["listing"][0]
+
         if source in origin_methods:
-
-            sorted_channel_list = channel_sort([self.fhdhr.device.channels.list[source][x].number for x in list(self.fhdhr.device.channels.list[source].keys())])
-
-            for channel in sorted_channel_list:
-
-                channel_obj = self.fhdhr.device.channels.get_channel_obj("number", channel, source)
-
-                now_playing = whatson_all[channel]["listing"][0]
+            channel_obj = self.fhdhr.device.channels.get_channel_obj("id", whatson_all[channel]["id"], source)
+            if channel_obj:
 
                 channel_dict = {
                                 "id": channel_obj.dict["id"],
@@ -70,50 +79,38 @@ class Guide_HTML():
                     else:
                         channel_dict["listing_%s" % time_item] = str(datetime.datetime.fromtimestamp(now_playing[time_item]))
 
-                channelslist[channel_obj.number] = channel_dict
+                return channel_dict
 
-        elif source in epg_methods:
+        channel_dict = {
+                        "id": whatson_all[channel]["id"],
+                        "name": whatson_all[channel]["name"],
+                        "number": whatson_all[channel]["number"],
+                        "chan_thumbnail": whatson_all[channel]["thumbnail"],
+                        "m3u_url": None,
+                        "listing_title": now_playing["title"],
+                        "listing_thumbnail": now_playing["thumbnail"],
+                        "listing_description": now_playing["description"],
+                        }
 
-            sorted_channel_list = channel_sort([x for x in list(whatson_all.keys())])
+        if now_playing["time_end"]:
+            channel_dict["listing_remaining_time"] = humanized_time(now_playing["time_end"] - nowtime)
+        else:
+            channel_dict["listing_remaining_time"] = "N/A"
 
-            for origin in origin_methods:
-                unmatched_origins[origin] = self.fhdhr.device.epg.get_epg_chan_unmatched(origin, source)
+        for time_item in ["time_start", "time_end"]:
 
-            for channel in sorted_channel_list:
+            if not now_playing[time_item]:
+                channel_dict["listing_%s" % time_item] = "N/A"
+            elif str(now_playing[time_item]).endswith(tuple(["+0000", "+00:00"])):
+                channel_dict["listing_%s" % time_item] = str(now_playing[time_item])
+            else:
+                channel_dict["listing_%s" % time_item] = str(datetime.datetime.fromtimestamp(now_playing[time_item]))
 
-                now_playing = whatson_all[channel]["listing"][0]
+        if source in epg_methods:
+            channel_dict["chan_match"] = self.fhdhr.device.epg.get_epg_chan_match(source, whatson_all[channel]["id"])
+            if channel_dict["chan_match"]:
+                chan_obj = self.fhdhr.device.channels.get_channel_obj("id", channel_dict["chan_match"]["fhdhr_id"], channel_dict["chan_match"]["origin"])
+                channel_dict["chan_match"]["number"] = chan_obj.number
+                channel_dict["chan_match"]["name"] = chan_obj.dict["name"]
 
-                channel_dict = {
-                                "id": whatson_all[channel]["id"],
-                                "name": whatson_all[channel]["name"],
-                                "number": whatson_all[channel]["number"],
-                                "chan_thumbnail": whatson_all[channel]["thumbnail"],
-                                "m3u_url": None,
-                                "listing_title": now_playing["title"],
-                                "listing_thumbnail": now_playing["thumbnail"],
-                                "listing_description": now_playing["description"],
-                                }
-
-                channel_dict["chan_match"] = self.fhdhr.device.epg.get_epg_chan_match(source, whatson_all[channel]["id"])
-                if channel_dict["chan_match"]:
-                    chan_obj = self.fhdhr.device.channels.get_channel_obj("id", channel_dict["chan_match"]["fhdhr_id"], channel_dict["chan_match"]["origin"])
-                    channel_dict["chan_match"]["number"] = chan_obj.number
-                    channel_dict["chan_match"]["name"] = chan_obj.dict["name"]
-
-                if now_playing["time_end"]:
-                    channel_dict["listing_remaining_time"] = humanized_time(now_playing["time_end"] - nowtime)
-                else:
-                    channel_dict["listing_remaining_time"] = "N/A"
-
-                for time_item in ["time_start", "time_end"]:
-
-                    if not now_playing[time_item]:
-                        channel_dict["listing_%s" % time_item] = "N/A"
-                    elif str(now_playing[time_item]).endswith(tuple(["+0000", "+00:00"])):
-                        channel_dict["listing_%s" % time_item] = str(now_playing[time_item])
-                    else:
-                        channel_dict["listing_%s" % time_item] = str(datetime.datetime.fromtimestamp(now_playing[time_item]))
-
-                channelslist[channel] = channel_dict
-
-        return render_template('guide.html', request=request, session=session, fhdhr=self.fhdhr, channelslist=channelslist, epg_methods=epg_methods, origin=source, origin_methods=origin_methods, unmatched_origins=unmatched_origins, list=list)
+        return channel_dict
