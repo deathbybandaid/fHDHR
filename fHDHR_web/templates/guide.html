@@ -47,7 +47,7 @@
 
             {% if origin not in origin_methods %}
               <input type="hidden" name="id" class="epg_channels" value="{{ channelslist[chan_number]["id"] }}">
-              <input type="hidden" name="epg_method" class="epg_channels" value="{{ source }}">
+              <input type="hidden" name="epg_method" class="epg_channels" value="{{ origin }}">
               <td>
                 <select name="chan_options" class="epg_channels">
                   {% if not channelslist[chan_number]["chan_match"]  %}
