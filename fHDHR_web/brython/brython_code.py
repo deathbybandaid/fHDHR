@@ -6,9 +6,27 @@ import json
 @bind("#epg_chan_map", "click")
 def epg_chan_map(event):
     channel_id = str(event.currentTarget.value)
-    channel_info = epg_chanmap_data(document.select(".epg_channels"), channel_id)
+    chanlist = epg_chanmap_data(document.select(".epg_channels"), channel_id)
+    postForm = epg_chan_map_postform(chanlist)
+    postForm.submit()
+    event.preventDefault()
 
-    InfoDialog(channel_id, channel_info, ok="Got it")
+
+def epg_chan_map_postform(chanlist):
+    source = document["source"].value
+    postForm = document.createElement('form')
+    postForm.method = "POST"
+    postForm.action = "/api/epg?method=map&redirect=/guide&source=%s" % source
+    postForm.setRequestHeader = "('Content-Type', 'application/json')"
+
+    postData = document.createElement('input')
+    postData.type = 'hidden'
+    postData.name = "channels"
+    postData.value = json.dumps(chanlist)
+
+    postForm.appendChild(postData)
+    document.body.appendChild(postForm)
+    return postForm
 
 
 def epg_chanmap_data(items, channel_id):
@@ -25,7 +43,6 @@ def epg_chanmap_data(items, channel_id):
             chandict[element.name] = element.value
 
     chanlist = [x for x in chanlist if x["id"] == channel_id]
-    print(chanlist)
 
     return chanlist
 

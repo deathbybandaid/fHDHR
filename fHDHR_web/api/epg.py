@@ -120,6 +120,10 @@ class EPG():
         elif method == "update":
             self.fhdhr.device.epg.update(source)
 
+        elif method == "map":
+            channels_list = json.loads(request.form.get('channels', []))
+            print(channels_list)
+
         elif method == "clearcache":
             self.fhdhr.device.epg.clear_epg_cache(source)
 
