@@ -3,6 +3,32 @@ from browser.widgets.dialog import InfoDialog
 import json
 
 
+@bind("#epg_chan_map", "click")
+def epg_chan_map(event):
+    channel_id = str(event.currentTarget.value)
+    channel_info = epg_chanmap_data(document.select(".epg_channels"), channel_id)
+
+    InfoDialog(channel_id, channel_info, ok="Got it")
+
+
+def epg_chanmap_data(items, help_id):
+
+    chanlist = []
+    chandict = {}
+
+    for element in items:
+        if element.name == "id":
+            if len(chandict.keys()) >= 2 and "id" in list(chandict.keys()):
+                chanlist.append(chandict)
+            helpdict = {"id": element.value}
+        if element.name != "id":
+            helpdict[element.name] = element.value
+
+    chanlist = [x for x in chanlist if x["id"] == help_id]
+
+    return chanlist
+
+
 @bind("#settings_help", "click")
 def settings_help(event):
     config_id = str(event.currentTarget.value)
