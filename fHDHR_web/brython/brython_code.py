@@ -63,6 +63,7 @@ def chan_edit_data(items, channel_id):
 
     if channel_id != "all":
         chanlist = [x for x in chanlist if x["id"] == channel_id]
+        print(chanlist)
 
     return chanlist
 
