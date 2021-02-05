@@ -79,7 +79,7 @@ class Guide_HTML():
                     else:
                         channel_dict["listing_%s" % time_item] = str(datetime.datetime.fromtimestamp(now_playing[time_item]))
 
-                return channel_dict
+                return channel_dict, channel_obj.number
 
         channel_dict = {
                         "id": whatson_all[channel]["id"],
@@ -113,4 +113,4 @@ class Guide_HTML():
                 channel_dict["chan_match"]["number"] = chan_obj.number
                 channel_dict["chan_match"]["name"] = chan_obj.dict["name"]
 
-        return channel_dict
+        return channel_dict, channel
