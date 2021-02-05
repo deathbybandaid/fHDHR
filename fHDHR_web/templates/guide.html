@@ -49,12 +49,16 @@
                   {% if not channelslist[chan_dict]["chan_match"]  %}
                     <option class="epg_channels" value="None" placeholder="None" selected>None</option>
                     {% for uorigin in unmatched_origins %}
-                      <option value="{{ unmatched_origins[uorigin]["id"] }}">{{ uorigin }} {{ unmatched_origins[uorigin]["number"] }} {{ unmatched_origins[uorigin]["name"] }}</option>
+                      {% for uorigindict in unmatched_origins[uorigin] %}
+                        <option value="{{ uorigindict["id"] }}">{{ uorigin }} {{ uorigindict["number"] }} {{ uorigindict["name"] }}</option>
+                      {% endfor %}
                     {% endfor %}
                   {% else %}
                     <option value="{{ channelslist[chan_dict]["chan_match"]["fhdhr_id"] }}">{{ channelslist[chan_dict]["chan_match"]["origin"] }} {{ channelslist[chan_dict]["chan_match"]["number"] }} {{ channelslist[chan_dict]["chan_match"]["name"] }}</option>
                     {% for uorigin in unmatched_origins %}
-                      <option value="{{ unmatched_origins[uorigin]["id"] }}">{{ uorigin }} {{ unmatched_origins[uorigin]["number"] }} {{ unmatched_origins[uorigin]["name"] }}</option>
+                      {% for uorigindict in unmatched_origins[uorigin] %}
+                        <option value="{{ uorigindict["id"] }}">{{ uorigin }} {{ uorigindict["number"] }} {{ uorigindict["name"] }}</option>
+                      {% endfor %}
                     {% endfor %}
                   {% endif %}
                 </select>
