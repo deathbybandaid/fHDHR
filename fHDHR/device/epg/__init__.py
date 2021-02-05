@@ -80,6 +80,14 @@ class EPG():
 
         self.save_db_channels(method)
 
+    def unset_epg_chan_match(self, method, epg_chan_id):
+
+        if method in list(self.epg_chan_matches.keys()):
+            if epg_chan_id in list(self.epg_chan_matches[method].keys()):
+                del self.epg_chan_matches[method][epg_chan_id]
+
+        self.save_db_channels(method)
+
     def get_db_channels(self, method=None):
 
         if not method:
