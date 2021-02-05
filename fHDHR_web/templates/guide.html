@@ -14,9 +14,7 @@
     <table class="table-scroll">
       <thead>
         <tr>
-          {% if origin in origin_methods %}
-            <th>Play</th>
-          {% endif %}
+          <th>Play</th>
           {% if origin not in origin_methods %}
             <th>Match</th>
           {% endif %}
@@ -36,22 +34,22 @@
         {% for chan_dict in channelslist %}
           <input type="hidden" name="id" class="epg_channels" value="{{ channelslist[chan_dict]["id"] }}">
           <tr>
-            {% if origin in origin_methods %}
-              <td>
+            <td>
+              {% if channelslist[chan_dict]["m3u_url"] %}
                 {% if channelslist[chan_dict]["enabled"] %}
-                  <a href="{{ chan_dict["m3u_url"] }}">M3U</a>
+                  <a href="{{ channelslist[chan_dict]["m3u_url"] }}">M3U</a>
                 {% else %}
-                  <a href="{{ chan_dict["m3u_url"] }}" style="visibility:hidden">M3U</a>
+                  <a href="{{ channelslist[chan_dict]["m3u_url"] }}" style="visibility:hidden">M3U</a>
                 {% endif %}
-              </td>
-            {% endif %}
+              {% endif %}
+            </td>
             {% if origin not in origin_methods %}
               <td>
                 <select name="enabled">
                   {% if not channelslist[chan_dict]["chan_match"]  %}
                     <option class="epg_channels" value="None" placeholder="None" selected>None</option>
                     {% for uorigin in unmatched_origins %}
-                      <option value="{{ unmatched_origins[uorigin]["id"] }}">{{ uorigin }} {{ unmatched_origins[uorigin]["number"] }}</option>
+                      <option value="{{ unmatched_origins[uorigin]["id"] }}">{{ uorigin }} {{ unmatched_origins[uorigin]["number"] }} {{ unmatched_origins[uorigin]["name"] }}</option>
                     {% endfor %}
                   {% else %}
                     <option value="{{ channelslist[chan_dict]["chan_match"]["fhdhr_id"] }}">{{ channelslist[chan_dict]["chan_match"]["origin"] }} {{ channelslist[chan_dict]["chan_match"]["number"] }} {{ channelslist[chan_dict]["chan_match"]["name"] }}</option>
