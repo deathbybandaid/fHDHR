@@ -72,11 +72,10 @@ class EPG():
         if method not in list(self.epg_chan_matches.keys()):
             self.epg_chan_matches[method] = self.fhdhr.db.get_fhdhr_value("epg_channels", "list", method) or {}
 
-        if epg_chan_id not in list(self.epg_chan_matches[method].keys()):
-            self.epg_chan_matches[method][epg_chan_id] = {
-                                                         "fhdhr_id": fhdhr_id,
-                                                         "origin": origin
-                                                         }
+        self.epg_chan_matches[method][epg_chan_id] = {
+                                                     "fhdhr_id": fhdhr_id,
+                                                     "origin": origin
+                                                     }
 
         self.save_db_channels(method)
 
