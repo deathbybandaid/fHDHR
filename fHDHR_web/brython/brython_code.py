@@ -17,7 +17,7 @@ def epg_chanmap_data(items, help_id):
     chandict = {}
 
     for element in items:
-        if element.name == "id":
+        if element.name == "epg_id":
             if len(chandict.keys()) >= 2 and "id" in list(chandict.keys()):
                 chanlist.append(chandict)
             helpdict = {"id": element.value}
@@ -25,6 +25,7 @@ def epg_chanmap_data(items, help_id):
             helpdict[element.name] = element.value
 
     chanlist = [x for x in chanlist if x["id"] == help_id]
+    print(chanlist)
 
     return chanlist
 
