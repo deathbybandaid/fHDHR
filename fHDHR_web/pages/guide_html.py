@@ -38,7 +38,11 @@ class Guide_HTML():
         sorted_channel_list = channel_sort([x for x in list(whatson_all.keys())])
 
         for origin in origin_methods:
-            unmatched_origins[origin] = self.fhdhr.device.epg.get_epg_chan_unmatched(origin, source)
+            unmatched_origins[origin] = []
+            curr_origin = self.fhdhr.device.epg.get_epg_chan_unmatched(origin, source)
+            sorted_unmatched = channel_sort([x["number"] for x in curr_origin])
+            for channel_number in sorted_unmatched:
+                unmatched_origins[origin].append([x for x in curr_origin if x["number"] == channel_number][0])
 
         for channel in sorted_channel_list:
             channel_dict, channel_number = self.create_channeldict(source, origin_methods, epg_methods, whatson_all, nowtime, channel)

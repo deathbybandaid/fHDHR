@@ -4,7 +4,7 @@ from io import BytesIO
 import urllib.parse
 import datetime
 
-from fHDHR.tools import sub_el
+from fHDHR.tools import sub_el, channel_sort
 
 
 class xmlTV():
@@ -148,6 +148,11 @@ class xmlTV():
                     epgdict[chan_obj.number]["number"] = chan_obj.number
                     epgdict[chan_obj.number]["id"] = chan_obj.dict["id"]
                     epgdict[chan_obj.number]["thumbnail"] = chan_obj.thumbnail
+
+        sorted_epgdict = {}
+        sorted_channel_list = channel_sort([x for x in list(epgdict.keys())])
+        for epgchan in sorted_channel_list:
+            sorted_epgdict[epgchan] = epgdict[epgchan]
 
         for c in list(epgdict.keys()):
 
