@@ -1,6 +1,7 @@
 import threading
 import socket
 import datetime
+import json
 
 from fHDHR.exceptions import TunerError
 from fHDHR.tools import humanized_time
@@ -47,7 +48,7 @@ class Tuner():
                 print(data)
 
     def setup_stream(self, stream_args):
-        self.fhdhr.web.session.post("http://127.0.0.1:%s" % (self.socket.getsockname()[1]), stream_args)
+        self.fhdhr.web.session.post("http://127.0.0.1:%s" % (self.socket.getsockname()[1]), json.dumps(stream_args))
 
     def channel_scan(self, origin, grabbed=False):
         if self.tuner_lock.locked() and not grabbed:
