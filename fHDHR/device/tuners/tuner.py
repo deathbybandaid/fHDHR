@@ -60,9 +60,11 @@ class Tuner():
                     stream_args = json.loads(body)
                     stream_args["duration"] = 0
                     self.stream = Stream(self.fhdhr, self.channels, self, stream_args)
+                    break
 
                 if method == "GET":
                     connection.send([chunk for chunk in self.stream.get()])
+                    break
 
     def setup_stream(self, stream_args):
         self.fhdhr.web.session.post("http://127.0.0.1:%s" % (self.socket.getsockname()[1]), json.dumps(stream_args))
