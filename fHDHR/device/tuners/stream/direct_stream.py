@@ -34,7 +34,7 @@ class Direct_Stream():
 
                 chunk_counter = 1
 
-                while self.tuner.tuner_lock.locked():
+                while True:
 
                     for chunk in req.iter_content(chunk_size=self.bytes_per_read):
 
