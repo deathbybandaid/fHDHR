@@ -75,7 +75,7 @@ class Tuner():
                     connection.send(msg.encode(encoding="utf-8"))
                     break
 
-                if method == "GET":
+                elif method == "GET":
                     connection.send([chunk for chunk in self.stream.get()])
                     break
 
