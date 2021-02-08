@@ -97,6 +97,7 @@ class Tuner():
         self.status = {"status": "Inactive"}
 
     def tune(self):
+        print("here")
         while self.tuner_lock.locked():
             connection, client_address = self.socket.accept()
             print(client_address)
