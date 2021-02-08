@@ -91,7 +91,7 @@ class Tuner():
 
     def tune(self):
         while self.tuner_lock.locked():
-            for chunk in self.get():
+            for chunk in self.current_stream.get():
                 self.current_stream_content.append(chunk)
                 if len(self.current_stream_content) > 3:
                     self.current_stream_content = self.current_stream_content[-3:]
