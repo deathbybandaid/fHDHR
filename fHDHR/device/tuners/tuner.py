@@ -135,8 +135,8 @@ class Tuner():
 
         return generate()
 
-    def setup_stream(self, stream_args, tuner):
-        self.current_stream = Stream(self.fhdhr, stream_args, tuner)
+    def setup_stream(self, tuner):
+        self.current_stream = Stream(self.fhdhr, tuner)
 
     def set_status(self, stream_args):
         if self.status["status"] != "Active":

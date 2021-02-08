@@ -6,9 +6,13 @@ from .direct_m3u8_stream import Direct_M3U8_Stream
 
 class Stream():
 
-    def __init__(self, fhdhr, stream_args, tuner):
+    def __init__(self, fhdhr, tuner):
         self.fhdhr = fhdhr
-        self.stream_args = stream_args
+        self.tuner = tuner
+
+        print(tuner.number)
+
+    def stuffy(self, stream_args, tuner, fhdhr):
 
         if stream_args["method"] == "direct":
             if self.stream_args["true_content_type"].startswith(tuple(["application/", "text/"])):

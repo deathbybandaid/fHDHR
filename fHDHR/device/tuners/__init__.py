@@ -69,16 +69,9 @@ class Tuners():
             raise TunerError("806 - Tune Failed")
 
         # TunerError will raise if unavailable
-        if not channel_number:
-            self.tuners[origin][str(tuner_number)].grab(origin, channel_number)
-        else:
-            if self.tuners[origin][str(tuner_number)].tuner_lock.locked():
-                if self.tuners[origin][str(tuner_number)].current_stream:
-                    if self.tuners[origin][str(tuner_number)].current_stream.stream_args["channel"] == channel_number:
-                        return tuner_number, False
-            self.tuners[origin][str(tuner_number)].grab(origin, channel_number)
+        self.tuners[origin][str(tuner_number)].grab(origin, channel_number)
 
-        return tuner_number, True
+        return tuner_number
 
     def first_available(self, origin, channel_number):
 
@@ -91,7 +84,7 @@ class Tuners():
             raise TunerError("805 - All Tuners In Use")
         else:
             self.tuners[origin][str(tunernumber)].grab(origin, channel_number)
-            return tunernumber, True
+            return tunernumber
 
     def tuner_close(self, tunernum, origin):
         self.tuners[origin][str(tunernum)].close()
