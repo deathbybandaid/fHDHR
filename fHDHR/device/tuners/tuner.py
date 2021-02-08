@@ -112,8 +112,10 @@ class Tuner():
         self.status = {"status": "Inactive"}
 
     def tune(self):
-        for chunk in self.current_stream.get():
-            self.socket.sendall(chunk)
+        while self.tuner_lock.locked():
+            for chunk in self.current_stream.get():
+                self.socket.send(chunk)
+        self.close()
 
     def get_stream(self):
 
