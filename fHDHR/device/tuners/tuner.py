@@ -1,6 +1,5 @@
 import threading
 import datetime
-import time
 
 from fHDHR.exceptions import TunerError
 from fHDHR.tools import humanized_time
@@ -18,7 +17,7 @@ class Tuner():
 
         self.tuner_lock = threading.Lock()
         self.current_stream = None
-        self.current_stream_content = []
+        self.current_stream_content = None
         self.status = {"status": "Inactive"}
 
         self.chanscan_url = "/api/channels?method=scan"
@@ -86,28 +85,21 @@ class Tuner():
 
     def set_off_status(self):
         self.current_stream = None
-        self.current_stream_content = []
+        self.current_stream_content = None
         self.status = {"status": "Inactive"}
 
     def tune(self):
         while self.tuner_lock.locked():
-            for chunk in self.current_stream.get():
-                self.current_stream_content.append(chunk)
-                if len(self.current_stream_content) > 3:
-                    self.current_stream_content = self.current_stream_content[-3:]
-        self.close()
+            self.current_stream_content = self.current_stream.get()
 
     def get_stream(self):
-        while not len(self.current_stream_content):
-            time.sleep(1)
 
         def generate():
             try:
                 while True:
-                    if not len(self.current_stream_content):
-                        break
-                    chunk = self.current_stream_content[-1]
-                    yield chunk
+                    chunk = self.current_stream_content
+                    if chunk:
+                        yield chunk
             except GeneratorExit:
                 self.fhdhr.logger.info("Connection Closed.")
             except Exception as e:
