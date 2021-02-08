@@ -1,5 +1,7 @@
 from gevent.pywsgi import WSGIServer
 from flask import Flask, request, session
+from flask_sockets import Sockets
+
 import threading
 import uuid
 
@@ -31,6 +33,8 @@ class fHDHR_HTTP_Server():
 
         # Set Secret Key For Sessions
         self.fhdhr.app.secret_key = self.fhdhr.config.dict["fhdhr"]["friendlyname"]
+
+        self.sockets = Sockets(self.fhdhr.app)
 
         self.route_list = {}
 
@@ -221,6 +225,14 @@ class fHDHR_HTTP_Server():
 
     def add_endpoint(self, endpoint=None, endpoint_name=None, handler=None, methods=['GET']):
         self.fhdhr.app.add_url_rule(endpoint, endpoint_name, handler, methods=methods)
+
+    def add_socket_endpoint(self, endpoint=None, endpoint_name=None, handler=None, methods=['GET']):
+        self.socket.add_url_rule("/socket", "socket_test", self.socket_test, methods=['GET', 'POST'])
+
+    def socket_test(self, ws):
+        while True:
+            message = ws.receive()
+            ws.send(message[::-1])
 
     def run(self):
 
