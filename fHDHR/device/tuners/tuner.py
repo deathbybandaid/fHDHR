@@ -103,8 +103,6 @@ class Tuner():
         def generate():
             try:
                 while True:
-                    if not len(self.current_stream_content):
-                        break
                     chunk = self.current_stream_content[-1]
                     yield chunk
             except GeneratorExit:
