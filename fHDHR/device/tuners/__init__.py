@@ -22,7 +22,7 @@ class Tuners():
             self.fhdhr.logger.info("Creating %s tuners for %s." % (max_tuners, origin))
 
             for i in range(0, max_tuners):
-                self.tuners[origin][str(i)] = Tuner(fhdhr, i, epg, origin)
+                self.tuners[origin][str(i)] = Tuner(fhdhr, channels, i, epg, origin)
 
         self.alt_stream_handlers = {}
 

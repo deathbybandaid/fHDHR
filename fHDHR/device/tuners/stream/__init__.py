@@ -8,8 +8,9 @@ from fHDHR.exceptions import TunerError
 
 class Stream():
 
-    def __init__(self, fhdhr, tuner, stream_args):
+    def __init__(self, fhdhr, channels, tuner, stream_args):
         self.fhdhr = fhdhr
+        self.channels = channels
         self.tuner = tuner
         self.stream_args = stream_args
         self.clients = []
@@ -28,7 +29,7 @@ class Stream():
 
     def get_stream_info(self):
 
-        self.stream_info = self.fhdhr.device.channels.get_channel_stream(self.stream_args, self.stream_args["origin"])
+        self.stream_info = self.channels.get_channel_stream(self.stream_args, self.stream_args["origin"])
         if not self.stream_info:
             raise TunerError("806 - Tune Failed")
 

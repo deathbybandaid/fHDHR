@@ -9,8 +9,9 @@ from .stream import Stream
 
 
 class Tuner():
-    def __init__(self, fhdhr, inum, epg, origin):
+    def __init__(self, fhdhr, channels, inum, epg, origin):
         self.fhdhr = fhdhr
+        self.channels = channels
 
         self.number = inum
         self.origin = origin
@@ -121,7 +122,7 @@ class Tuner():
         return generate()
 
     def setup_stream(self, tuner, stream_args):
-        self.stream = Stream(self.fhdhr, tuner, stream_args)
+        self.stream = Stream(self.fhdhr, self.channels, tuner, stream_args)
 
     def set_status(self, stream_args):
         if self.status["status"] != "Active":
