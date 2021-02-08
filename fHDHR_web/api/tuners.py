@@ -110,6 +110,12 @@ class Tuners():
                             "transcode_quality": transcode_quality or self.fhdhr.config.dict["streaming"]["transcode_quality"],
                             }
 
+            client_info = {
+                        "address": client_address,
+                        "id": session["session_id"],
+                        "accessed": accessed_url,
+                        }
+
             try:
                 tuner.setup_stream(stream_args)
             except TunerError as e:
@@ -118,15 +124,9 @@ class Tuners():
                 tuner.close()
                 abort(response)
 
-            client_info = {
-                        "address": client_address,
-                        "id": session["session_id"],
-                        "accessed": accessed_url,
-                        }
+            # tuner.stream.add_client(client_info)
 
-            tuner.stream.add_client(client_info)
-
-            self.fhdhr.api.client.get(tuner.start_url)
+            # self.fhdhr.api.client.get(tuner.start_url)
 
             return Response(stream_with_context(tuner.get_stream()), mimetype=stream_args["content_type"])
 

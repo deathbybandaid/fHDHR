@@ -37,13 +37,15 @@ class Tuner():
         socket_listener.start()
 
     def socket_listen(self):
-        print("Starting socket Listener.")
         while True:
             connection, client_address = self.socket.accept()
             print(client_address)
 
             while True:
                 data = connection.recv(2048)
+
+                method = str(data).split(" ")[0]
+                print(method)
 
                 try:
                     index = data.index(b'\r\n\r\n')
@@ -54,7 +56,10 @@ class Tuner():
                     header, body = (data[:index], data[index:])
                     header
 
-                print(json.loads(body))
+                stream_args = json.loads(body)
+                self.stream = Stream(self.fhdhr, self.channels, self, stream_args)
+
+                connection.send([chunk for chunk in self.stream.get()])
 
     def setup_stream(self, stream_args):
         self.fhdhr.web.session.post("http://127.0.0.1:%s" % (self.socket.getsockname()[1]), json.dumps(stream_args))
