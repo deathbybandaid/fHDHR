@@ -53,8 +53,7 @@ class Tuner():
                     index += len(b'\r\n\r\n')
                     header, body = (data[:index], data[index:])
 
-                print(header)
-                print(body)
+                print(json.loads(body))
 
     def setup_stream(self, stream_args):
         self.fhdhr.web.session.post("http://127.0.0.1:%s" % (self.socket.getsockname()[1]), json.dumps(stream_args))
