@@ -60,6 +60,19 @@ class Tuner():
                     stream_args = json.loads(body)
                     stream_args["duration"] = 0
                     self.stream = Stream(self.fhdhr, self.channels, self, stream_args)
+
+                    msg = "Success"
+                    response_headers = {
+                                        'Content-Type': 'text/html; encoding=utf8',
+                                        'Content-Length': len(msg),
+                                        'Connection': 'close',
+                                        }
+                    response_headers_raw = ''.join('%s: %s\r\n' % (k, v) for k, v in response_headers.items())
+                    r = '%s %s %s\r\n' % ('HTTP/1.1', '200', 'OK')
+                    connection.send(r)
+                    connection.send(response_headers_raw)
+                    connection.send('\r\n')
+                    connection.send(msg.encode(encoding="utf-8"))
                     break
 
                 if method == "GET":
