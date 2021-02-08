@@ -1,5 +1,6 @@
 import threading
 import datetime
+import time
 
 from fHDHR.exceptions import TunerError
 from fHDHR.tools import humanized_time
@@ -16,10 +17,13 @@ class Tuner():
         self.epg = epg
 
         self.tuner_lock = threading.Lock()
-        self.set_off_status()
+        self.current_stream = None
+        self.current_stream_content = []
+        self.status = {"status": "Inactive"}
 
         self.chanscan_url = "/api/channels?method=scan"
         self.close_url = "/api/tuners?method=close&tuner=%s&origin=%s" % (self.number, self.origin)
+        self.start_url = "/api/tuners?method=start&tuner=%s&origin=%s" % (self.number, self.origin)
 
     def channel_scan(self, origin, grabbed=False):
         if self.tuner_lock.locked() and not grabbed:
@@ -61,7 +65,7 @@ class Tuner():
         self.status["time_start"] = datetime.datetime.utcnow()
         self.fhdhr.logger.info("Tuner #%s Acquired." % str(self.number))
 
-    def close(self):
+    def close(self, force=False):
         self.set_off_status()
         if self.tuner_lock.locked():
             self.tuner_lock.release()
@@ -81,27 +85,53 @@ class Tuner():
         return current_status
 
     def set_off_status(self):
+        self.current_stream = None
+        self.current_stream_content = []
         self.status = {"status": "Inactive"}
 
-    def get_stream(self, stream_args, tuner):
-        stream = Stream(self.fhdhr, stream_args, tuner)
-        return stream
+    def tune(self):
+        while self.tuner_lock.locked():
+            for chunk in self.get():
+                self.current_stream_content.append(chunk)
+                if len(self.current_stream_content) > 3:
+                    self.current_stream_content = self.current_stream_content[-3:]
+        self.close()
+
+    def get_stream(self):
+        time.sleep(2)
+
+        def generate():
+            try:
+                while True:
+                    if not len(self.current_stream_content):
+                        break
+                    chunk = self.current_stream_content[-1]
+                    yield chunk
+            except GeneratorExit:
+                self.fhdhr.logger.info("Connection Closed.")
+            except Exception as e:
+                self.fhdhr.logger.info("Connection Closed: %s" % e)
+            finally:
+                self.fhdhr.logger.info("Connection Closed: Tuner Lock Removed")
+
+        return generate()
+
+    def setup_stream(self, stream_args, tuner):
+        self.current_stream = Stream(self.fhdhr, stream_args, tuner)
 
     def set_status(self, stream_args):
         if self.status["status"] != "Active":
             self.status = {
                             "status": "Active",
-                            "clients": [],
-                            "clients_id": [],
+                            "clients": stream_args["clients"],
                             "method": stream_args["method"],
-                            "accessed": [stream_args["accessed"]],
                             "origin": stream_args["origin"],
                             "channel": stream_args["channel"],
                             "proxied_url": stream_args["stream_info"]["url"],
                             "time_start": datetime.datetime.utcnow(),
                             "downloaded": 0
                             }
-        if stream_args["client"] not in self.status["clients"]:
-            self.status["clients"].append(stream_args["client"])
-        if stream_args["client_id"] not in self.status["clients_id"]:
-            self.status["clients_id"].append(stream_args["client_id"])
+        else:
+            for client in stream_args["clients"]:
+                if client["client_id"] not in [x["client_id"] for x in self.status["clients"]]:
+                    self.status["clients"].extend(stream_args["clients"])

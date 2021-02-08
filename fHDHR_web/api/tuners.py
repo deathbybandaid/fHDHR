@@ -90,26 +90,14 @@ class Tuners():
                 self.fhdhr.logger.error(response.headers["X-fHDHR-Error"])
                 abort(response)
 
-            stream_args = {
-                            "channel": channel_number,
-                            "origin": origin,
-                            "method": stream_method,
-                            "duration": duration,
-                            "origin_quality": self.fhdhr.config.dict["streaming"]["origin_quality"],
-                            "transcode_quality": transcode_quality or self.fhdhr.config.dict["streaming"]["transcode_quality"],
-                            "accessed": accessed_url,
-                            "client": client_address,
-                            "client_id": session["session_id"]
-                            }
-
             try:
                 if not tuner_number:
-                    tunernum = self.fhdhr.device.tuners.first_available(origin, channel_number)
+                    tunernum, grabbed = self.fhdhr.device.tuners.first_available(origin, channel_number)
                 else:
-                    tunernum = self.fhdhr.device.tuners.tuner_grab(tuner_number, origin, channel_number)
+                    tunernum, grabbed = self.fhdhr.device.tuners.tuner_grab(tuner_number, origin, channel_number)
             except TunerError as e:
                 self.fhdhr.logger.info("A %s stream request for channel %s was rejected due to %s"
-                                       % (stream_args["method"], str(stream_args["channel"]), str(e)))
+                                       % (stream_method, channel_number, e))
                 response = Response("Service Unavailable", status=503)
                 response.headers["X-fHDHR-Error"] = str(e)
                 self.fhdhr.logger.error(response.headers["X-fHDHR-Error"])
@@ -117,30 +105,63 @@ class Tuners():
 
             tuner = self.fhdhr.device.tuners.tuners[origin][str(tunernum)]
 
-            try:
-                stream_args = self.fhdhr.device.tuners.get_stream_info(stream_args)
-            except TunerError as e:
-                self.fhdhr.logger.info("A %s stream request for %s channel %s was rejected due to %s"
-                                       % (origin, stream_args["method"], str(stream_args["channel"]), str(e)))
-                response = Response("Service Unavailable", status=503)
-                response.headers["X-fHDHR-Error"] = str(e)
-                self.fhdhr.logger.error(response.headers["X-fHDHR-Error"])
-                tuner.close()
-                abort(response)
+            stream_args = {
+                            "channel": channel_number,
+                            "origin": origin,
+                            "method": stream_method,
+                            "duration": duration,
+                            "origin_quality": self.fhdhr.config.dict["streaming"]["origin_quality"],
+                            "transcode_quality": transcode_quality or self.fhdhr.config.dict["streaming"]["transcode_quality"],
+                            "clients": [{
+                                        "address": client_address,
+                                        "client_id": session["session_id"],
+                                        "accessed": accessed_url,
+                                        }]
+                            }
 
-            self.fhdhr.logger.info("%s Tuner #%s to be used for stream." % (origin, tunernum))
-            tuner.set_status(stream_args)
-            session["tuner_used"] = tunernum
+            if not grabbed:
+                tuner.set_status(stream_args)
+                return Response(stream_with_context(tuner.get_stream()), mimetype=stream_args["content_type"])
 
-            try:
-                stream = tuner.get_stream(stream_args, tuner)
-            except TunerError as e:
-                response.headers["X-fHDHR-Error"] = str(e)
-                self.fhdhr.logger.error(response.headers["X-fHDHR-Error"])
-                tuner.close()
-                abort(response)
+            else:
 
-            return Response(stream_with_context(stream.get()), mimetype=stream_args["content_type"])
+                try:
+                    stream_args = self.fhdhr.device.tuners.get_stream_info(stream_args)
+                except TunerError as e:
+                    self.fhdhr.logger.info("A %s stream request for %s channel %s was rejected due to %s"
+                                           % (origin, stream_args["method"], str(stream_args["channel"]), str(e)))
+                    response = Response("Service Unavailable", status=503)
+                    response.headers["X-fHDHR-Error"] = str(e)
+                    self.fhdhr.logger.error(response.headers["X-fHDHR-Error"])
+                    tuner.close()
+                    abort(response)
+
+                self.fhdhr.logger.info("%s Tuner #%s to be used for stream." % (origin, tunernum))
+                tuner.set_status(stream_args)
+                session["tuner_used"] = tunernum
+
+                try:
+                    tuner.setup_stream(stream_args, tuner)
+                except TunerError as e:
+                    response.headers["X-fHDHR-Error"] = str(e)
+                    self.fhdhr.logger.error(response.headers["X-fHDHR-Error"])
+                    tuner.close()
+                    abort(response)
+
+                # Trigger tuner start
+                self.fhdhr.api.client.get(tuner.start_url)
+
+                return Response(stream_with_context(tuner.get_stream()), mimetype=stream_args["content_type"])
+
+        elif method == "start":
+
+            if not origin:
+                return "Missing Origin"
+
+            if not tuner_number or str(tuner_number) not in list(self.fhdhr.device.tuners.tuners[origin].keys()):
+                return "%s Invalid tuner" % str(tuner_number)
+
+            tuner = self.fhdhr.device.tuners.tuners[origin][str(tuner_number)].tune()
 
         elif method == "close":
 
@@ -160,16 +181,16 @@ class Tuners():
             if not origin:
                 for origin in list(self.fhdhr.device.tuners.tuners.keys()):
                     if not tuner_number:
-                        tunernum = self.fhdhr.device.tuners.first_available(origin, None)
+                        tunernum, grabbed = self.fhdhr.device.tuners.first_available(origin, None)
                     else:
-                        tunernum = self.fhdhr.device.tuners.tuner_grab(tuner_number, origin, None)
+                        tunernum, grabbed = self.fhdhr.device.tuners.tuner_grab(tuner_number, origin, None)
                     tuner = self.fhdhr.device.tuners.tuners[origin][str(tunernum)]
                     tuner.channel_scan(origin=origin, grabbed=False)
             else:
                 if not tuner_number:
-                    tunernum = self.fhdhr.device.tuners.first_available(origin, None)
+                    tunernum, grabbed = self.fhdhr.device.tuners.first_available(origin, None)
                 else:
-                    tunernum = self.fhdhr.device.tuners.tuner_grab(tuner_number, origin, None)
+                    tunernum, grabbed = self.fhdhr.device.tuners.tuner_grab(tuner_number, origin, None)
                 tuner = self.fhdhr.device.tuners.tuners[origin][str(tunernum)]
                 tuner.channel_scan(origin=origin, grabbed=True)
 
