@@ -98,11 +98,14 @@ class Tuner():
         self.close()
 
     def get_stream(self):
-        time.sleep(2)
+        while not len(self.current_stream_content):
+            time.sleep(1)
 
         def generate():
             try:
                 while True:
+                    if not len(self.current_stream_content):
+                        break
                     chunk = self.current_stream_content[-1]
                     yield chunk
             except GeneratorExit:
