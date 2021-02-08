@@ -42,7 +42,7 @@ class Direct_Stream():
                            not time.time() < self.stream_args["time_end"]):
                             req.close()
                             self.fhdhr.logger.info("Requested Duration Expired.")
-                            self.tuner.close()
+                            # self.tuner.close()
 
                         if not chunk:
                             break
