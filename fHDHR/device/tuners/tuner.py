@@ -31,7 +31,7 @@ class Tuner():
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind((self.address, 0))
 
-        self.fhdhr.logger.info("%s Tuner #%s will use a socket at %s:%s." % (self.origin. self.number, self.socket.getsockname()[0], self.socket.getsockname()[1]))
+        self.fhdhr.logger.info("%s Tuner #%s will use a socket at %s:%s." % (self.origin, self.number, self.socket.getsockname()[0], self.socket.getsockname()[1]))
 
         # self.socket.close()
 
