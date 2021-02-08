@@ -52,6 +52,7 @@ class Tuner():
                 else:
                     index += len(b'\r\n\r\n')
                     header, body = (data[:index], data[index:])
+                    header
 
                 print(json.loads(body))
 
