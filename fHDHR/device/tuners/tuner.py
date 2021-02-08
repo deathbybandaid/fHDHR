@@ -43,7 +43,7 @@ class Tuner():
             print(client_address)
 
             while True:
-                data = connection.recv()
+                data = connection.recv(2048)
 
                 try:
                     index = data.index(b'\r\n\r\n')
