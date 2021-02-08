@@ -101,7 +101,7 @@ class Tuner():
         while self.tuner_lock.locked():
             connection, client_address = self.socket.accept()
             print(client_address)
-            # self.socket.send([chunk for chunk in self.stream.get()])
+            connection.send([chunk for chunk in self.stream.get()])
         self.close()
 
     def get_stream(self):
