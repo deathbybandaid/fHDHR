@@ -69,8 +69,8 @@ class Tuner():
                                         }
                     response_headers_raw = ''.join('%s: %s\r\n' % (k, v) for k, v in response_headers.items())
                     r = '%s %s %s\r\n' % ('HTTP/1.1', '200', 'OK')
-                    connection.send(r)
-                    connection.send(response_headers_raw)
+                    connection.send(r.encode(encoding="utf-8"))
+                    connection.send(response_headers_raw.encode(encoding="utf-8"))
                     connection.send('\r\n')
                     connection.send(msg.encode(encoding="utf-8"))
                     break
