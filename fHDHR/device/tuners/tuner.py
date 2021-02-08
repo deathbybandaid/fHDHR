@@ -44,7 +44,7 @@ class Tuner():
             while True:
                 data = connection.recv(2048)
 
-                method = str(data).split("b'").split(" ")[0]
+                method = str(data).split(" ")[0].split("b'")[-1]
                 print(method)
                 if method == "POST":
 
