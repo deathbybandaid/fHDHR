@@ -43,9 +43,18 @@ class Tuner():
             print(client_address)
 
             while True:
-                data = connection.recv(2048)
+                data = connection.recv()
 
-                print(data)
+                try:
+                    index = data.index(b'\r\n\r\n')
+                except Exception:
+                    header, body = (data, bytes())
+                else:
+                    index += len(b'\r\n\r\n')
+                    header, body = (data[:index], data[index:])
+
+                print(header)
+                print(body)
 
     def setup_stream(self, stream_args):
         self.fhdhr.web.session.post("http://127.0.0.1:%s" % (self.socket.getsockname()[1]), json.dumps(stream_args))
