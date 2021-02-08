@@ -102,19 +102,29 @@ class Tuners():
 
             tuner = self.fhdhr.device.tuners.tuners[origin][str(tunernum)]
 
-            client_add = {
-                        "address": client_address,
-                        "client_id": session["session_id"],
-                        "accessed": accessed_url,
-                        }
+            stream_args = {
+                            "channel": channel_number,
+                            "origin": origin,
+                            "method": stream_method,
+                            "origin_quality": self.fhdhr.config.dict["streaming"]["origin_quality"],
+                            "transcode_quality": transcode_quality or self.fhdhr.config.dict["streaming"]["transcode_quality"],
+                            }
 
             try:
-                tuner.setup_stream(tuner)
+                tuner.setup_stream(tuner, stream_args)
             except TunerError as e:
                 response.headers["X-fHDHR-Error"] = str(e)
                 self.fhdhr.logger.error(response.headers["X-fHDHR-Error"])
                 tuner.close()
                 abort(response)
+
+            client_info = {
+                        "address": client_address,
+                        "id": session["session_id"],
+                        "accessed": accessed_url,
+                        }
+
+            tuner.stream.add_client(client_info)
 
             response = Response("Service Unavailable", status=503)
             response.headers["X-fHDHR-Error"] = "dev"
@@ -129,6 +139,8 @@ class Tuners():
                             "origin_quality": self.fhdhr.config.dict["streaming"]["origin_quality"],
                             "transcode_quality": transcode_quality or self.fhdhr.config.dict["streaming"]["transcode_quality"],
                             }
+
+            self.fhdhr.api.client.get(tuner.start_url)
 
             return
 

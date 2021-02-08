@@ -1,7 +1,6 @@
 import threading
 import socket
 import datetime
-import re
 
 from fHDHR.exceptions import TunerError
 from fHDHR.tools import humanized_time
@@ -18,35 +17,19 @@ class Tuner():
         self.epg = epg
 
         self.tuner_lock = threading.Lock()
-        self.current_stream = None
+        self.stream = None
         self.status = {"status": "Inactive"}
 
         self.chanscan_url = "/api/channels?method=scan"
         self.close_url = "/api/tuners?method=close&tuner=%s&origin=%s" % (self.number, self.origin)
         self.start_url = "/api/tuners?method=start&tuner=%s&origin=%s" % (self.number, self.origin)
 
-        self.address = self.get_sock_address()
-
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind((self.address, 0))
+        self.socket.bind(("0.0.0.0", 0))
 
         self.fhdhr.logger.info("%s Tuner #%s will use a socket at %s:%s." % (self.origin, self.number, self.socket.getsockname()[0], self.socket.getsockname()[1]))
 
         # self.socket.close()
-
-    def get_sock_address(self):
-        if self.fhdhr.config.dict["fhdhr"]["discovery_address"]:
-            return self.fhdhr.config.dict["fhdhr"]["discovery_address"]
-        else:
-            try:
-                base_url = self.stream_args["base_url"].split("://")[1].split(":")[0]
-            except IndexError:
-                return None
-            ip_match = re.match('^' + '[\.]'.join(['(\d{1,3})']*4) + '$', base_url)
-            ip_validate = bool(ip_match)
-            if ip_validate:
-                return base_url
-        return None
 
     def channel_scan(self, origin, grabbed=False):
         if self.tuner_lock.locked() and not grabbed:
@@ -108,17 +91,19 @@ class Tuner():
         return current_status
 
     def set_off_status(self):
-        self.current_stream = None
+        self.stream = None
         self.status = {"status": "Inactive"}
 
     def tune(self):
         while self.tuner_lock.locked():
-            self.socket.send([chunk for chunk in self.current_stream.get()])
+            connection, client_address = self.socket.accept()
+            print(client_address)
+            self.socket.send([chunk for chunk in self.stream.get()])
         self.close()
 
     def get_stream(self):
 
-        req = self.fhdhr.web.session.get("http://%s:%s" % (self.socket.getsockname()[0], self.socket.getsockname()[1]), stream=True)
+        req = self.fhdhr.web.session.get("http://127.0.0.1:%s" % (self.socket.getsockname()[1]), stream=True)
 
         def generate():
             try:
@@ -135,8 +120,8 @@ class Tuner():
 
         return generate()
 
-    def setup_stream(self, tuner):
-        self.current_stream = Stream(self.fhdhr, tuner)
+    def setup_stream(self, tuner, stream_args):
+        self.stream = Stream(self.fhdhr, tuner, stream_args)
 
     def set_status(self, stream_args):
         if self.status["status"] != "Active":
