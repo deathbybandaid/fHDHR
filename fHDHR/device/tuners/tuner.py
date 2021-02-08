@@ -44,22 +44,25 @@ class Tuner():
             while True:
                 data = connection.recv(2048)
 
-                method = str(data).split(" ")[0]
+                method = str(data).split("b'").split(" ")[0]
                 print(method)
+                if method == "POST":
 
-                try:
-                    index = data.index(b'\r\n\r\n')
-                except Exception:
-                    header, body = (data, bytes())
-                else:
-                    index += len(b'\r\n\r\n')
-                    header, body = (data[:index], data[index:])
-                    header
+                    try:
+                        index = data.index(b'\r\n\r\n')
+                    except Exception:
+                        header, body = (data, bytes())
+                    else:
+                        index += len(b'\r\n\r\n')
+                        header, body = (data[:index], data[index:])
+                        header
 
-                stream_args = json.loads(body)
-                self.stream = Stream(self.fhdhr, self.channels, self, stream_args)
+                    stream_args = json.loads(body)
+                    stream_args["duration"] = 0
+                    self.stream = Stream(self.fhdhr, self.channels, self, stream_args)
 
-                connection.send([chunk for chunk in self.stream.get()])
+                if method == "GET":
+                    connection.send([chunk for chunk in self.stream.get()])
 
     def setup_stream(self, stream_args):
         self.fhdhr.web.session.post("http://127.0.0.1:%s" % (self.socket.getsockname()[1]), json.dumps(stream_args))
