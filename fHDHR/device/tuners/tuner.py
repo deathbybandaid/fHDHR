@@ -71,7 +71,7 @@ class Tuner():
                     r = '%s %s %s\r\n' % ('HTTP/1.1', '200', 'OK')
                     connection.send(r.encode(encoding="utf-8"))
                     connection.send(response_headers_raw.encode(encoding="utf-8"))
-                    connection.send('\r\n')
+                    connection.send('\r\n'.encode(encoding="utf-8"))
                     connection.send(msg.encode(encoding="utf-8"))
                     break
 
