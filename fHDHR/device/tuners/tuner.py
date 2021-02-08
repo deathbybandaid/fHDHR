@@ -19,7 +19,6 @@ class Tuner():
 
         self.tuner_lock = threading.Lock()
         self.current_stream = None
-        self.current_stream_content = None
         self.status = {"status": "Inactive"}
 
         self.chanscan_url = "/api/channels?method=scan"
@@ -110,21 +109,24 @@ class Tuner():
 
     def set_off_status(self):
         self.current_stream = None
-        self.current_stream_content = None
         self.status = {"status": "Inactive"}
 
     def tune(self):
         while self.tuner_lock.locked():
-            self.current_stream_content = self.current_stream.get()
+            for chunk in self.current_stream.get():
+                self.socket.sendall(chunk)
+        self.close()
 
     def get_stream(self):
+
+        req = self.fhdhr.web.session.get("http://%s:%s" % (self.socket.getsockname()[0], self.socket.getsockname()[1]), stream=True)
 
         def generate():
             try:
                 while True:
-                    chunk = self.current_stream_content
-                    if chunk:
-                        yield chunk
+                    for chunk in req.iter_content(chunk_size=self.bytes_per_read):
+                        if chunk:
+                            yield chunk
             except GeneratorExit:
                 self.fhdhr.logger.info("Connection Closed.")
             except Exception as e:
