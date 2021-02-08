@@ -32,6 +32,14 @@ class Tuner():
         self.fhdhr.logger.info("%s Tuner #%s will use a socket at %s:%s." % (self.origin, self.number, self.socket.getsockname()[0], self.socket.getsockname()[1]))
 
         # self.socket.close()
+        socket_listener = threading.Thread(target=self.socket_listen)
+        socket_listener.start()
+
+    def socket_listen(self):
+        print("Starting socket Listener.")
+        while True:
+            connection, client_address = self.socket.accept()
+            print(client_address)
 
     def channel_scan(self, origin, grabbed=False):
         if self.tuner_lock.locked() and not grabbed:
