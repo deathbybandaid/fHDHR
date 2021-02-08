@@ -113,7 +113,7 @@ class Tuner():
 
     def tune(self):
         while self.tuner_lock.locked():
-            self.socket.send(chunk for chunk in self.current_stream.get())
+            self.socket.send([chunk for chunk in self.current_stream.get()])
         self.close()
 
     def get_stream(self):
