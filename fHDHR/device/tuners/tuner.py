@@ -41,6 +41,14 @@ class Tuner():
             connection, client_address = self.socket.accept()
             print(client_address)
 
+            while True:
+                data = connection.recv(2048)
+
+                print(data)
+
+    def setup_stream(self, stream_args):
+        self.fhdhr.web.session.post("http://127.0.0.1:%s" % (self.socket.getsockname()[1]), stream_args)
+
     def channel_scan(self, origin, grabbed=False):
         if self.tuner_lock.locked() and not grabbed:
             self.fhdhr.logger.error("%s Tuner #%s is not available." % (self.origin, self.number))
@@ -131,7 +139,7 @@ class Tuner():
 
         return generate()
 
-    def setup_stream(self, tuner, stream_args):
+    def setup_streamold(self, tuner, stream_args):
         self.stream = Stream(self.fhdhr, self.channels, tuner, stream_args)
 
     def set_status(self, stream_args):

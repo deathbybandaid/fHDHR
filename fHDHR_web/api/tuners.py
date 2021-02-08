@@ -111,7 +111,7 @@ class Tuners():
                             }
 
             try:
-                tuner.setup_stream(tuner, stream_args)
+                tuner.setup_stream(stream_args)
             except TunerError as e:
                 response.headers["X-fHDHR-Error"] = str(e)
                 self.fhdhr.logger.error(response.headers["X-fHDHR-Error"])
