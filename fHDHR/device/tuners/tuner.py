@@ -1,5 +1,7 @@
 import threading
+import socket
 import datetime
+import re
 
 from fHDHR.exceptions import TunerError
 from fHDHR.tools import humanized_time
@@ -23,6 +25,29 @@ class Tuner():
         self.chanscan_url = "/api/channels?method=scan"
         self.close_url = "/api/tuners?method=close&tuner=%s&origin=%s" % (self.number, self.origin)
         self.start_url = "/api/tuners?method=start&tuner=%s&origin=%s" % (self.number, self.origin)
+
+        self.address = self.get_sock_address()
+
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.bind((self.address, 0))
+
+        self.fhdhr.logger.info("%s Tuner #%s will use a socket at %s:%s." % (self.origin. self.number, self.socket.getsockname()[0], self.socket.getsockname()[1]))
+
+        # self.socket.close()
+
+    def get_sock_address(self):
+        if self.fhdhr.config.dict["fhdhr"]["discovery_address"]:
+            return self.fhdhr.config.dict["fhdhr"]["discovery_address"]
+        else:
+            try:
+                base_url = self.stream_args["base_url"].split("://")[1].split(":")[0]
+            except IndexError:
+                return None
+            ip_match = re.match('^' + '[\.]'.join(['(\d{1,3})']*4) + '$', base_url)
+            ip_validate = bool(ip_match)
+            if ip_validate:
+                return base_url
+        return None
 
     def channel_scan(self, origin, grabbed=False):
         if self.tuner_lock.locked() and not grabbed:
