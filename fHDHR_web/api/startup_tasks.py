@@ -16,9 +16,10 @@ class Startup_Tasks():
 
     def get(self, *args):
 
-        self.fhdhr.logger.info("Running Startup Tasks.")
+        self.fhdhr.logger.noob("Running Startup Tasks.")
 
         # Hit Channel Update API
+        self.fhdhr.logger.noob("Performing Channel Scans.")
         for origin in list(self.fhdhr.origins.origins_dict.keys()):
 
             haseverscanned = self.fhdhr.db.get_fhdhr_value("channels", "scanned_time", origin)
@@ -32,9 +33,10 @@ class Startup_Tasks():
                 self.fhdhr.api.get("%s&origin=%s" % (self.channel_update_url, origin))
 
         # Hit EPG Update API
+        self.fhdhr.logger.noob("Performing EPG Updates.")
         for epg_method in self.fhdhr.device.epg.epg_methods:
             self.fhdhr.api.get("%s&source=%s" % (self.epg_update_url, epg_method))
 
-        self.fhdhr.logger.info("Startup Tasks Complete.")
+        self.fhdhr.logger.noob("Startup Tasks Complete.")
 
         return "Success"
