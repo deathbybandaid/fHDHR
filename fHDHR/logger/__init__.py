@@ -10,7 +10,7 @@ class Logger():
             'version': 1,
             'formatters': {
                 'fHDHR': {
-                    'format': '[%(asctime)s] %(levelname)-8s %(filename)-8s Line%(lineno)d - %(message)s'
+                    'format': '[%(asctime)s] %(levelname)s - %(message)s'
                     },
             },
             'loggers': {
