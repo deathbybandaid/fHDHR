@@ -54,7 +54,8 @@ def run(settings, logger, db, script_dir, fHDHR_web, plugins, versions):
         restart_code = "restart"
         while fhdhr.threads["flask"].is_alive():
             time.sleep(1)
-            logger.noob("fHDHR has been signalled to restart.")
+        if restart_code in ["restart"]:
+            logger.noob("fHDHR has been signaled to restart.")
         return restart_code
 
     except KeyboardInterrupt:
