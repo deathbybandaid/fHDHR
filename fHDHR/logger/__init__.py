@@ -3,72 +3,14 @@ import logging
 from logging.config import dictConfig
 
 
-class Color(object):
-    """
-     utility to return ansi colored text.
-    """
-
-    colors = {
-        'black': 30,
-        'red': 31,
-        'green': 32,
-        'yellow': 33,
-        'blue': 34,
-        'magenta': 35,
-        'cyan': 36,
-        'white': 37,
-        'bgred': 41,
-        'bggrey': 100
-    }
-
-    prefix = '\033['
-
-    suffix = '\033[0m'
-
-    def colored(self, text, color=None):
-        if color not in self.colors:
-            color = 'white'
-
-        clr = self.colors[color]
-        return (self.prefix+'%dm%s'+self.suffix) % (clr, text)
-
-
-colored = Color().colored
-
-
-class ColoredFormatter(logging.Formatter):
-
-    def format(self, record):
-
-        timestamp = "[%s]" % record.asctime
-
-        message = record.getMessage()
-
-        mapping = {
-            'INFO': 'cyan',
-            'WARNING': 'yellow',
-            'ERROR': 'red',
-            'CRITICAL': 'bgred',
-            'DEBUG': 'bggrey'
-        }
-
-        clr = mapping.get(record.levelname, 'white')
-
-        return timestamp + colored(record.levelname, clr) + ': ' + message
-
-
 class Logger():
-
-    # '()': 'ColoredFormatter',
-    # 'format': '%(log_color)s[%(asctime)s] %(name)-20s %(levelname)-8s - %(message)s'
 
     def __init__(self, settings):
         logging_config = {
             'version': 1,
             'formatters': {
                 'fHDHR': {
-                    'format': '%(log_color)s [%(asctime)s] %(levelname)s - %(message)s',
-                    '()': ColoredFormatter,
+                    'format': '[%(asctime)s] %(levelname)s - %(message)s',
                     },
             },
             'loggers': {
@@ -103,3 +45,5 @@ class Logger():
         ''' will only get called for undefined attributes '''
         if hasattr(self.logger, name):
             return eval("self.logger.%s" % name)
+        elif hasattr(self.logger, name.lower()):
+            return eval("self.logger.%s" % name.lower())
