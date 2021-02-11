@@ -190,7 +190,7 @@ class Channels():
                 self.fhdhr.db.set_fhdhr_value("channels", "scanned_time", time.time(), origin)
                 return_chan_list.extend([self.list[origin][x].dict for x in list(self.list[origin].keys())])
 
-        self.fhdhr.logger.info("Channel Scans have completed.")
+        self.fhdhr.logger.noob("Channel Scans have completed.")
 
         return return_chan_list
 
