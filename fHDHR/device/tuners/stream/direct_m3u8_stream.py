@@ -57,8 +57,11 @@ class Direct_M3U8_Stream():
                     else:
                         keys = [None for i in range(0, len(segments))]
 
+                    print("a")
+
                     # Only add new segments to our segments dict
                     for segment, key in zip(segments, keys):
+                        print("abbbb")
                         uri = segment.absolute_uri
                         if uri not in list(segments_dict.keys()):
                             segments_dict[uri] = {
