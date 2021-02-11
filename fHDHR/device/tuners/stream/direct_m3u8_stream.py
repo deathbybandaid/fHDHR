@@ -57,11 +57,8 @@ class Direct_M3U8_Stream():
                     else:
                         keys = [None for i in range(0, len(segments))]
 
-                    print("a")
-
                     # Only add new segments to our segments dict
                     for segment, key in zip(segments, keys):
-                        print("abbbb")
                         uri = segment.absolute_uri
                         if uri not in list(segments_dict.keys()):
                             segments_dict[uri] = {
@@ -83,7 +80,7 @@ class Direct_M3U8_Stream():
 
                     self.fhdhr.logger.info("Refreshing m3u8, Loaded %s new segments, removed %s" % (added, removed))
 
-                    for uri in list(segments_dict.items()):
+                    for uri in list(segments_dict.keys()):
 
                         if not segments_dict[uri]["played"]:
 
