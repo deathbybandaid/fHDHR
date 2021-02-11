@@ -58,12 +58,12 @@ class ColoredFormatter(logging.Formatter):
 class Logger():
 
     def __init__(self, settings):
-
         logging_config = {
             'version': 1,
             'formatters': {
                 'fHDHR': {
-                    'format': '[%(asctime)s] %(name)-20s %(levelname)-8s - %(message)s'
+                    '()': 'ColoredFormatter',
+                    'format': '%(log_color)s[%(asctime)s] %(name)-20s %(levelname)-8s - %(message)s'
                     },
             },
             'loggers': {
@@ -92,18 +92,13 @@ class Logger():
             },
         }
         dictConfig(logging_config)
-
-        # Create a custom logger
-        # logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s', level=logging_level)
         self.logger = logging.getLogger('fHDHR')
 
-        """
         self.logger.info("cyan")
         self.logger.warning("yellow")
         self.logger.error("red")
         self.logger.critical("bgred")
         self.logger.debug("bggrey")
-        """
 
     def __getattr__(self, name):
         ''' will only get called for undefined attributes '''
