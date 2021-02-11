@@ -62,7 +62,6 @@ class Logger():
             'version': 1,
             'formatters': {
                 'fHDHR': {
-                    '()': 'ColoredFormatter',
                     'format': '%(log_color)s[%(asctime)s] %(name)-20s %(levelname)-8s - %(message)s'
                     },
             },
