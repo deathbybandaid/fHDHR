@@ -1,5 +1,6 @@
 import os
 import logging
+from logging.config import dictConfig
 
 
 class Color(object):
@@ -57,39 +58,52 @@ class ColoredFormatter(logging.Formatter):
 class Logger():
 
     def __init__(self, settings):
-        self.config = settings
 
-        log_level = self.config.dict["logging"]["level"].upper()
+        logging_config = {
+            'version': 1,
+            'formatters': {
+                'fHDHR': {
+                    'format': '[%(asctime)s] %(name)-20s %(levelname)-8s - %(message)s'
+                    },
+            },
+            'loggers': {
+                # all purpose, fHDHR root logger
+                'fHDHR': {
+                    'level': settings.dict["logging"]["level"].upper(),
+                    'handlers': ['console', 'logfile'],
+                },
+            },
+            'handlers': {
+                # output on stderr
+                'console': {
+                    'level': 'DEBUG',
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'fHDHR',
+                },
+                # generic purpose log file
+                'logfile': {
+                    'level': 'DEBUG',
+                    'class': 'logging.handlers.TimedRotatingFileHandler',
+                    'filename': os.path.join(
+                        settings.internal["paths"]["logs_dir"], '.fHDHR.log'),
+                    'when': 'midnight',
+                    'formatter': 'fHDHR',
+                },
+            },
+        }
+        dictConfig(logging_config)
 
         # Create a custom logger
-        logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s', level=log_level)
+        # logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s', level=logging_level)
         self.logger = logging.getLogger('fHDHR')
-        log_file = os.path.join(self.config.internal["paths"]["logs_dir"], 'fHDHR.log')
 
-        # Create handlers
-        # c_handler = logging.StreamHandler()
-        f_handler = logging.FileHandler(log_file)
-        # c_handler.setLevel(log_level)
-        f_handler.setLevel(log_level)
-
-        # Create formatters and add it to handlers
-        # c_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-        # f_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        # c_handler.setFormatter(c_format)
-        # f_handler.setFormatter(f_format)
-
-        formatter = ColoredFormatter()
-        f_handler.setFormatter(formatter)
-
-        # Add handlers to the logger
-        # logger.addHandler(c_handler)
-        self.logger.addHandler(f_handler)
-
+        """
         self.logger.info("cyan")
         self.logger.warning("yellow")
         self.logger.error("red")
         self.logger.critical("bgred")
         self.logger.debug("bggrey")
+        """
 
     def __getattr__(self, name):
         ''' will only get called for undefined attributes '''
