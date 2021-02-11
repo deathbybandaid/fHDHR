@@ -62,7 +62,7 @@ class Logger():
             'version': 1,
             'formatters': {
                 'fHDHR': {
-                    'format': '[%(asctime)s] %(name)-20s %(levelname)-8s - %(message)s'
+                    'format': '[%(asctime)s] %(name)-5s %(levelname)-5s - %(message)s'
                     },
             },
             'loggers': {
