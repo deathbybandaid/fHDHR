@@ -10,7 +10,7 @@ class Logger():
             'version': 1,
             'formatters': {
                 'fHDHR': {
-                    'format': '[%(asctime)s] %(name)-8s %(funcName)-8s %(levelname)-8s - %(message)s'
+                    'format': '[%(asctime)s] %(name)-8s %(filename)-8s %(funcName)s %(lineno)d %(levelname)-8s - %(message)s'
                     },
             },
             'loggers': {
@@ -40,12 +40,6 @@ class Logger():
         }
         dictConfig(logging_config)
         self.logger = logging.getLogger('fHDHR')
-
-        self.logger.info("INFO cyan")
-        self.logger.warning("WARNING yellow")
-        self.logger.error("ERROR red")
-        self.logger.critical("CRITICAL bgred")
-        self.logger.debug("DEBUG bggrey")
 
     def __getattr__(self, name):
         ''' will only get called for undefined attributes '''
