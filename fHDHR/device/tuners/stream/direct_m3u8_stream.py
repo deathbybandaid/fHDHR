@@ -49,6 +49,7 @@ class Direct_M3U8_Stream():
                         self.fhdhr.logger.info("Connection Closed: %s" % e)
                         self.tuner.close()
                         return None
+                    print("here")
 
                     segments = playlist.segments
 
