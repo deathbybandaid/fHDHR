@@ -58,11 +58,13 @@ class ColoredFormatter(logging.Formatter):
 class Logger():
 
     def __init__(self, settings):
+        color_format = ColoredFormatter(logging.Formatter)
         logging_config = {
             'version': 1,
             'formatters': {
                 'fHDHR': {
-                    'format': '[%(asctime)s] %(name)-5s %(levelname)-5s - %(message)s'
+                    '()': 'color_format',
+                    'format': '%(log_color)s[%(asctime)s] %(name)-20s %(levelname)-8s - %(message)s'
                     },
             },
             'loggers': {
@@ -93,11 +95,11 @@ class Logger():
         dictConfig(logging_config)
         self.logger = logging.getLogger('fHDHR')
 
-        self.logger.info("cyan")
-        self.logger.warning("yellow")
-        self.logger.error("red")
-        self.logger.critical("bgred")
-        self.logger.debug("bggrey")
+        self.logger.info("INFO cyan")
+        self.logger.warning("WARNING yellow")
+        self.logger.error("ERROR red")
+        self.logger.critical("CRITICAL bgred")
+        self.logger.debug("DEBUG bggrey")
 
     def __getattr__(self, name):
         ''' will only get called for undefined attributes '''
