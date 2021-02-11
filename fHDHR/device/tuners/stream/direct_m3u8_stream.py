@@ -49,7 +49,6 @@ class Direct_M3U8_Stream():
                         self.fhdhr.logger.info("Connection Closed: %s" % e)
                         self.tuner.close()
                         return None
-                    print("here")
 
                     segments = playlist.segments
 
@@ -61,7 +60,7 @@ class Direct_M3U8_Stream():
                     # Only add new segments to our segments dict
                     for segment, key in zip(segments, keys):
                         uri = segment.absolute_uri
-                        if uri not in segments_dict:
+                        if uri not in list(segments_dict.keys()):
                             segments_dict[uri] = {
                                                   "played": False,
                                                   "duration": segment.duration,
