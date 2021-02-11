@@ -2,6 +2,58 @@ import os
 import logging
 
 
+class Color(object):
+    """
+     utility to return ansi colored text.
+    """
+
+    colors = {
+        'black': 30,
+        'red': 31,
+        'green': 32,
+        'yellow': 33,
+        'blue': 34,
+        'magenta': 35,
+        'cyan': 36,
+        'white': 37,
+        'bgred': 41,
+        'bggrey': 100
+    }
+
+    prefix = '\033['
+
+    suffix = '\033[0m'
+
+    def colored(self, text, color=None):
+        if color not in self.colors:
+            color = 'white'
+
+        clr = self.colors[color]
+        return (self.prefix+'%dm%s'+self.suffix) % (clr, text)
+
+
+colored = Color().colored
+
+
+class ColoredFormatter(logging.Formatter):
+
+    def format(self, record):
+
+        message = record.getMessage()
+
+        mapping = {
+            'INFO': 'cyan',
+            'WARNING': 'yellow',
+            'ERROR': 'red',
+            'CRITICAL': 'bgred',
+            'DEBUG': 'bggrey'
+        }
+
+        clr = mapping.get(record.levelname, 'white')
+
+        return colored(record.levelname, clr) + ': ' + message
+
+
 class Logger():
 
     def __init__(self, settings):
@@ -19,6 +71,8 @@ class Logger():
         f_handler = logging.FileHandler(log_file)
         # c_handler.setLevel(log_level)
         f_handler.setLevel(log_level)
+        formatter = ColoredFormatter()
+        f_handler.setFormatter(formatter)
 
         # Create formatters and add it to handlers
         # c_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
@@ -29,6 +83,12 @@ class Logger():
         # Add handlers to the logger
         # logger.addHandler(c_handler)
         self.logger.addHandler(f_handler)
+
+        self.logger.info("cyan")
+        self.logger.warning("yellow")
+        self.logger.error("red")
+        self.logger.critical("bgred")
+        self.logger.debug("bggrey")
 
     def __getattr__(self, name):
         ''' will only get called for undefined attributes '''
