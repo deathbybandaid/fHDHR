@@ -40,6 +40,8 @@ class ColoredFormatter(logging.Formatter):
 
     def format(self, record):
 
+        timestamp = record.asctime
+
         message = record.getMessage()
 
         mapping = {
@@ -52,7 +54,7 @@ class ColoredFormatter(logging.Formatter):
 
         clr = mapping.get(record.levelname, 'white')
 
-        return colored(record.levelname, clr) + ': ' + message
+        return timestamp + colored(record.levelname, clr) + ': ' + message
 
 
 class Logger():
