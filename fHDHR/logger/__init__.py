@@ -40,7 +40,7 @@ class ColoredFormatter(logging.Formatter):
 
     def format(self, record):
 
-        timestamp = record.asctime
+        timestamp = "[%s]" % record.asctime
 
         message = record.getMessage()
 
@@ -67,8 +67,8 @@ class Logger():
             'version': 1,
             'formatters': {
                 'fHDHR': {
+                    'format': '%(log_color)s [%(asctime)s] %(levelname)s - %(message)s',
                     '()': ColoredFormatter,
-                    'format': '%(log_color)s [%(asctime)s] %(levelname)s - %(message)s'
                     },
             },
             'loggers': {
