@@ -137,8 +137,6 @@ class Channels():
         if isinstance(origins_list, str):
             origins_list = [origins_list]
 
-        self.fhdhr.logger.noob("Performing Channel Scans for %s. This Process can take some time, Please Wait." % ",".join(origins_list))
-
         return_chan_list = []
         for origin in origins_list:
 
@@ -152,12 +150,15 @@ class Channels():
 
                 channel_origin_id_list = [str(self.list[origin][x].dict["origin_id"]) for x in list(self.list[origin].keys())]
 
-                self.fhdhr.logger.info("Performing Channel Scan for %s." % origin)
+                if self.fhdhr.config.dict["logging"]["level"].upper() == "NOOB":
+                    self.fhdhr.logger.noob("Performing Channel Scan for %s. This Process can take some time, Please Wait." % origin)
+                else:
+                    self.fhdhr.logger.info("Performing Channel Scan for %s." % origin)
 
                 channel_dict_list = self.origins.origins_dict[origin].get_channels()
                 self.fhdhr.logger.info("Found %s channels for %s." % (len(channel_dict_list), origin))
 
-                self.fhdhr.logger.info("Performing Channel Import.")
+                self.fhdhr.logger.info("Performing %s Channel Import, This can take some time, Please wait." % origin)
 
                 newchan = 0
                 chan_scan_start = time.time()
@@ -189,8 +190,6 @@ class Channels():
 
                 self.fhdhr.db.set_fhdhr_value("channels", "scanned_time", time.time(), origin)
                 return_chan_list.extend([self.list[origin][x].dict for x in list(self.list[origin].keys())])
-
-        self.fhdhr.logger.noob("Channel Scans have completed.")
 
         return return_chan_list
 
