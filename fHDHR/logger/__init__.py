@@ -42,6 +42,8 @@ class Logger():
         }
         dictConfig(logging_config)
         self.logger = logging.getLogger('fHDHR')
+        self.logger.noob("NOOB")
+        self.logger.info("INFO")
 
     def custom_log_levels(self):
 
