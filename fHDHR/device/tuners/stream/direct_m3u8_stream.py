@@ -72,16 +72,17 @@ class Direct_M3U8_Stream():
                             segments[uri]["last_seen"] = time.time()
 
                     # Cleanup Play Queue
-                    for uri, data in list(segments_dict.items()):
-                        if data["played"] and (time.time() - data["last_seen"]) > 10:
+                    for uri in list(segments_dict.keys()):
+                        if segments_dict[uri]["played"] and (time.time() - segments_dict[uri]["last_seen"]) > 10:
                             self.fhdhr.logger.debug("Removed %s from play queue." % uri)
                             del segments[uri]
                             removed += 1
 
                     self.fhdhr.logger.info("Refreshing m3u8, Loaded %s new segments, removed %s" % (added, removed))
 
-                    for uri, data in list(segments_dict.items()):
-                        if not data["played"]:
+                    for uri in list(segments_dict.items()):
+
+                        if not segments_dict[uri]["played"]:
 
                             total_chunks += 1
 
@@ -91,17 +92,17 @@ class Direct_M3U8_Stream():
                             else:
                                 chunk = self.fhdhr.web.session.get(uri).content
 
-                            if data["key"]:
-                                if data["key"]["uri"]:
+                            if segments_dict[uri]["key"]:
+                                if segments_dict[uri]["key"]["uri"]:
                                     if self.stream_args["stream_info"]["headers"]:
-                                        keyfile = self.fhdhr.web.session.get(data["key"]["uri"], headers=self.stream_args["stream_info"]["headers"]).content
+                                        keyfile = self.fhdhr.web.session.get(segments_dict[uri]["key"]["uri"], headers=self.stream_args["stream_info"]["headers"]).content
                                     else:
-                                        keyfile = self.fhdhr.web.session.get(data["key"]["uri"]).content
+                                        keyfile = self.fhdhr.web.session.get(segments_dict[uri]["key"]["uri"]).content
                                     cryptor = AES.new(keyfile, AES.MODE_CBC, keyfile)
-                                    self.fhdhr.logger.debug("Decrypting Chunk #%s with key: %s" % (total_chunks, data["key"]["uri"]))
+                                    self.fhdhr.logger.debug("Decrypting Chunk #%s with key: %s" % (total_chunks, segments_dict[uri]["key"]["uri"]))
                                     chunk = cryptor.decrypt(chunk)
 
-                            data['played'] = True
+                            segments_dict[uri]['played'] = True
 
                             if not chunk:
                                 break
