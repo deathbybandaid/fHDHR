@@ -137,7 +137,7 @@ class Channels():
         if isinstance(origins_list, str):
             origins_list = [origins_list]
 
-        self.fhdhr.logger.info("Performing Channel Scans for %s. This Process can take some time, Please Wait." % ",".join(origins_list))
+        self.fhdhr.logger.noob("Performing Channel Scans for %s. This Process can take some time, Please Wait." % ",".join(origins_list))
 
         return_chan_list = []
         for origin in origins_list:
