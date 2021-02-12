@@ -117,7 +117,7 @@ class Direct_M3U8_Stream():
 
                             total_secs_served += duration
 
-                            index = data.find(b'mvhd')+4
+                            index = chunk.find(b'mvhd')+4
                             time_scale = struct.unpack('>I', data[index + 13:index + 13 + 4])
                             durations = struct.unpack('>I', data[index + 13 + 4:index + 13 + 4 + 4])
                             vduration = durations[0] / time_scale[0]
