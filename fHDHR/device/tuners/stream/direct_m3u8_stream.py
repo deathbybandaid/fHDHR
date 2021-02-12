@@ -4,6 +4,7 @@ import datetime
 import m3u8
 from collections import OrderedDict
 from Crypto.Cipher import AES
+import re
 
 # from fHDHR.exceptions import TunerError
 
@@ -18,9 +19,6 @@ class Direct_M3U8_Stream():
         self.bytes_per_read = int(self.fhdhr.config.dict["streaming"]["bytes_per_read"])
 
     def get(self):
-
-        if not self.stream_args["duration"] == 0:
-            self.stream_args["time_end"] = self.stream_args["duration"] + time.time()
 
         self.fhdhr.logger.info("Detected stream of m3u8 URL: %s" % self.stream_args["stream_info"]["url"])
 
@@ -119,6 +117,18 @@ class Direct_M3U8_Stream():
 
                             total_secs_served += duration
 
+                            length_regexp = 'Duration: (\d{2}):(\d{2}):(\d{2})\.\d+,'
+                            re_length = re.compile(length_regexp)
+                            matches = re_length.search(chunk.read())
+
+                            if matches:
+                                video_length = int(matches.group(1)) * 3600 + \
+                                               int(matches.group(2)) * 60 + \
+                                               int(matches.group(3))
+                                print("Video length in seconds: {}".format(video_length))
+                            else:
+                                print("Can't determine video length.")
+
                             chunk_size = int(sys.getsizeof(chunk))
                             self.fhdhr.logger.info("Passing Through Chunk #%s: size %s, duration %s" % (data["chunk_number"], chunk_size, duration))
                             yield chunk
@@ -129,10 +139,7 @@ class Direct_M3U8_Stream():
                                 time.sleep(wait)
 
                             if self.stream_args["duration"]:
-                                print(self.stream_args["duration"])
-                                print(total_secs_served)
-                                print(time.time() >= self.stream_args["time_end"])
-                                if (total_secs_served >= int(self.stream_args["duration"])) or (time.time() >= self.stream_args["time_end"]):
+                                if (total_secs_served >= int(self.stream_args["duration"])) or (runtime >= self.stream_args["duration"]):
                                     self.fhdhr.logger.info("Requested Duration Expired.")
                                     self.tuner.close()
 
