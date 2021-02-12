@@ -75,8 +75,6 @@ class Direct_M3U8_Stream():
 
                     # Cleanup Play Queue
                     for uri, data in list(segments_dict.items()):
-                        print(uri)
-                        print(data)
                         if data["played"] and (datetime.datetime.utcnow() - data["last_seen"]).total_seconds() > 10:
                             self.fhdhr.logger.debug("Removed %s from play queue." % uri)
                             del segments_dict[uri]
