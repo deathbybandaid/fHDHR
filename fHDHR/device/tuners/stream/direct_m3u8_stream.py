@@ -129,6 +129,9 @@ class Direct_M3U8_Stream():
                                 time.sleep(wait)
 
                             if self.stream_args["duration"]:
+                                print(self.stream_args["duration"])
+                                print(total_secs_served)
+                                print(time.time() >= self.stream_args["time_end"])
                                 if (total_secs_served >= int(self.stream_args["duration"])) or (time.time() >= self.stream_args["time_end"]):
                                     self.fhdhr.logger.info("Requested Duration Expired.")
                                     self.tuner.close()
