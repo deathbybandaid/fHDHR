@@ -108,17 +108,30 @@ class Direct_M3U8_Stream():
                                 break
                                 # raise TunerError("807 - No Video Data")
 
+                            duration = data['duration']
+                            runtime = (datetime.datetime.utcnow() - start_time).total_seconds()
+                            target_diff = 0.5 * duration
+
+                            if total_secs_served > 0:
+                                wait = total_secs_served - target_diff - runtime
+                            else:
+                                wait = 0
+
+                            total_secs_served += duration
+
                             chunk_size = int(sys.getsizeof(chunk))
-                            self.fhdhr.logger.info("Passing Through Chunk #%s with size %s" % (data["chunk_number"], chunk_size))
+                            self.fhdhr.logger.info("Passing Through Chunk #%s: size %s, duration %s" % (data["chunk_number"], chunk_size, duration))
                             yield chunk
                             self.tuner.add_downloaded_size(chunk_size)
 
-                            """
-                            if (not self.stream_args["duration"] == 0 and
-                               not time.time() < self.stream_args["time_end"]):
-                                self.fhdhr.logger.info("Requested Duration Expired.")
-                                self.tuner.close()
-                            """
+                            # We can't wait negative time..
+                            if wait > 0:
+                                time.sleep(wait)
+
+                            if self.stream_args["duration"]:
+                                if (total_secs_served >= int(self.stream_args["duration"])) or (time.time() >= self.stream_args["time_end"]):
+                                    self.fhdhr.logger.info("Requested Duration Expired.")
+                                    self.tuner.close()
 
                 self.fhdhr.logger.info("Connection Closed: Tuner Lock Removed")
 
