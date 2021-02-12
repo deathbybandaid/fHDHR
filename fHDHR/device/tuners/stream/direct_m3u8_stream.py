@@ -4,7 +4,6 @@ import datetime
 import m3u8
 from collections import OrderedDict
 from Crypto.Cipher import AES
-import struct
 
 # from fHDHR.exceptions import TunerError
 
@@ -116,12 +115,6 @@ class Direct_M3U8_Stream():
                                 wait = 0
 
                             total_secs_served += duration
-
-                            index = chunk.find(b'mvhd')+4
-                            time_scale = struct.unpack('>I', data[index + 13:index + 13 + 4])
-                            durations = struct.unpack('>I', data[index + 13 + 4:index + 13 + 4 + 4])
-                            vduration = durations[0] / time_scale[0]
-                            print(vduration)
 
                             chunk_size = int(sys.getsizeof(chunk))
                             self.fhdhr.logger.info("Passing Through Chunk #%s: size %s, duration %s" % (data["chunk_number"], chunk_size, duration))
