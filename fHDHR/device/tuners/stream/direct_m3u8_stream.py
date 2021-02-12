@@ -26,14 +26,13 @@ class Direct_M3U8_Stream():
         if self.stream_args["transcode_quality"]:
             self.fhdhr.logger.info("Client requested a %s transcode for stream. Direct Method cannot transcode." % self.stream_args["transcode_quality"])
 
-        segments_dict = OrderedDict()
-        start_time = time.time()
-        total_secs_served = 0
-
         def generate():
-            total_chunks = 0
 
             try:
+                segments_dict = OrderedDict()
+                start_time = time.time()
+                total_secs_served = 0
+                chunks_counter = 0
 
                 while self.tuner.tuner_lock.locked():
 
@@ -61,9 +60,11 @@ class Direct_M3U8_Stream():
                     for segment, key in zip(m3u8_segments, keys):
                         uri = segment.absolute_uri
                         if uri not in list(segments_dict.keys()):
+                            chunks_counter += 1
                             segments_dict[uri] = {
                                                   "played": False,
                                                   "duration": segment.duration,
+                                                  "chunk_number": chunks_counter,
                                                   "key": key
                                                   }
                             added += 1
@@ -73,6 +74,8 @@ class Direct_M3U8_Stream():
 
                     # Cleanup Play Queue
                     for uri, data in list(segments_dict.items()):
+                        print(uri)
+                        print(data)
                         if data["played"] and (time.time() - data["last_seen"]) > 10:
                             self.fhdhr.logger.debug("Removed %s from play queue." % uri)
                             del segments_dict[uri]
@@ -84,9 +87,7 @@ class Direct_M3U8_Stream():
 
                         if not data["played"]:
 
-                            total_chunks += 1
-
-                            self.fhdhr.logger.debug("Downloading Chunk #%s: %s" % (total_chunks, uri))
+                            self.fhdhr.logger.debug("Downloading Chunk #%s: %s" % (data["chunk_number"], uri))
                             if self.stream_args["stream_info"]["headers"]:
                                 chunk = self.fhdhr.web.session.get(uri, headers=self.stream_args["stream_info"]["headers"]).content
                             else:
@@ -99,17 +100,17 @@ class Direct_M3U8_Stream():
                                     else:
                                         keyfile = self.fhdhr.web.session.get(data["key"]["uri"]).content
                                     cryptor = AES.new(keyfile, AES.MODE_CBC, keyfile)
-                                    self.fhdhr.logger.debug("Decrypting Chunk #%s with key: %s" % (total_chunks, data["key"]["uri"]))
+                                    self.fhdhr.logger.debug("Decrypting Chunk #%s with key: %s" % (data["chunk_number"], data["key"]["uri"]))
                                     chunk = cryptor.decrypt(chunk)
 
-                            data['played'] = True
+                            segments_dict[uri]["played"] = True
 
                             if not chunk:
                                 break
                                 # raise TunerError("807 - No Video Data")
 
                             chunk_size = int(sys.getsizeof(chunk))
-                            self.fhdhr.logger.info("Passing Through Chunk #%s with size %s" % (total_chunks, chunk_size))
+                            self.fhdhr.logger.info("Passing Through Chunk #%s with size %s" % (data["chunk_number"], chunk_size))
                             yield chunk
                             self.tuner.add_downloaded_size(chunk_size)
 
