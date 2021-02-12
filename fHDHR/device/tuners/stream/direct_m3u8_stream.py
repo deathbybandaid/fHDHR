@@ -50,15 +50,15 @@ class Direct_M3U8_Stream():
                         self.tuner.close()
                         return None
 
-                    segments = playlist.segments
+                    m3u8_segments = playlist.segments
 
                     if playlist.keys != [None]:
                         keys = [{"uri": key.absolute_uri, "method": key.method, "iv": key.iv} for key in playlist.keys if key]
                     else:
-                        keys = [None for i in range(0, len(segments))]
+                        keys = [None for i in range(0, len(m3u8_segments))]
 
-                    # Only add new segments to our segments dict
-                    for segment, key in zip(segments, keys):
+                    # Only add new m3u8_segments to our segments_dict
+                    for segment, key in zip(m3u8_segments, keys):
                         uri = segment.absolute_uri
                         if uri not in list(segments_dict.keys()):
                             segments_dict[uri] = {
@@ -69,20 +69,20 @@ class Direct_M3U8_Stream():
                             added += 1
                             self.fhdhr.logger.debug("Adding %s to play queue." % uri)
 
-                            segments[uri]["last_seen"] = time.time()
+                            segments_dict[uri]["last_seen"] = time.time()
 
                     # Cleanup Play Queue
-                    for uri in list(segments_dict.keys()):
-                        if segments_dict[uri]["played"] and (time.time() - segments_dict[uri]["last_seen"]) > 10:
+                    for uri, data in list(segments_dict.items()):
+                        if data["played"] and (time.time() - data["last_seen"]) > 10:
                             self.fhdhr.logger.debug("Removed %s from play queue." % uri)
-                            del segments[uri]
+                            del segments_dict[uri]
                             removed += 1
 
                     self.fhdhr.logger.info("Refreshing m3u8, Loaded %s new segments, removed %s" % (added, removed))
 
-                    for uri in list(segments_dict.keys()):
+                    for uri, dict in list(segments_dict.items()):
 
-                        if not segments_dict[uri]["played"]:
+                        if not data["played"]:
 
                             total_chunks += 1
 
@@ -92,17 +92,17 @@ class Direct_M3U8_Stream():
                             else:
                                 chunk = self.fhdhr.web.session.get(uri).content
 
-                            if segments_dict[uri]["key"]:
-                                if segments_dict[uri]["key"]["uri"]:
+                            if data["key"]:
+                                if data["key"]["uri"]:
                                     if self.stream_args["stream_info"]["headers"]:
-                                        keyfile = self.fhdhr.web.session.get(segments_dict[uri]["key"]["uri"], headers=self.stream_args["stream_info"]["headers"]).content
+                                        keyfile = self.fhdhr.web.session.get(data["key"]["uri"], headers=self.stream_args["stream_info"]["headers"]).content
                                     else:
-                                        keyfile = self.fhdhr.web.session.get(segments_dict[uri]["key"]["uri"]).content
+                                        keyfile = self.fhdhr.web.session.get(data["key"]["uri"]).content
                                     cryptor = AES.new(keyfile, AES.MODE_CBC, keyfile)
-                                    self.fhdhr.logger.debug("Decrypting Chunk #%s with key: %s" % (total_chunks, segments_dict[uri]["key"]["uri"]))
+                                    self.fhdhr.logger.debug("Decrypting Chunk #%s with key: %s" % (total_chunks, data["key"]["uri"]))
                                     chunk = cryptor.decrypt(chunk)
 
-                            segments_dict[uri]['played'] = True
+                            data['played'] = True
 
                             if not chunk:
                                 break
