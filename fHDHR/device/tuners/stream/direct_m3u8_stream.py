@@ -82,7 +82,7 @@ class Direct_M3U8_Stream():
 
                     self.fhdhr.logger.info("Refreshing m3u8, Loaded %s new segments, removed %s" % (added, removed))
 
-                    for uri, dict in list(segments_dict.items()):
+                    for uri, data in list(segments_dict.items()):
 
                         if not data["played"]:
 
