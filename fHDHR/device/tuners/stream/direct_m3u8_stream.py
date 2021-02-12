@@ -119,7 +119,7 @@ class Direct_M3U8_Stream():
 
                             length_regexp = 'Duration: (\d{2}):(\d{2}):(\d{2})\.\d+,'
                             re_length = re.compile(length_regexp)
-                            matches = re_length.search(chunk.read())
+                            matches = re_length.search(chunk)
 
                             if matches:
                                 video_length = int(matches.group(1)) * 3600 + \
