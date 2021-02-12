@@ -4,7 +4,7 @@ import datetime
 import m3u8
 from collections import OrderedDict
 from Crypto.Cipher import AES
-import re
+import struct
 
 # from fHDHR.exceptions import TunerError
 
@@ -117,17 +117,11 @@ class Direct_M3U8_Stream():
 
                             total_secs_served += duration
 
-                            length_regexp = 'Duration: (\d{2}):(\d{2}):(\d{2})\.\d+,'
-                            re_length = re.compile(length_regexp)
-                            matches = re_length.search(chunk.decode('utf-8').read())
-
-                            if matches:
-                                video_length = int(matches.group(1)) * 3600 + \
-                                               int(matches.group(2)) * 60 + \
-                                               int(matches.group(3))
-                                print("Video length in seconds: {}".format(video_length))
-                            else:
-                                print("Can't determine video length.")
+                            index = data.find(b'mvhd')+4
+                            time_scale = struct.unpack('>I', data[index + 13:index + 13 + 4])
+                            durations = struct.unpack('>I', data[index + 13 + 4:index + 13 + 4 + 4])
+                            vduration = durations[0] / time_scale[0]
+                            print(vduration)
 
                             chunk_size = int(sys.getsizeof(chunk))
                             self.fhdhr.logger.info("Passing Through Chunk #%s: size %s, duration %s" % (data["chunk_number"], chunk_size, duration))
