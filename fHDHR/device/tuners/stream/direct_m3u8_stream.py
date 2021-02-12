@@ -37,7 +37,7 @@ class Direct_M3U8_Stream():
 
                 while self.tuner.tuner_lock.locked():
 
-                    added, removed = 0, 0
+                    added, removed, played = 0, [], []
 
                     # (re)Load the m3u8 playlist, apply headers if needbe
                     try:
@@ -61,7 +61,6 @@ class Direct_M3U8_Stream():
                     for segment, key in zip(m3u8_segments, keys):
                         uri = segment.absolute_uri
                         if uri not in list(segments_dict.keys()):
-                            print(segment.duration)
                             segments_dict[uri] = {
                                                   "played": False,
                                                   "duration": segment.duration,
@@ -76,10 +75,12 @@ class Direct_M3U8_Stream():
                     for uri, data in list(segments_dict.items()):
                         if data["played"] and (time.time() - data["last_seen"]) > 10:
                             self.fhdhr.logger.debug("Removed %s from play queue." % uri)
-                            del segments_dict[uri]
-                            removed += 1
+                            removed.append(uri)
 
-                    self.fhdhr.logger.info("Refreshing m3u8, Loaded %s new segments, removed %s" % (added, removed))
+                    for uri in removed:
+                        del segments_dict[uri]
+
+                    self.fhdhr.logger.info("Refreshing m3u8, Loaded %s new segments, removed %s" % (added, len(removed)))
 
                     for uri, dict in list(segments_dict.items()):
 
@@ -103,7 +104,7 @@ class Direct_M3U8_Stream():
                                     self.fhdhr.logger.debug("Decrypting Chunk #%s with key: %s" % (total_chunks, data["key"]["uri"]))
                                     chunk = cryptor.decrypt(chunk)
 
-                            data['played'] = True
+                            played.append(uri)
 
                             if not chunk:
                                 break
@@ -120,6 +121,9 @@ class Direct_M3U8_Stream():
                                 self.fhdhr.logger.info("Requested Duration Expired.")
                                 self.tuner.close()
                             """
+
+                    for uri in played:
+                        segments_dict[uri]["played"] = True
 
                 self.fhdhr.logger.info("Connection Closed: Tuner Lock Removed")
 
