@@ -61,6 +61,7 @@ class Direct_M3U8_Stream():
                     for segment, key in zip(m3u8_segments, keys):
                         uri = segment.absolute_uri
                         if uri not in list(segments_dict.keys()):
+                            print(segment.duration)
                             segments_dict[uri] = {
                                                   "played": False,
                                                   "duration": segment.duration,
