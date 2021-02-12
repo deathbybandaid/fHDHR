@@ -1,5 +1,6 @@
 import sys
 import time
+import datetime
 import m3u8
 from collections import OrderedDict
 from Crypto.Cipher import AES
@@ -30,7 +31,7 @@ class Direct_M3U8_Stream():
 
             try:
                 segments_dict = OrderedDict()
-                start_time = time.time()
+                start_time = datetime.utcnow()
                 total_secs_served = 0
                 chunks_counter = 0
 
@@ -70,13 +71,13 @@ class Direct_M3U8_Stream():
                             added += 1
                             self.fhdhr.logger.debug("Adding %s to play queue." % uri)
 
-                        segments_dict[uri]["last_seen"] = time.time()
+                        segments_dict[uri]["last_seen"] = datetime.utcnow()
 
                     # Cleanup Play Queue
                     for uri, data in list(segments_dict.items()):
                         print(uri)
                         print(data)
-                        if data["played"] and (time.time() - data["last_seen"]) > 10:
+                        if data["played"] and (datetime.utcnow() - data["last_seen"]).total_seconds() > 10:
                             self.fhdhr.logger.debug("Removed %s from play queue." % uri)
                             del segments_dict[uri]
                             removed += 1
