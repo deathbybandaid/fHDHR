@@ -157,6 +157,8 @@ class M3U():
                 return "No Stream Active."
             self.fhdhr.logger.info("Client Refreshing proxyied %s stream on tuner #%s." % (origin, tuner_number))
 
+            self.fhdhr.device.tuners.tuners[origin][str(tuner_number)].stream.update_request_time()
+
             if not hasattr(self.fhdhr.device.tuners.tuners[origin][str(tuner_number)].stream, "m3u8_file"):
                 return "No m3u8_file"
 
