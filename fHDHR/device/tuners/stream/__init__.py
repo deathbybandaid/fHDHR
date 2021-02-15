@@ -1,6 +1,7 @@
 import sys
 import datetime
 from collections import OrderedDict
+import cv2
 
 
 from .direct_stream import Direct_Stream
@@ -36,6 +37,8 @@ class Stream():
         return None
 
     def get(self):
+        print(cv2.__version__)
+
         def buffer_generator():
             start_time = datetime.datetime.utcnow()
             segments_dict = OrderedDict()
