@@ -1,6 +1,7 @@
 import sys
 import datetime
 from collections import OrderedDict
+from moviepy.editor import VideoFileClip
 
 
 from .direct_stream import Direct_Stream
@@ -53,6 +54,9 @@ class Stream():
                         self.fhdhr.logger.debug("Adding Chunk #%s to the buffer." % chunks_counter)
                         chunk_size = int(sys.getsizeof(chunk))
                         self.tuner.add_downloaded_size(chunk_size)
+
+                        clip = VideoFileClip(chunk)
+                        print(clip.duration)
 
                         if len(list(segments_dict.items())) >= self.buffer_size:
                             chunk_number = list(segments_dict.keys())[0]
