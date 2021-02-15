@@ -166,9 +166,7 @@ class M3U():
 
             m3u8_file = tuner.stream.method.m3u8_file
 
-            resp = Response(status=200, response=m3u8_file, mimetype='audio/x-mpegurl')
-            resp.headers["content-disposition"] = "attachment; filename=%s_%s.m3u8" % (origin, tuner_number)
-            return resp
+            return Response(status=200, response=m3u8_file, mimetype='text/html')
 
         elif method == "m3u8_proxy_start":
 
