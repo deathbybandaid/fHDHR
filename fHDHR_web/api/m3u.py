@@ -166,6 +166,7 @@ class M3U():
             return Response(status=200, response=m3u8_file, mimetype='audio/x-mpegurl')
 
         elif method == "m3u8_proxy_start":
+            print("here")
 
             tuner_number = request.args.get('tuner', default=None, type=str)
             if not tuner_number:

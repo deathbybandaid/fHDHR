@@ -170,7 +170,13 @@ class Tuners():
 
             if stream_method == "m3u8_proxy":
                 # Trigger tuner start
-                self.fhdhr.api.client.get("/api/m3u?method=m3u8_proxy_start&tuner=%s&origin=%s" % (tunernum, origin))
+                try:
+                    self.fhdhr.api.client.get("/api/m3u?method=m3u8_proxy_start&tuner=%s&origin=%s" % (tunernum, origin))
+                except TypeError as e:
+                    response = Response("Service Unavailable", status=503)
+                    response.headers["X-fHDHR-Error"] = str(e)
+                    tuner.close()
+                    abort(response)
                 return redirect("/api/m3u?method=m3u8_proxy&tuner=%s&origin=%s" % (tunernum, origin))
             else:
                 return Response(stream_with_context(tuner.stream.get()), mimetype=stream_args["content_type"])
