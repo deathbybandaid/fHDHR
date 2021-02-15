@@ -42,6 +42,7 @@ class Proxy_M3U8_Stream():
                     self.tuner.close()
                     return None
 
+                self.fhdhr.logger.info("Updating m3u8 file.")
                 self.m3u8_file = StringIO(playlist.dumps())
 
                 duration = sum([segment.duration for segment in playlist.segments])
