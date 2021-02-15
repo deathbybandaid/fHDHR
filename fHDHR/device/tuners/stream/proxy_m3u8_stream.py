@@ -45,6 +45,9 @@ class Proxy_M3U8_Stream():
                 self.fhdhr.logger.info("Updating m3u8 file.")
                 self.m3u8_file = StringIO(playlist.dumps())
 
+                for line in playlist.dumps().readlines():
+                    print(line)
+
                 duration = sum([segment.duration for segment in playlist.segments])
 
                 runtime = (datetime.datetime.utcnow() - start_time).total_seconds()
