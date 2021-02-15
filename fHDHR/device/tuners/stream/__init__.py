@@ -59,7 +59,7 @@ class Stream():
                         # create video capture object
                         data = cv2.VideoCapture(chunk)
 
-                        # count the number of frames
+                        """# count the number of frames
                         frames = data.get(cv2.CAP_PROP_FRAME_COUNT)
                         fps = int(data.get(cv2.CAP_PROP_FPS))
 
@@ -67,7 +67,7 @@ class Stream():
                         seconds = int(frames / fps)
                         video_time = str(datetime.timedelta(seconds=seconds))
                         print("duration in seconds: %s" % seconds)
-                        print("video time: %s" % video_time)
+                        print("video time: %s" % video_time)"""
 
                         if len(list(segments_dict.items())) >= self.buffer_size:
                             chunk_number = list(segments_dict.keys())[0]
