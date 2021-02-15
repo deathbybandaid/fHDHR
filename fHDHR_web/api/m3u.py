@@ -153,18 +153,22 @@ class M3U():
             if not origin or origin not in origin_methods:
                 return "Invalid channels origin"
 
-            if not self.fhdhr.device.tuners.tuners[origin][str(tuner_number)].stream:
+            tuner = self.fhdhr.device.tuners.tuners[origin][str(tuner_number)]
+
+            if not tuner.stream:
                 return "No Stream Active."
             self.fhdhr.logger.info("Client Refreshing proxyied %s stream on tuner #%s." % (origin, tuner_number))
 
-            if not hasattr(self.fhdhr.device.tuners.tuners[origin][str(tuner_number)].stream.method, "m3u8_file"):
+            if not hasattr(tuner.stream.method, "m3u8_file"):
                 return "No m3u8_file"
 
-            self.fhdhr.device.tuners.tuners[origin][str(tuner_number)].stream.method.update_request_time()
+            tuner.stream.method.update_request_time()
 
-            m3u8_file = self.fhdhr.device.tuners.tuners[origin][str(tuner_number)].stream.method.m3u8_file
+            m3u8_file = tuner.stream.method.m3u8_file
 
-            return Response(status=200, response=m3u8_file, mimetype='audio/x-mpegurl')
+            resp = Response(status=200, response=m3u8_file, mimetype='audio/x-mpegurl')
+            resp.headers["content-disposition"] = "attachment; filename=%s_%s.m3u8" % (origin, tuner_number)
+            return resp
 
         elif method == "m3u8_proxy_start":
 
