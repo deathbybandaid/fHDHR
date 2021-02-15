@@ -37,7 +37,6 @@ class Stream():
         return None
 
     def get(self):
-        print(cv2.__version__)
 
         def buffer_generator():
             start_time = datetime.datetime.utcnow()
@@ -56,6 +55,19 @@ class Stream():
                         self.fhdhr.logger.debug("Adding Chunk #%s to the buffer." % chunks_counter)
                         chunk_size = int(sys.getsizeof(chunk))
                         self.tuner.add_downloaded_size(chunk_size)
+
+                        # create video capture object
+                        data = cv2.VideoCapture(chunk)
+
+                        # count the number of frames
+                        frames = data.get(cv2.CAP_PROP_FRAME_COUNT)
+                        fps = int(data.get(cv2.CAP_PROP_FPS))
+
+                        # calculate dusration of the video
+                        seconds = int(frames / fps)
+                        video_time = str(datetime.timedelta(seconds=seconds))
+                        print("duration in seconds:", seconds)
+                        print("video time:", video_time)
 
                         if len(list(segments_dict.items())) >= self.buffer_size:
                             chunk_number = list(segments_dict.keys())[0]
