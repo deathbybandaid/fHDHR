@@ -141,5 +141,43 @@ class M3U():
                 return redirect("%s&retmessage=%s" % (redirect_url, urllib.parse.quote("%s Success" % method)))
             else:
                 return redirect("%s?retmessage=%s" % (redirect_url, urllib.parse.quote("%s Success" % method)))
+
+        elif method == "m3u8_proxy":
+
+            tuner_number = request.args.get('tuner', default=None, type=str)
+            if not tuner_number:
+                return "Invalid Tuner"
+
+            origin_methods = self.fhdhr.origins.valid_origins
+            origin = request.args.get('origin', default=None, type=str)
+            if not origin or origin not in origin_methods:
+                return "Invalid channels origin"
+
+            if not self.fhdhr.device.tuners.tuners[origin][str(tuner_number)].stream:
+                return "No Stream Active."
+
+            if not hasattr(tuner_number, "m3u8_file"):
+                return "No m3u8_file"
+
+            self.fhdhr.device.tuners.tuners[origin][str(tuner_number)].stream.update_request_time()
+
+            m3u8_file = self.fhdhr.device.tuners.tuners[origin][str(tuner_number)].stream.m3u8_file
+
+            return Response(status=200, response=m3u8_file, mimetype='audio/x-mpegurl')
+
+        elif method == "m3u8_proxy_start":
+
+            tuner_number = request.args.get('tuner', default=None, type=str)
+            if not tuner_number:
+                return "Invalid Tuner"
+
+            origin_methods = self.fhdhr.origins.valid_origins
+            origin = request.args.get('origin', default=None, type=str)
+            if not origin or origin not in origin_methods:
+                return "Invalid channels origin"
+
+            if self.fhdhr.device.tuners.tuners[origin][str(tuner_number)].stream:
+                self.fhdhr.device.tuners.tuners[origin][str(tuner_number)].stream.get()
+
         else:
             return "%s Success" % method

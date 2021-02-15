@@ -126,6 +126,7 @@ class Tuners():
                     response.headers["X-fHDHR-Error"] = str(e)
                     self.fhdhr.logger.error(response.headers["X-fHDHR-Error"])
                     abort(response)
+
                 self.fhdhr.logger.info("Passthrough method selected, no tuner will be used. Redirecting Client to %s" % stream_args["stream_info"]["url"])
                 return redirect(stream_args["stream_info"]["url"])
 
@@ -160,14 +161,19 @@ class Tuners():
             session["tuner_used"] = tunernum
 
             try:
-                stream = tuner.get_stream(stream_args, tuner)
+                tuner.get_stream(stream_args, tuner)
             except TunerError as e:
                 response.headers["X-fHDHR-Error"] = str(e)
                 self.fhdhr.logger.error(response.headers["X-fHDHR-Error"])
                 tuner.close()
                 abort(response)
 
-            return Response(stream_with_context(stream.get()), mimetype=stream_args["content_type"])
+            if stream_method == "m3u8_proxy":
+                # Trigger tuner start
+                self.fhdhr.api.client.get("/api/m3u?method=m3u8_proxy_start&tuner=%s&origin=%s" % (tunernum, origin))
+                return redirect("/api/m3u?method=m3u8_proxy&tuner=%s&origin=%s" % (tunernum, origin))
+            else:
+                return Response(stream_with_context(tuner.stream.get()), mimetype=stream_args["content_type"])
 
         elif method == "close":
 

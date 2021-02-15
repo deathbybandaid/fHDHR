@@ -2,6 +2,7 @@
 
 from .direct_stream import Direct_Stream
 from .direct_m3u8_stream import Direct_M3U8_Stream
+from .proxy_m3u8_stream import Proxy_M3U8_Stream
 from fHDHR.exceptions import TunerError
 
 
@@ -16,6 +17,8 @@ class Stream():
                 self.method = Direct_M3U8_Stream(fhdhr, stream_args, tuner)
             else:
                 self.method = Direct_Stream(fhdhr, stream_args, tuner)
+        elif stream_args["method"] == "m3u8_proxy":
+            self.method = Proxy_M3U8_Stream(fhdhr, stream_args, tuner)
         else:
             plugin_name = self.get_alt_stream_plugin(stream_args["method"])
             if plugin_name:

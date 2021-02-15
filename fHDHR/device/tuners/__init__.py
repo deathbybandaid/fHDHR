@@ -42,7 +42,7 @@ class Tuners():
 
     @property
     def streaming_methods(self):
-        streaming_methods = ["direct", "passthrough"]
+        streaming_methods = ["direct", "passthrough", "m3u8_proxy"]
         for plugin_name in list(self.fhdhr.plugins.plugins.keys()):
             if self.fhdhr.plugins.plugins[plugin_name].type == "alt_stream":
                 streaming_methods.append(self.fhdhr.plugins.plugins[plugin_name].name)
