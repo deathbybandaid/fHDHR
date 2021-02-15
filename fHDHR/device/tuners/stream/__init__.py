@@ -66,8 +66,8 @@ class Stream():
                         # calculate dusration of the video
                         seconds = int(frames / fps)
                         video_time = str(datetime.timedelta(seconds=seconds))
-                        print("duration in seconds:", seconds)
-                        print("video time:", video_time)
+                        print("duration in seconds: %s" % seconds)
+                        print("video time: %s" % video_time)
 
                         if len(list(segments_dict.items())) >= self.buffer_size:
                             chunk_number = list(segments_dict.keys())[0]
