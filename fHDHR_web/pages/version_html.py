@@ -2,11 +2,11 @@ from flask import request, render_template, session
 
 
 class Version_HTML():
-    endpoints = ["/version", "/version.html"]
-    endpoint_name = "page_version_html"
+    endpoints = ["/versions", "/versions.html"]
+    endpoint_name = "page_versions_html"
     endpoint_access_level = 1
     endpoint_category = "tool_pages"
-    pretty_name = "Version"
+    pretty_name = "Versions"
 
     def __init__(self, fhdhr):
         self.fhdhr = fhdhr
@@ -34,4 +34,19 @@ class Version_HTML():
             if version_item not in ["fHDHR", "fHDHR_web"]:
                 sorted_version_dict[version_item] = version_dict[version_item]
 
-        return render_template('version.html', request=request, session=session, fhdhr=self.fhdhr, version_dict=sorted_version_dict, list=list)
+        available_version_dict = {}
+        for key in list(self.fhdhr.versions.official_plugins.keys()):
+            if key not in list(self.fhdhr.versions.dict.keys()):
+                available_version_dict[key] = self.fhdhr.versions.dict[key]
+
+        # Sort the Version Info
+        sorted_available_version_list = sorted(available_version_dict, key=lambda i: (available_version_dict[i]['type'], available_version_dict[i]['name']))
+        sorted_available_version_dict = {
+                                "fHDHR": available_version_dict["fHDHR"],
+                                "fHDHR_web": available_version_dict["fHDHR_web"]
+                                }
+        for version_item in sorted_available_version_list:
+            if version_item not in ["fHDHR", "fHDHR_web"]:
+                sorted_available_version_dict[version_item] = available_version_dict[version_item]
+
+        return render_template('version.html', request=request, session=session, fhdhr=self.fhdhr, version_dict=sorted_version_dict, available_version_dict=sorted_available_version_dict, list=list)
