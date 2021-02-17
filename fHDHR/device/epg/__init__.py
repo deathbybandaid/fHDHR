@@ -23,6 +23,7 @@ class EPG():
         self.epg_update_url = "/api/epg?method=update"
 
         for epg_method in self.epg_methods:
+            self.fhdhr.scheduler.every(10).seconds.do(self.fhdhr.api.get, url="/test")
             self.fhdhr.scheduler.every(
              self.epg_handling[epg_method]["class"].update_frequency
              ).seconds.do(self.fhdhr.api.get, url=("%s&source=%s" % (self.epg_update_url, epg_method)))
