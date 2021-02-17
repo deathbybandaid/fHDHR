@@ -24,7 +24,7 @@ class Versions():
         self.get_online_versions()
 
     def get_online_versions(self):
-        github_org_json = self.web.session.get(self.github_org_list_url).json
+        github_org_json = self.web.session.get(self.github_org_list_url).json()
 
         online_plugin_names = [x["name"] for x in github_org_json if x["name"].startswith("fHDHR_plugin_")]
         print(online_plugin_names)
