@@ -1,6 +1,7 @@
 import os
 import sys
 import platform
+import requests
 
 from fHDHR import fHDHR_VERSION
 from fHDHR.tools import is_docker
@@ -23,7 +24,7 @@ class Versions():
         self.get_online_versions()
 
     def get_online_versions(self):
-        github_org_json = self.fhdhr.web.session.get(self.github_org_list_url).json
+        github_org_json = requests.get(self.github_org_list_url).json
 
         online_plugin_names = [x["name"] for x in github_org_json if x["name"].startswith("fHDHR_plugin_")]
         print(online_plugin_names)
