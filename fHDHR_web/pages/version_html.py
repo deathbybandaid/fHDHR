@@ -19,6 +19,10 @@ class Version_HTML():
         version_dict = {}
         for key in list(self.fhdhr.versions.dict.keys()):
             version_dict[key] = self.fhdhr.versions.dict[key]
+            online_version = "N/A"
+            if key in list(self.fhdhr.versions.official_plugins.keys()):
+                online_version = self.fhdhr.versions.official_plugins[key]["version"]
+            version_dict[key]["online_version"] = online_version
 
         # Sort the Version Info
         sorted_version_list = sorted(version_dict, key=lambda i: (version_dict[i]['type'], version_dict[i]['name']))
