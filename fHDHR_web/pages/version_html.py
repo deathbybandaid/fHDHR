@@ -37,7 +37,7 @@ class Version_HTML():
         available_version_dict = {}
         for key in list(self.fhdhr.versions.official_plugins.keys()):
             if key not in list(self.fhdhr.versions.dict.keys()):
-                available_version_dict[key] = self.fhdhr.versions.dict[key]
+                available_version_dict[key] = self.fhdhr.versions.official_plugins[key]
 
         # Sort the Version Info
         sorted_available_version_list = sorted(available_version_dict, key=lambda i: (available_version_dict[i]['type'], available_version_dict[i]['name']))
