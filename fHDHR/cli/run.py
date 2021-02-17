@@ -50,10 +50,6 @@ def run(settings, logger, db, script_dir, fHDHR_web, plugins, versions, web, sch
         if fhdhr.device.ssdp.multicast_address and "ssdp" in list(fhdhr.threads.keys()):
             fhdhr.device.ssdp.start()
 
-        # Start EPG Thread
-        if settings.dict["epg"]["method"] and "epg" in list(fhdhr.threads.keys()):
-            fhdhr.device.epg.start()
-
         for interface_plugin in fhdhr.device.interfaces.keys():
             if hasattr(fhdhr.device.interfaces[interface_plugin], 'run_thread'):
                 fhdhr.device.interfaces[interface_plugin].run_thread()

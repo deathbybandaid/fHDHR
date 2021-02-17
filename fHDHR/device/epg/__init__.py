@@ -1,6 +1,5 @@
 import time
 import datetime
-import threading
 
 from fHDHR.tools import channel_sort
 
@@ -23,7 +22,10 @@ class EPG():
 
         self.epg_update_url = "/api/epg?method=update"
 
-        self.fhdhr.threads["epg"] = threading.Thread(target=self.run)
+        for epg_method in self.epg_methods:
+            self.fhdhr.scheduler.every(
+             self.epg_handling[epg_method]["class"].update_frequency
+             ).seconds.do(self.fhdhr.api.get("%s&source=%s" % (self.epg_update_url, epg_method)))
 
     @property
     def valid_epg_methods(self):
