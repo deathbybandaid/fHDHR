@@ -41,12 +41,9 @@ class Version_HTML():
 
         # Sort the Version Info
         sorted_available_version_list = sorted(available_version_dict, key=lambda i: (available_version_dict[i]['type'], available_version_dict[i]['name']))
-        sorted_available_version_dict = {
-                                "fHDHR": available_version_dict["fHDHR"],
-                                "fHDHR_web": available_version_dict["fHDHR_web"]
-                                }
+        sorted_available_version_dict = {}
         for version_item in sorted_available_version_list:
-            if version_item not in ["fHDHR", "fHDHR_web"]:
+            if version_item:
                 sorted_available_version_dict[version_item] = available_version_dict[version_item]
 
         return render_template('version.html', request=request, session=session, fhdhr=self.fhdhr, version_dict=sorted_version_dict, available_version_dict=sorted_available_version_dict, list=list)
