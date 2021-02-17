@@ -14,6 +14,7 @@ class Versions():
         self.web = web
 
         self.github_org_list_url = "https://api.github.com/orgs/fHDHR/repos?type=all"
+        self.github_fhdhr_core_info_url = "https://raw.githubusercontent.com/fHDHR/fHDHR/main/version.json"
 
         self.dict = {}
         self.official_plugins = {}
@@ -39,6 +40,10 @@ class Versions():
                 plugin_json = plugin_json.json()
                 official_plugins[plugin_name] = plugin_json
         self.official_plugins = official_plugins
+
+        core_json = self.web.session.get(self.github_fhdhr_core_info_url).json()
+        for key in list(core_json.keys()):
+            self.official_plugins[key] = {"name": key, "version": core_json[key], "type": "core"}
 
     def register_version(self, item_name, item_version, item_type):
         self.logger.debug("Registering %s item: %s %s" % (item_type, item_name, item_version))
