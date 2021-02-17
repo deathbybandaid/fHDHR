@@ -12,10 +12,21 @@ class Versions():
         self.fHDHR_web = fHDHR_web
         self.logger = logger
 
+        self.github_org_list_url = "https://api.github.com/orgs/fHDHR/repos?type=all"
+
         self.dict = {}
+        self.official_plugins = {}
 
         self.register_fhdhr()
         self.register_env()
+
+        self.get_online_versions()
+
+    def get_online_versions(self):
+        github_org_json = self.fhdhr.web.session.get(self.github_org_list_url).json
+
+        online_plugin_names = [x["name"] for x in github_org_json if x["name"].startswith("fHDHR_plugin_")]
+        print(online_plugin_names)
 
     def register_version(self, item_name, item_version, item_type):
         self.logger.debug("Registering %s item: %s %s" % (item_type, item_name, item_version))
