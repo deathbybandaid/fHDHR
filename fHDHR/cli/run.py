@@ -27,10 +27,16 @@ def build_args_parser(script_dir):
     return parser.parse_args()
 
 
+def job():
+    print("I'm working...")
+
+
 def run(settings, logger, db, script_dir, fHDHR_web, plugins, versions, web, scheduler):
 
     fhdhr = fHDHR_OBJ(settings, logger, db, plugins, versions, web, scheduler)
     fhdhrweb = fHDHR_web.fHDHR_HTTP_Server(fhdhr)
+
+    fhdhr.scheduler.every(10).seconds.do(job)
 
     try:
 
