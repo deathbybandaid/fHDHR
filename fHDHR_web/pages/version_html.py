@@ -20,6 +20,7 @@ class Version_HTML():
         for key in list(self.fhdhr.versions.dict.keys()):
             version_dict[key] = self.fhdhr.versions.dict[key]
             online_version = "N/A"
+            print(key)
             if key in list(self.fhdhr.versions.official_plugins.keys()):
                 online_version = self.fhdhr.versions.official_plugins[key]["version"]
             version_dict[key]["online_version"] = online_version

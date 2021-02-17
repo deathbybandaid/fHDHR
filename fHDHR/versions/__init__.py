@@ -37,6 +37,7 @@ class Versions():
                 plugin_json = plugin_json.json()
                 official_plugins[plugin_name] = plugin_json
         self.official_plugins = official_plugins
+        print(self.official_plugins)
 
     def register_version(self, item_name, item_version, item_type):
         self.logger.debug("Registering %s item: %s %s" % (item_type, item_name, item_version))
