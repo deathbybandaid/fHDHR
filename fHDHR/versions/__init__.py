@@ -25,6 +25,8 @@ class Versions():
 
     def get_online_versions(self):
 
+        self.logger.debug("Checking for Online Plugin Information")
+
         official_plugins = {}
 
         github_org_json = self.web.session.get(self.github_org_list_url).json()
@@ -33,11 +35,10 @@ class Versions():
         for plugin_name in online_plugin_names:
             plugin_json_url = "https://raw.githubusercontent.com/fHDHR/%s/main/plugin.json" % plugin_name
             plugin_json = self.web.session.get(plugin_json_url)
-            if plugin_json.status_code == "200":
+            if plugin_json.status_code == 200:
                 plugin_json = plugin_json.json()
                 official_plugins[plugin_name] = plugin_json
         self.official_plugins = official_plugins
-        print(self.official_plugins)
 
     def register_version(self, item_name, item_version, item_type):
         self.logger.debug("Registering %s item: %s %s" % (item_type, item_name, item_version))
