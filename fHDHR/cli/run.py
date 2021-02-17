@@ -58,6 +58,9 @@ def run(settings, logger, db, script_dir, fHDHR_web, plugins, versions, web, sch
             if hasattr(fhdhr.device.interfaces[interface_plugin], 'run_thread'):
                 fhdhr.device.interfaces[interface_plugin].run_thread()
 
+        # Run Scheduled Jobs thread
+        fhdhr.scheduler.run()
+
         logger.noob("fHDHR and fHDHR_web should now be running and accessible via the web interface at %s" % fhdhr.api.base)
         if settings.dict["logging"]["level"].upper() == "NOOB":
             logger.noob("Set your [logging]level to INFO if you wish to see more logging output.")
