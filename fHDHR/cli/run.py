@@ -90,6 +90,8 @@ def start(args, script_dir, fHDHR_web):
     # Continue non-core settings setup
     settings.secondary_setup()
 
+    scheduler = fHDHR.scheduler.Scheduler()
+
     # Setup Database
     db = fHDHRdb(settings, logger)
 
@@ -97,12 +99,10 @@ def start(args, script_dir, fHDHR_web):
     web = fHDHR.web.WebReq()
 
     # Setup Version System
-    versions = fHDHR.versions.Versions(settings, fHDHR_web, logger, web)
+    versions = fHDHR.versions.Versions(settings, fHDHR_web, logger, web, scheduler)
 
     # Find Plugins and import their default configs
     plugins = fHDHR.plugins.PluginsHandler(settings, logger, db, versions)
-
-    scheduler = fHDHR.scheduler.Scheduler()
 
     return run(settings, logger, db, script_dir, fHDHR_web, plugins, versions, web, scheduler)
 
