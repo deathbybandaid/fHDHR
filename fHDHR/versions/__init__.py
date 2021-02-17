@@ -32,7 +32,8 @@ class Versions():
         online_plugin_names = [x["name"] for x in github_org_json if x["name"].startswith("fHDHR_plugin_")]
         for plugin_name in online_plugin_names:
             plugin_json_url = "https://raw.githubusercontent.com/fHDHR/%s/main/plugin.json" % plugin_name
-            plugin_json = self.web.session.get(plugin_json_url).json()
+            plugin_json = self.web.session.get(plugin_json_url)
+            print(plugin_json)
             official_plugins[plugin_name] = plugin_json
         self.official_plugins = official_plugins
 
