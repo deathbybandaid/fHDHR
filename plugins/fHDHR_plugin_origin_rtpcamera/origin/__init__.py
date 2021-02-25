@@ -18,8 +18,8 @@ class Plugin_OBJ():
         streamurl = ('%s%s:%s@%s:%s' %
                      (self.proto,
                       self.username,
-                      self.username,
                       self.password,
+                      self.address,
                       self.port))
         stream_info = {"url": streamurl}
         return stream_info
