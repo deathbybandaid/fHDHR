@@ -87,9 +87,9 @@ class Direct_RTP_Stream():
                     yield chunk
 
             finally:
-                self.fhdhr.logger.info("Closing UDP socket at %s:%s." % (self.socket_address, self.socket_port))
+                self.fhdhr.logger.info("Closing UDP socket at %s:%s." % (self.udp_socket_address, self.udp_socket_port))
                 self.socket.close()
-                self.fhdhr.logger.info("Closing TCP socket at %s:%s." % (self.socket_address, self.socket_port))
+                self.fhdhr.logger.info("Closing TCP socket at %s:%s." % (self.tcp_socket_address, self.tcp_socket_port))
                 self.socket.close()
 
         return generate()
