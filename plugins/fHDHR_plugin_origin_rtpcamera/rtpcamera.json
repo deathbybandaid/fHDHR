@@ -1,0 +1,35 @@
+{
+  "rtpcamera":{
+          "address":{
+                    "value": "localhost",
+                    "config_file": true,
+                    "config_web": true,
+                    "required": true
+                },
+          "port":{
+                    "value": 9981,
+                    "config_file": true,
+                    "config_web": true,
+                    "required": true
+                },
+          "ssl":{
+                    "value": false,
+                    "config_file": true,
+                    "config_web": true,
+                    "required": true
+                },
+          "username":{
+                    "value": "none",
+                    "config_file": true,
+                    "config_web": true,
+                    "required": true
+                },
+          "password":{
+                    "value": "none",
+                    "config_file": true,
+                    "config_web": true,
+                    "config_web_hidden": true,
+                    "required": true
+                }
+  }
+}
