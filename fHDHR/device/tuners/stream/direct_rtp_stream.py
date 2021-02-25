@@ -4,7 +4,7 @@ import re
 from fHDHR.exceptions import TunerError
 
 
-class Direct_Stream():
+class Direct_RTP_Stream():
 
     def __init__(self, fhdhr, stream_args, tuner):
         self.fhdhr = fhdhr
