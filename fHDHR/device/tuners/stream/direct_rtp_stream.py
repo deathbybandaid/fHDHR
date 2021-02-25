@@ -1,6 +1,7 @@
 import socket
 import re
 import bitstring
+import base64
 
 from fHDHR.exceptions import TunerError
 
@@ -33,8 +34,13 @@ class Direct_RTP_Stream():
             self.udp_socket.settimeout(5)
             self.fhdhr.logger.info("Created UDP socket at %s:%s." % (self.udp_socket_address, self.udp_socket_port))
 
-            self.describe = "DESCRIBE %s RTSP/1.0\r\nCSeq: 2\r\nUser-Agent: python\r\nAccept: application/sdp\r\n\r\n" % self.stream_args["stream_info"]["url"]
-            self.setup = "SETUP %s/trackID=1 RTSP/1.0\r\nCSeq: 3\r\nUser-Agent: python\r\nTransport: RTP/AVP;unicast;client_port=%s\r\n\r\n" % (self.stream_args["stream_info"]["url"], self.udp_socket_port)
+            credentials = "%s:%s" % (self.stream_args["stream_info"]["username"], self.stream_args["stream_info"]["password"])
+            credentials_bytes = credentials.encode("ascii")
+            credentials_base64_bytes = base64.b64encode(credentials_bytes)
+            credentials_base64_string = credentials_base64_bytes.decode("ascii")
+
+            self.describe = "DESCRIBE %s RTSP/1.0\r\nCSeq: 2\r\nUser-Agent: python\r\nAccept: application/sdp\r\nAuthorization: Basic %s\r\n\r\n" % (self.stream_args["stream_info"]["url"], credentials_base64_string)
+            self.setup = "SETUP %s/trackID=1 RTSP/1.0\r\nCSeq: 3\r\nUser-Agent: python\r\nTransport: RTP/AVP;unicast;client_port=%s\r\nAuthorization: Basic %s\r\n\r\n" % (self.stream_args["stream_info"]["url"], self.udp_socket_port, credentials_base64_string)
 
             self.fhdhr.logger.info("Connecting to Socket")
             self.tcp_socket.connect((self.stream_args["stream_info"]["address"], self.stream_args["stream_info"]["port"]))
@@ -51,7 +57,7 @@ class Direct_RTP_Stream():
 
             self.sessionid = self.sessionid(recst)
             self.fhdhr.logger.info("SessionID=%s" % self.sessionid)
-            self.play = "PLAY %s RTSP/1.0\r\nCSeq: 5\r\nUser-Agent: python\r\nSession: %s\r\nRange: npt=0.000-\r\n\r\n" % (self.stream_args["stream_info"]["url"], self.sessionid)
+            self.play = "PLAY %s RTSP/1.0\r\nCSeq: 5\r\nUser-Agent: python\r\nSession: %s\r\nRange: npt=0.000-\r\nAuthorization: Basic %s\r\n\r\n" % (self.stream_args["stream_info"]["url"], self.sessionid, credentials_base64_string)
 
         except Exception as e:
             self.fhdhr.logger.info("Closing UDP socket at %s:%s." % (self.udp_socket_address, self.udp_socket_port))
