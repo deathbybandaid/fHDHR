@@ -19,7 +19,7 @@ class Stream():
         self.buffer_size = int(self.fhdhr.config.dict["streaming"]["buffer_size"])
 
         if stream_args["method"] == "direct":
-            print(stream_args["stream_info"]["url"])
+
             if stream_args["stream_info"]["url"].startswith(tuple(["rtp://", "rtsp://", "udp://"])):
                 self.method = Direct_RTP_Stream(fhdhr, stream_args, tuner)
             elif self.stream_args["true_content_type"].startswith(tuple(["application/", "text/"])):

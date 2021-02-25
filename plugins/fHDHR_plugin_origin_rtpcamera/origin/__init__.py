@@ -21,5 +21,12 @@ class Plugin_OBJ():
                       self.password,
                       self.address,
                       self.port))
-        stream_info = {"url": streamurl}
+        stream_info = {
+                        "url": streamurl,
+                        "proto": self.proto,
+                        "username": self.username,
+                        "password": self.password,
+                        "address": self.address,
+                        "port": self.port
+                        }
         return stream_info
