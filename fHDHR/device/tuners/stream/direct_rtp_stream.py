@@ -111,6 +111,7 @@ class Direct_RTP_Stream():
     def sessionid(self, recst):
         """ Search session id from rtsp strings
         """
+        print(recst)
         recs = recst.split('\r\n')
         for rec in recs:
             ss = rec.split()
