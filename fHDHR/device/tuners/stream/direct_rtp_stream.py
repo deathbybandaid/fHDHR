@@ -40,12 +40,12 @@ class Direct_RTP_Stream():
         self.tcp_socket.connect((self.stream_args["stream_info"]["address"], self.stream_args["stream_info"]["port"]))
 
         self.fhdhr.logger.info("Sending DESCRIBE")
-        self.tcp_socket.send(self.describe)
+        self.tcp_socket.send(self.describe.encode("utf-8"))
         recst = self.tcp_socket.recv(4096)
         self.fhdhr.logger.info("Got response: %s" % recst)
 
         self.fhdhr.logger.info("Sending SETUP")
-        self.tcp_socket.send(self.setup)
+        self.tcp_socket.send(self.setup.encode("utf-8"))
         recst = self.tcp_socket.recv(4096)
         self.fhdhr.logger.info("Got response: %s" % recst)
 
@@ -64,7 +64,7 @@ class Direct_RTP_Stream():
             self.fhdhr.logger.info("Client requested a %s transcode for stream. Direct Method cannot transcode." % self.stream_args["transcode_quality"])
 
         self.fhdhr.logger.info("Sending PLAY")
-        self.tcp_socket.send(self.play)
+        self.tcp_socket.send(self.play.encode("utf-8"))
 
         def generate():
 
