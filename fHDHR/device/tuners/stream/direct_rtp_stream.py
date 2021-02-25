@@ -41,12 +41,12 @@ class Direct_RTP_Stream():
 
         self.fhdhr.logger.info("Sending DESCRIBE")
         self.tcp_socket.send(self.describe.encode("utf-8"))
-        recst = self.tcp_socket.recv(4096)
+        recst = self.tcp_socket.recv(4096).decode()
         self.fhdhr.logger.info("Got response: %s" % recst)
 
         self.fhdhr.logger.info("Sending SETUP")
         self.tcp_socket.send(self.setup.encode("utf-8"))
-        recst = self.tcp_socket.recv(4096)
+        recst = self.tcp_socket.recv(4096).decode()
         self.fhdhr.logger.info("Got response: %s" % recst)
 
         self.sessionid = self.sessionid(recst)
@@ -111,7 +111,6 @@ class Direct_RTP_Stream():
     def sessionid(self, recst):
         """ Search session id from rtsp strings
         """
-        print(recst)
         recs = recst.split('\r\n')
         for rec in recs:
             ss = rec.split()
