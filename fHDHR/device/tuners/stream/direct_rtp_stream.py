@@ -19,42 +19,46 @@ class Direct_RTP_Stream():
         if not self.address:
             raise TunerError("806 - Tune Failed: Could Not Create Socket")
 
-        # try:
-        self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.tcp_socket.bind((self.address, 0))
-        self.tcp_socket_address = self.tcp_socket.getsockname()[0]
-        self.tcp_socket_port = self.tcp_socket.getsockname()[1]
-        self.fhdhr.logger.info("Created TCP socket at %s:%s." % (self.tcp_socket_address, self.tcp_socket_port))
+        try:
+            self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.tcp_socket.bind((self.address, 0))
+            self.tcp_socket_address = self.tcp_socket.getsockname()[0]
+            self.tcp_socket_port = self.tcp_socket.getsockname()[1]
+            self.fhdhr.logger.info("Created TCP socket at %s:%s." % (self.tcp_socket_address, self.tcp_socket_port))
 
-        self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.udp_socket.bind((self.address, 0))
-        self.udp_socket_address = self.udp_socket.getsockname()[0]
-        self.udp_socket_port = self.udp_socket.getsockname()[1]
-        self.udp_socket.settimeout(5)
-        self.fhdhr.logger.info("Created UDP socket at %s:%s." % (self.udp_socket_address, self.udp_socket_port))
+            self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.udp_socket.bind((self.address, 0))
+            self.udp_socket_address = self.udp_socket.getsockname()[0]
+            self.udp_socket_port = self.udp_socket.getsockname()[1]
+            self.udp_socket.settimeout(5)
+            self.fhdhr.logger.info("Created UDP socket at %s:%s." % (self.udp_socket_address, self.udp_socket_port))
 
-        self.describe = "DESCRIBE %s RTSP/1.0\r\nCSeq: 2\r\nUser-Agent: python\r\nAccept: application/sdp\r\n\r\n" % self.stream_args["stream_info"]["url"]
-        self.setup = "SETUP %s/trackID=1 RTSP/1.0\r\nCSeq: 3\r\nUser-Agent: python\r\nTransport: RTP/AVP;unicast;client_port=%s\r\n\r\n" % (self.stream_args["stream_info"]["url"], self.udp_socket_port)
+            self.describe = "DESCRIBE %s RTSP/1.0\r\nCSeq: 2\r\nUser-Agent: python\r\nAccept: application/sdp\r\n\r\n" % self.stream_args["stream_info"]["url"]
+            self.setup = "SETUP %s/trackID=1 RTSP/1.0\r\nCSeq: 3\r\nUser-Agent: python\r\nTransport: RTP/AVP;unicast;client_port=%s\r\n\r\n" % (self.stream_args["stream_info"]["url"], self.udp_socket_port)
 
-        self.fhdhr.logger.info("Connecting to Socket")
-        self.tcp_socket.connect((self.stream_args["stream_info"]["address"], self.stream_args["stream_info"]["port"]))
+            self.fhdhr.logger.info("Connecting to Socket")
+            self.tcp_socket.connect((self.stream_args["stream_info"]["address"], self.stream_args["stream_info"]["port"]))
 
-        self.fhdhr.logger.info("Sending DESCRIBE")
-        self.tcp_socket.send(self.describe.encode("utf-8"))
-        recst = self.tcp_socket.recv(4096).decode()
-        self.fhdhr.logger.info("Got response: %s" % recst)
+            self.fhdhr.logger.info("Sending DESCRIBE")
+            self.tcp_socket.send(self.describe.encode("utf-8"))
+            recst = self.tcp_socket.recv(4096).decode()
+            self.fhdhr.logger.info("Got response: %s" % recst)
 
-        self.fhdhr.logger.info("Sending SETUP")
-        self.tcp_socket.send(self.setup.encode("utf-8"))
-        recst = self.tcp_socket.recv(4096).decode()
-        self.fhdhr.logger.info("Got response: %s" % recst)
+            self.fhdhr.logger.info("Sending SETUP")
+            self.tcp_socket.send(self.setup.encode("utf-8"))
+            recst = self.tcp_socket.recv(4096).decode()
+            self.fhdhr.logger.info("Got response: %s" % recst)
 
-        self.sessionid = self.sessionid(recst)
-        self.fhdhr.logger.info("SessionID=%s" % self.sessionid)
-        self.play = "PLAY %s RTSP/1.0\r\nCSeq: 5\r\nUser-Agent: python\r\nSession: %s\r\nRange: npt=0.000-\r\n\r\n" % (self.stream_args["stream_info"]["url"], self.sessionid)
+            self.sessionid = self.sessionid(recst)
+            self.fhdhr.logger.info("SessionID=%s" % self.sessionid)
+            self.play = "PLAY %s RTSP/1.0\r\nCSeq: 5\r\nUser-Agent: python\r\nSession: %s\r\nRange: npt=0.000-\r\n\r\n" % (self.stream_args["stream_info"]["url"], self.sessionid)
 
-        # except Exception as e:
-        #    raise TunerError("806 - Tune Failed: Could Not Create Socket: %s" % e)
+        except Exception as e:
+            self.fhdhr.logger.info("Closing UDP socket at %s:%s." % (self.udp_socket_address, self.udp_socket_port))
+            self.udp_socket.close()
+            self.fhdhr.logger.info("Closing TCP socket at %s:%s." % (self.tcp_socket_address, self.tcp_socket_port))
+            self.tcp_socket.close()
+            raise TunerError("806 - Tune Failed: Could Not Create Socket: %s" % e)
 
     def get(self):
 
@@ -88,9 +92,9 @@ class Direct_RTP_Stream():
 
             finally:
                 self.fhdhr.logger.info("Closing UDP socket at %s:%s." % (self.udp_socket_address, self.udp_socket_port))
-                self.socket.close()
+                self.udp_socket.close()
                 self.fhdhr.logger.info("Closing TCP socket at %s:%s." % (self.tcp_socket_address, self.tcp_socket_port))
-                self.socket.close()
+                self.tcp_socket.close()
 
         return generate()
 
