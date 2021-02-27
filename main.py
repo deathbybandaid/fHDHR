@@ -16,4 +16,3 @@ import fHDHR_web
 
 if __name__ == "__main__":
     sys.exit(run.main(SCRIPT_DIR, fHDHR_web))
-print("here")
