@@ -8,3 +8,5 @@ class Dependencies():
 
 if __name__ == "__deps__":
     print("here")
+
+__name__
