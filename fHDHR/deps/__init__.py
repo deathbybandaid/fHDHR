@@ -1,5 +1,8 @@
 import pathlib
 
+from pip._internal import main as pipmain
+from pip._internal.utils.misc import get_installed_distributions as getpiplist
+
 
 class Dependencies():
 
