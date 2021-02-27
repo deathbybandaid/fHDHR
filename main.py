@@ -7,6 +7,7 @@ import pathlib
 SCRIPT_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 
 import fHDHR.deps
+fHDHR.deps.test()
 
 from gevent import monkey
 monkey.patch_all()

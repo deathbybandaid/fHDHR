@@ -6,5 +6,5 @@ class Dependencies():
         print("here at " + script_dir)
 
 
-if __name__ == "__main__":
+def test():
     print("here")
