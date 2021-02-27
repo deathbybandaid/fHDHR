@@ -6,7 +6,4 @@ class Dependencies():
         print("here at " + script_dir)
 
 
-if __name__ == "__deps__":
-    print("here")
-
-__name__
+print("here")
