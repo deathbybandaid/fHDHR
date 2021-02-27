@@ -17,4 +17,4 @@ import fHDHR_web
 
 if __name__ == "__main__":
     print("run script")
-    # sys.exit(run.main(SCRIPT_DIR, fHDHR_web))
+    sys.exit(run.main(SCRIPT_DIR, fHDHR_web))
