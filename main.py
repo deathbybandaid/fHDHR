@@ -6,14 +6,14 @@ import sys
 import pathlib
 SCRIPT_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 
-import fHDHR.deps
-
 from gevent import monkey
 monkey.patch_all()
 
 from fHDHR.cli import run
 import fHDHR_web
 
+from fHDHR.deps import Dependencies
+deps = Dependencies(SCRIPT_DIR)
+
 if __name__ == "__main__":
-    deps = fHDHR.deps.Dependencies(SCRIPT_DIR)
     sys.exit(run.main(SCRIPT_DIR, fHDHR_web))
