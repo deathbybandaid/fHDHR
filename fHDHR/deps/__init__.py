@@ -1,4 +1,11 @@
+import sys
 import pathlib
+
+try:
+    __import__('pip')
+except ImportError:
+    print("pip appears to not be installed")
+    sys.exit(1)
 
 from pip._internal import main as pipmain
 from pip._internal.utils.misc import get_installed_distributions
