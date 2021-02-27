@@ -36,4 +36,4 @@ class Dependencies():
                 if "<" in pypipreq:
                     pypipreq = pypipreq.split("<")[0]
                 pipreqsdeps.append(pypipreq)
-        return pipreqsdeps()
+        return pipreqsdeps
