@@ -2,7 +2,7 @@ import sys
 import pathlib
 
 try:
-    from setuptools import setup
+    from setuptools import setup as pipsetup
 except ImportError:
     print("setuptools appears to not be installed")
     sys.exit(1)
@@ -55,4 +55,4 @@ class Dependencies():
     def check_requirements(self, reqs):
         installed = self.pipinstalled
         not_installed = [x for x in list(reqs.keys()) if x not in list(installed.keys())]
-        setup(install_requires=not_installed)
+        pipsetup(install_requires=not_installed)
