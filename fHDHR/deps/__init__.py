@@ -7,6 +7,8 @@ except ImportError:
     print("pip appears to not be installed")
     sys.exit(1)
 
+import pkg_resources
+
 from pip._internal import main as pipmain
 from pip._internal.utils.misc import get_installed_distributions
 
@@ -23,7 +25,8 @@ class Dependencies():
 
     @property
     def pipinstalled(self):
-        return sorted(["%s" % (i.key) for i in get_installed_distributions()])
+        installed_packages = pkg_resources.working_set
+        return sorted(["%s==%s" % (i.key, i.version) for i in installed_packages])
 
     def get_requirements(self, req_file):
         pipreqsdeps = []
