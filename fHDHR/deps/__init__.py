@@ -17,8 +17,23 @@ class Dependencies():
         self.script_dir = script_dir
         self.core_req = pathlib.Path(script_dir).joinpath('requirements.txt')
 
-        print(self.pipinstalled)
+        corereqs = self.get_requirements(self.core_req)
+        print(corereqs)
 
     @property
     def pipinstalled(self):
         return sorted(["%s" % (i.key) for i in get_installed_distributions()])
+
+    def get_requirements(self, req_file):
+        pipreqsdeps = []
+        piprequires = [line.rstrip('\n') for line in open(req_file)]
+        for pypipreq in piprequires:
+            if pypipreq not in ['']:
+                if "=" in pypipreq:
+                    pypipreq = pypipreq.split("=")[0]
+                if ">" in pypipreq:
+                    pypipreq = pypipreq.split(">")[0]
+                if "<" in pypipreq:
+                    pypipreq = pypipreq.split("<")[0]
+                pipreqsdeps.append(pypipreq)
+        return pipreqsdeps()
