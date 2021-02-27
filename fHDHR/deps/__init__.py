@@ -9,7 +9,7 @@ except ImportError:
 
 import pkg_resources
 
-import pip.main as pipmain
+from pip import main as pipmain
 
 
 class Dependencies():
