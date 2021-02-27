@@ -12,8 +12,8 @@ monkey.patch_all()
 from fHDHR.cli import run
 import fHDHR_web
 
-from fHDHR.deps import Dependencies
-deps = Dependencies(SCRIPT_DIR)
-
 if __name__ == "__main__":
     sys.exit(run.main(SCRIPT_DIR, fHDHR_web))
+
+from fHDHR.deps import Dependencies
+deps = Dependencies(SCRIPT_DIR)
