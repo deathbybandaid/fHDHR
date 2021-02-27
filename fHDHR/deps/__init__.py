@@ -17,8 +17,9 @@ class Dependencies():
         self.script_dir = script_dir
         self.core_req = pathlib.Path(script_dir).joinpath('requirements.txt')
 
+        print("Checking and Installing Core Dependencies.")
         corereqs = self.get_requirements(self.core_req)
-        print(corereqs)
+        self.check_requirements(corereqs)
 
     @property
     def pipinstalled(self):
@@ -37,3 +38,10 @@ class Dependencies():
                     pypipreq = pypipreq.split("<")[0]
                 pipreqsdeps.append(pypipreq)
         return pipreqsdeps
+
+    def check_requirements(self, reqs):
+        installed = self.pipinstalled
+        not_installed = [x for x in reqs if x not in installed]
+        for pipdep in not_installed:
+            print("%s missing. Attempting installation" % pipdep)
+            pipmain(['install', pipdep])
