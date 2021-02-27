@@ -2,9 +2,9 @@ import sys
 import pathlib
 
 try:
-    from pip import main as pipmain
+    from setuptools import setup
 except ImportError:
-    print("pip appears to not be installed")
+    print("setuptools appears to not be installed")
     sys.exit(1)
 
 import pkg_resources
@@ -55,6 +55,4 @@ class Dependencies():
     def check_requirements(self, reqs):
         installed = self.pipinstalled
         not_installed = [x for x in list(reqs.keys()) if x not in list(installed.keys())]
-        for pipdep in not_installed:
-            print("%s missing. Attempting installation" % pipdep)
-            pipmain(['install', pipdep])
+        setup(install_requires=not_installed)
