@@ -22,26 +22,39 @@ class Dependencies():
 
     @property
     def pipinstalled(self):
+        packages_dict = {}
         installed_packages = pkg_resources.working_set
-        return sorted(["%s" % i.key for i in installed_packages])
+        sorted_packages = sorted(["%s==%s" % (i.key, i.version) for i in installed_packages])
+        for pypipreq in sorted_packages:
+            if "=" in pypipreq:
+                pypipreq = pypipreq.split("=")
+            elif ">" in pypipreq:
+                pypipreq = pypipreq.split(">")
+            elif "<" in pypipreq:
+                pypipreq = pypipreq.split("<")
+            else:
+                pypipreq = [pypipreq, None]
+            packages_dict[pypipreq[0]] = pypipreq[-1]
+        return packages_dict
 
     def get_requirements(self, req_file):
-        pipreqsdeps = []
+        pipreqsdeps = {}
         piprequires = [line.rstrip('\n') for line in open(req_file)]
         for pypipreq in piprequires:
-            if pypipreq not in ['']:
-                if "=" in pypipreq:
-                    pypipreq = pypipreq.split("=")[0]
-                if ">" in pypipreq:
-                    pypipreq = pypipreq.split(">")[0]
-                if "<" in pypipreq:
-                    pypipreq = pypipreq.split("<")[0]
-                pipreqsdeps.append(pypipreq)
+            if "=" in pypipreq:
+                pypipreq = pypipreq.split("=")
+            elif ">" in pypipreq:
+                pypipreq = pypipreq.split(">")
+            elif "<" in pypipreq:
+                pypipreq = pypipreq.split("<")
+            else:
+                pypipreq = [pypipreq, None]
+            pipreqsdeps[pypipreq[0]] = pypipreq[-1]
         return pipreqsdeps
 
     def check_requirements(self, reqs):
         installed = self.pipinstalled
-        not_installed = [x for x in reqs if x not in installed]
+        not_installed = [x for x in list(reqs.keys()) if x not in list(installed.keys())]
         for pipdep in not_installed:
             print("%s missing. Attempting installation" % pipdep)
             pipmain(['install', pipdep])
