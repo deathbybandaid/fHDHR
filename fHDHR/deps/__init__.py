@@ -26,7 +26,7 @@ class Dependencies():
     @property
     def pipinstalled(self):
         installed_packages = pkg_resources.working_set
-        return sorted(["%s==%s" % (i.key, i.version) for i in installed_packages])
+        return sorted(["%s" % i.key for i in installed_packages])
 
     def get_requirements(self, req_file):
         pipreqsdeps = []
