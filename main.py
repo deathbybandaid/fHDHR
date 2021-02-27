@@ -6,8 +6,7 @@ import sys
 import pathlib
 SCRIPT_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 
-from fHDHR.deps import Dependencies
-deps = Dependencies(SCRIPT_DIR)
+import fHDHR.deps
 
 from gevent import monkey
 monkey.patch_all()
