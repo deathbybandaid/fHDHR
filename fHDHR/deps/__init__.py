@@ -2,14 +2,12 @@ import sys
 import pathlib
 
 try:
-    __import__('pip')
+    from pip import main as pipmain
 except ImportError:
     print("pip appears to not be installed")
     sys.exit(1)
 
 import pkg_resources
-
-from pip import main as pipmain
 
 
 class Dependencies():
