@@ -9,8 +9,8 @@ SCRIPT_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 from fHDHR.deps import Dependencies
 deps = Dependencies(SCRIPT_DIR)
 
-from gevent import monkey
-monkey.patch_all()
+# from gevent import monkey
+# monkey.patch_all()
 
 from fHDHR.cli import run
 import fHDHR_web
