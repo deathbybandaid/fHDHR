@@ -9,8 +9,7 @@ except ImportError:
 
 import pkg_resources
 
-from pip._internal import main as pipmain
-from pip._internal.utils.misc import get_installed_distributions
+import pip.main as pipmain
 
 
 class Dependencies():
