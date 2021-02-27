@@ -9,11 +9,12 @@ SCRIPT_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 from gevent import monkey
 monkey.patch_all()
 
+from fHDHR.deps import Dependencies
+deps = Dependencies(SCRIPT_DIR)
+
 from fHDHR.cli import run
 import fHDHR_web
 
 if __name__ == "__main__":
-    sys.exit(run.main(SCRIPT_DIR, fHDHR_web))
-
-from fHDHR.deps import Dependencies
-deps = Dependencies(SCRIPT_DIR)
+    print("run script")
+    # sys.exit(run.main(SCRIPT_DIR, fHDHR_web))
