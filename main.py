@@ -13,7 +13,7 @@ deps = Dependencies(SCRIPT_DIR)
 print("b")
 
 from gevent import monkey
-monkey.patch_all()
+monkey.patch_all(ssl=False)
 
 from fHDHR.cli import run
 import fHDHR_web
