@@ -4,15 +4,13 @@
 import os
 import sys
 import pathlib
-import importlib
 SCRIPT_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 
 from fHDHR.deps import Dependencies
 deps = Dependencies(SCRIPT_DIR)
 
 from gevent import monkey
-monkey.patch_all()
-importlib.reload(ssl)
+monkey.patch_all(ssl=False)
 
 from fHDHR.cli import run
 import fHDHR_web
