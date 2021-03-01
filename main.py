@@ -17,7 +17,7 @@ from deps import Dependencies
 deps = Dependencies(SCRIPT_DIR)
 if not gevent_check:
     print("gevent was missing, restarting...")
-    os.execv(sys.argv[0], sys.argv)
+    os.execl(sys.executable, sys.executable, *sys.argv)
     sys.exit()
 
 from fHDHR.cli import run
