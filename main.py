@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # coding=utf-8
 # pylama:ignore=E402
-
-from gevent import monkey
-monkey.patch_all()
+try:
+    from gevent import monkey
+    monkey.patch_all()
+    gevent_check = True
+except ModuleNotFoundError:
+    gevent_check = False
 
 import os
 import sys
@@ -12,6 +15,10 @@ SCRIPT_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 
 from deps import Dependencies
 deps = Dependencies(SCRIPT_DIR)
+if not gevent_check:
+    print("gevent was missing, restarting...")
+    os.execv(sys.argv[0], sys.argv)
+    sys.exit()
 
 from fHDHR.cli import run
 import fHDHR_web
