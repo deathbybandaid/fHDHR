@@ -12,7 +12,7 @@ deps = Dependencies(SCRIPT_DIR)
 
 from gevent import monkey
 monkey.patch_all()
-importlib.reload("ssl")
+importlib.reload(ssl)
 
 from fHDHR.cli import run
 import fHDHR_web
