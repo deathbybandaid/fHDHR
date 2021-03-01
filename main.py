@@ -3,7 +3,7 @@
 # pylama:ignore=E402
 
 from gevent import monkey
-monkey.patch_all(ssl=False)
+monkey.patch_all()
 
 import os
 import sys
