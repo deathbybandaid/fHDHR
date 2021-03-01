@@ -8,7 +8,7 @@ import pathlib
 SCRIPT_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 
 print("a")
-from fHDHR.deps import Dependencies
+from .deps import Dependencies
 deps = Dependencies(SCRIPT_DIR)
 print("b")
 
