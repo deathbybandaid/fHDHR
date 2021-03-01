@@ -9,11 +9,10 @@ import sys
 import pathlib
 SCRIPT_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 
-from fHDHR.deps import Dependencies
-deps = Dependencies(SCRIPT_DIR)
-
 from fHDHR.cli import run
 import fHDHR_web
 
 if __name__ == "__main__":
+    from fHDHR.deps import Dependencies
+    deps = Dependencies(SCRIPT_DIR)
     sys.exit(run.main(SCRIPT_DIR, fHDHR_web, deps))
