@@ -66,7 +66,6 @@ class MEMLogs():
             filterdict = filtereddict
 
         for log_entry in list(filterdict.keys()):
-
             if self.dict[log_entry]["levelno"] >= level:
                 returndict[log_entry] = filterdict[log_entry]
 
