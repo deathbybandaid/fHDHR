@@ -24,7 +24,7 @@ class Logs():
 
         if method == "text":
 
-            level = request.args.get('level', default=self.fhdhr.logger.level, type=str)
+            level = request.args.get('level', default=self.fhdhr.config.dict["logging"]["level"].upper(), type=str)
             if not isint(level):
                 print(self.fhdhr.logger.getLevelName(level))
 
