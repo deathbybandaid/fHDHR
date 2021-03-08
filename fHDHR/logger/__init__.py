@@ -20,6 +20,7 @@ class MemLogger(logging.StreamHandler):
 
     def emit(self, record):
         print(record.levelno)
+        print(logging.getLevelName(record.levelno))
 
 
 class Logger():
