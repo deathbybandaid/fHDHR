@@ -18,7 +18,8 @@ class Logger():
 
     def __init__(self, settings):
         self.custom_log_levels()
-        logging.MemLogger = MemLogger
+        self.memlogger = MemLogger()
+        logging.MemLogger = self.memlogger
         logging_config = {
             'version': 1,
             'formatters': {
