@@ -1,13 +1,16 @@
 import os
+from collections import OrderedDict
 import logging
 from logging.config import dictConfig
 
 
 class TestLogger(logging.StreamHandler):
 
+    def __init__(self):
+        self.dict = OrderedDict()
+
     def emit(self, record):
-        print("test logger")
-        print(record)
+        print(record.level)
 
 
 class Logger():
