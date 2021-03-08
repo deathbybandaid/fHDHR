@@ -10,7 +10,7 @@ class MemLogger(logging.StreamHandler):
     level = 0
 
     def emit(self, record):
-        print(record)
+        print(record.level)
 
 
 class Logger():
