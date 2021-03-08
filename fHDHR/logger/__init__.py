@@ -30,7 +30,8 @@ class MemLogger(logging.StreamHandler):
         if not len(list(memlog.dict.items())):
             record_number = 0
         else:
-            record_number = list(memlog.dict.items())[-1] + 1
+            print(list(memlog.dict.keys())[-1])
+            record_number = list(memlog.dict.keys())[-1] + 1
         print(record_number)
 
         memlog.dict[record_number] = {}
