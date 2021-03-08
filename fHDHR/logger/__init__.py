@@ -8,13 +8,6 @@ import json
 from fHDHR.tools import isint, closest_int_from_list
 
 
-"""
-'args', 'asctime', 'created', 'exc_info', 'exc_text', 'filename', 'funcName', 'getMessage', 'levelname', 'levelno', 'lineno',
-'message', 'module', 'msecs', 'msg', 'name', 'pathname', 'process', 'processName', 'relativeCreated',
-'stack_info', 'thread', 'threadName'
-"""
-
-
 def is_jsonable(x):
     try:
         json.dumps(x)
