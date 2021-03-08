@@ -3,9 +3,6 @@ import urllib.parse
 from io import StringIO
 
 
-from fHDHR.tools import isint
-
-
 class Logs():
     endpoints = ["/api/logs"]
     endpoint_name = "api_logs"
@@ -25,12 +22,12 @@ class Logs():
         if method == "text":
 
             level = request.args.get('level', default=self.fhdhr.logger.levelname, type=str)
-            if not isint(level):
-                print(self.fhdhr.logger.getLevelName(level))
+
+            logs = self.fhdhr.logger.memory.filter_by_level(level)
 
             fakefile = StringIO()
 
-            for log_entry in list(self.fhdhr.logger.memory.dict.keys()):
+            for log_entry in list(logs.keys()):
                 fakefile.write("%s\n" % self.fhdhr.logger.memory.dict[log_entry]["fmsg"])
 
             logfile = fakefile.getvalue()

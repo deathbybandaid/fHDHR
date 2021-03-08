@@ -85,7 +85,6 @@ def start(args, script_dir, fHDHR_web, deps):
     settings.logger = logger
 
     logger.noob("Loading fHDHR %s with fHDHR_web %s" % (fHDHR_VERSION, fHDHR_web.fHDHR_web_VERSION))
-    return
     logger.info("Importing Core config values from Configuration File: %s" % settings.config_file)
 
     logger.debug("Logging to File: %s" % os.path.join(settings.internal["paths"]["logs_dir"], '.fHDHR.log'))
