@@ -4,7 +4,7 @@ import logging
 from logging.config import dictConfig
 
 
-class TestLogger(logging.StreamHandler):
+class MemLogger(logging.StreamHandler):
 
     level = 0
 
@@ -56,8 +56,9 @@ class Logger():
         dictConfig(logging_config)
         self.logger = logging.getLogger('fHDHR')
 
-        self.testlogger = TestLogger()
-        self.logger.addHandler(self.testlogger)
+        self.memlogger = MemLogger()
+        self.memlogger.setFormatter(logging.Formatter('[%(asctime)s] %(levelname)s - %(message)s'))
+        self.logger.addHandler(self.memlogger)
 
     def custom_log_levels(self):
 
