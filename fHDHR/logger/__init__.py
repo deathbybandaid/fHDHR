@@ -37,8 +37,11 @@ class MEMLogs():
         self.dict = OrderedDict()
         self.logger = None
 
-    def filter_by_level(self, level):
+    def filter(self, level=None):
         returndict = OrderedDict()
+
+        if not level:
+            level = self.logger.levelno
         if isint(level):
             levels = sorted_levels("number")
             if level in list(levels.keys()):
@@ -52,8 +55,10 @@ class MEMLogs():
             level = logging.getLevelName(level.upper())
 
         for log_entry in list(self.dict.keys()):
+
             if self.dict[log_entry]["levelno"] >= level:
                 returndict[log_entry] = self.dict[log_entry]
+
         return returndict
 
 

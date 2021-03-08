@@ -23,7 +23,7 @@ class Logs():
 
             level = request.args.get('level', default=self.fhdhr.logger.levelname, type=str)
 
-            logs = self.fhdhr.logger.memory.filter_by_level(level)
+            logs = self.fhdhr.logger.memory.filter(level=level)
 
             fakefile = StringIO()
 
