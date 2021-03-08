@@ -10,7 +10,7 @@ class TestLogger(logging.StreamHandler):
         self.dict = OrderedDict()
 
     def emit(self, record):
-        print(record.level)
+        print(dir(record))
 
 
 class Logger():
