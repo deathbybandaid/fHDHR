@@ -6,11 +6,7 @@ from logging.config import dictConfig
 
 class MemLogger(logging.StreamHandler):
 
-    level = 0
-    # filters = []
-
-    def __init__(self):
-        self.dict = OrderedDict()
+    dict = OrderedDict()
 
     def emit(self, record):
         print(record)
@@ -22,6 +18,7 @@ class Logger():
 
     def __init__(self, settings):
         self.custom_log_levels()
+        logging.MemLogger = MemLogger
         logging_config = {
             'version': 1,
             'formatters': {
@@ -33,7 +30,7 @@ class Logger():
                 # all purpose, fHDHR root logger
                 'fHDHR': {
                     'level': settings.dict["logging"]["level"].upper(),
-                    'handlers': ['console', 'logfile'],
+                    'handlers': ['console', 'logfile', 'memlog'],
                 },
             },
             'handlers': {
@@ -51,15 +48,18 @@ class Logger():
                         settings.internal["paths"]["logs_dir"], '.fHDHR.log'),
                     'when': 'midnight',
                     'formatter': 'fHDHR',
+                },
+                # Memory Logging
+                'memlog': {
+                    'level': 'DEBUG',
+                    'class': 'logging.MemLogger',
+                    'when': 'midnight',
+                    'formatter': 'fHDHR',
                 }
             },
         }
         dictConfig(logging_config)
         self.logger = logging.getLogger('fHDHR')
-
-        self.memlogger = MemLogger()
-        self.memlogger.setFormatter(logging.Formatter('[%(asctime)s] %(levelname)s - %(message)s'))
-        self.logger.addHandler(self.memlogger)
 
     def custom_log_levels(self):
 
