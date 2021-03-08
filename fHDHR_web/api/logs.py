@@ -22,8 +22,9 @@ class Logs():
         if method == "text":
 
             level = request.args.get('level', default=self.fhdhr.logger.levelname, type=str)
+            limit = request.args.get('limit', default=None, type=str)
 
-            logs = self.fhdhr.logger.memory.filter(level=level)
+            logs = self.fhdhr.logger.memory.filter(level=level, limit=limit)
 
             fakefile = StringIO()
 

@@ -37,12 +37,12 @@ class MEMLogs():
         self.dict = OrderedDict()
         self.logger = None
 
-    def filter(self, level=None):
+    def filter(self, level=None, limit=None):
         returndict = OrderedDict()
 
         if not level:
             level = self.logger.levelno
-        if isint(level):
+        elif isint(level):
             levels = sorted_levels("number")
             if level in list(levels.keys()):
                 level = int(level)
@@ -53,6 +53,17 @@ class MEMLogs():
             if level not in levels:
                 level = self.logger.levelname
             level = logging.getLevelName(level.upper())
+
+        if limit and not isint(limit):
+            limit = None
+
+        filterdict = self.dict.copy()
+        if limit:
+            limit_entries = list(filterdict.keys()[-limit:])
+            filtereddict = {}
+            for entry_item in limit_entries:
+                filtereddict[entry_item] = filterdict[entry_item]
+            filterdict = filtereddict
 
         for log_entry in list(self.dict.keys()):
 
