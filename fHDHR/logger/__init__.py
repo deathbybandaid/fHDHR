@@ -7,13 +7,13 @@ from logging.config import dictConfig
 class MemLogger(logging.StreamHandler):
 
     level = 0
-    filters = []
+    # filters = []
 
     def __init__(self):
         self.dict = OrderedDict()
 
     def emit(self, record):
-        print(dir(record))
+        print(record)
 
 
 class Logger():
