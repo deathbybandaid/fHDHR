@@ -16,30 +16,18 @@ memlog = MEMLogs()
 class MemLogger(logging.StreamHandler):
     level = 0
 
-    """
-    ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__',
-    '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__',
-
-    'args', 'asctime', 'created', 'exc_info', 'exc_text', 'filename', 'funcName', 'getMessage', 'levelname', 'levelno', 'lineno',
-    'message', 'module', 'msecs', 'msg', 'name', 'pathname', 'process', 'processName', 'relativeCreated',
-    'stack_info', 'thread', 'threadName']
-    """
-
     def emit(self, record):
 
         if not len(list(memlog.dict.items())):
             record_number = 0
         else:
-            print(list(memlog.dict.keys())[-1])
-            record_number = list(memlog.dict.keys())[-1] + 1
-        print(record_number)
+            record_number = max(list(memlog.dict.keys())) + 1
 
         memlog.dict[record_number] = {}
 
         for record_item in dir(record):
             if not record_item.startswith("__"):
                 memlog.dict[record_number][record_item] = eval("record.%s" % record_item)
-        print(memlog.dict[record_number])
 
 
 class Logger():
