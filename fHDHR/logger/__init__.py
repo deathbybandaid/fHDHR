@@ -7,6 +7,7 @@ from logging.config import dictConfig
 class MemLogger(logging.StreamHandler):
 
     dict = OrderedDict()
+    level = 0
 
     def emit(self, record):
         print(record)
@@ -51,7 +52,6 @@ class Logger():
                 },
                 # Memory Logging
                 'memlog': {
-                    'level': 'DEBUG',
                     'class': 'logging.MemLogger',
                     'formatter': 'fHDHR',
                 }
