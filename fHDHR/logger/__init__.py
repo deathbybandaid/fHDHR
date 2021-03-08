@@ -23,7 +23,9 @@ class MemLogger(logging.StreamHandler):
         else:
             record_number = max(list(memlog.dict.keys())) + 1
 
-        memlog.dict[record_number] = {}
+        memlog.dict[record_number] = {
+                                      "fmsg": self.format(record)
+                                      }
 
         for record_item in dir(record):
             if not record_item.startswith("__"):
