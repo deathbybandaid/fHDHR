@@ -16,7 +16,7 @@ class Logger():
 
     def __init__(self, settings):
         self.custom_log_levels()
-        self.testlogger = TestLogger()
+        testlogger = TestLogger()
         logging_config = {
             'version': 1,
             'formatters': {
@@ -49,7 +49,7 @@ class Logger():
                 },
                 'testlogger': {
                     'level': 'DEBUG',
-                    'class': 'self.testlogger',
+                    'class': 'testlogger',
                     'formatter': 'fHDHR',
                 },
             },
