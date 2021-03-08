@@ -17,7 +17,7 @@ from fHDHR.tools import isint, closest_int_from_list
 """
 
 
-def sorted_levels(self, method):
+def sorted_levels(method):
     level_guide = {}
     sorted_levels = sorted(logging._nameToLevel, key=lambda i: (logging._nameToLevel[i]))
     if method == "name":
