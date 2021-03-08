@@ -6,6 +6,8 @@ from logging.config import dictConfig
 
 class TestLogger(logging.StreamHandler):
 
+    level = 'DEBUG'
+
     def __init__(self):
         self.dict = OrderedDict()
 
