@@ -26,6 +26,13 @@ class MemLogger(logging.StreamHandler):
     """
 
     def emit(self, record):
+
+        if not len(list(memlog.dict.items())):
+            record_number = 0
+        else:
+            record_number = list(memlog.dict.items())[-1] + 1
+        print(record_number)
+
         for record_item in dir(record):
             if not record_item.startswith("__"):
                 print(record_item)
