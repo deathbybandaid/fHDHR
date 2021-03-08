@@ -3,12 +3,20 @@ import logging
 from logging.config import dictConfig
 
 
+class TestLogger(logging.StreamHandler):
+
+    def emit(self, record):
+        print("test logger")
+        print(record)
+
+
 class Logger():
     LOG_LEVEL_CUSTOM_NOOB = 25
     LOG_LEVEL_CUSTOM_SSDP = 8
 
     def __init__(self, settings):
         self.custom_log_levels()
+        self.testlogger = TestLogger()
         logging_config = {
             'version': 1,
             'formatters': {
@@ -37,6 +45,11 @@ class Logger():
                     'filename': os.path.join(
                         settings.internal["paths"]["logs_dir"], '.fHDHR.log'),
                     'when': 'midnight',
+                    'formatter': 'fHDHR',
+                },
+                'testlogger': {
+                    'level': 'DEBUG',
+                    'class': 'self.TestLogger',
                     'formatter': 'fHDHR',
                 },
             },
