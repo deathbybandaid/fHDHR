@@ -52,7 +52,7 @@ class Logger():
                 # Memory Logging
                 'memlog': {
                     'level': 'DEBUG',
-                    'class': 'self.memlogger',
+                    'class': 'logging.MemLogger',
                     'formatter': 'fHDHR',
                 }
             },
