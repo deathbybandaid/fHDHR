@@ -7,6 +7,7 @@ from logging.config import dictConfig
 class MemLogger(logging.StreamHandler):
 
     level = 0
+    filters = None
 
     def __init__(self):
         self.dict = OrderedDict()
