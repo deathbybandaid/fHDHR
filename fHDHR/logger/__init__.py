@@ -49,7 +49,7 @@ class Logger():
                 },
                 'testlogger': {
                     'level': 'DEBUG',
-                    'class': 'self.TestLogger',
+                    'class': 'self.testlogger',
                     'formatter': 'fHDHR',
                 },
             },
