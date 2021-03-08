@@ -26,7 +26,9 @@ class MemLogger(logging.StreamHandler):
     """
 
     def emit(self, record):
-        print(record.levelno)
+        for record_item in dir(record):
+            if not record_item.startswith("__"):
+                print(record_item)
         print(logging.getLevelName(record.levelno))
 
 
@@ -76,6 +78,7 @@ class Logger():
         }
         dictConfig(logging_config)
         self.logger = logging.getLogger('fHDHR')
+        self.memory = memlog
 
     def custom_log_levels(self):
 
