@@ -1,6 +1,7 @@
 from flask import request, redirect, Response
 import urllib.parse
 from io import StringIO
+import json
 
 
 class Logs():
@@ -34,6 +35,19 @@ class Logs():
             logfile = fakefile.getvalue()
 
             return Response(status=200, response=logfile, mimetype='text/plain')
+
+        elif method == "json":
+
+            level = request.args.get('level', default=self.fhdhr.logger.levelname, type=str)
+            limit = request.args.get('limit', default=None, type=str)
+
+            logs = self.fhdhr.logger.memory.filter(level=level, limit=limit)
+
+            logs_json = json.dumps(logs, indent=4)
+
+            return Response(status=200,
+                            response=logs_json,
+                            mimetype='application/json')
 
         if redirect_url:
             if "?" in redirect_url:
