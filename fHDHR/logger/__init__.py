@@ -17,6 +17,7 @@ class Logger():
     def __init__(self, settings):
         self.custom_log_levels()
         testlogger = TestLogger()
+        logger.addHandler(testlogger)
         logging_config = {
             'version': 1,
             'formatters': {
