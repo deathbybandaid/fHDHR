@@ -86,7 +86,8 @@ class Logger():
         self.logger = logging.getLogger('fHDHR')
         self.memory = memlog
 
-        print(self.get_levelno("fart"))
+        print(self.get_levelname("fart"))
+        print(self.get_levelname(19))
 
     def sorted_levels(self, method):
         level_guide = {}
