@@ -4,9 +4,16 @@ import logging
 from logging.config import dictConfig
 
 
-class MemLogger(logging.StreamHandler):
+class MEMLogs():
 
-    dict = OrderedDict()
+    def __init__(self):
+        self.dict = OrderedDict()
+
+
+memlog = MEMLogs()
+
+
+class MemLogger(logging.StreamHandler):
     level = 0
 
     """
