@@ -112,7 +112,7 @@ class Logger():
             levels = self.sorted_levels("name")
             if level not in levels:
                 level = self.levelname
-            return self.fhdhr.logger.getLevelName(level.upper())
+            return logging.getLevelName(level.upper())
 
     def get_levelname(self, level):
         if isint(level):
@@ -121,7 +121,7 @@ class Logger():
                 level = int(level)
             else:
                 level = closest_int_from_list(list(levels.keys()), int(level))
-            return self.fhdhr.logger.getLevelName(int(level))
+            return logging.getLevelName(int(level))
         else:
             levels = self.sorted_levels("name")
             if level.upper() not in levels:
@@ -141,7 +141,7 @@ class Logger():
             level = self.config.dict["logging"]["level"].upper()
             if self.config.dict["logging"]["level"].upper() not in levels:
                 level = self.fhdhr.config.conf_default["logging"]["level"]["value"]
-            return self.fhdhr.logger.getLevelName(level)
+            return logging.getLevelName(level)
 
     @property
     def levelname(self):
@@ -151,7 +151,7 @@ class Logger():
                 level = int(self.config.dict["logging"]["level"])
             else:
                 level = closest_int_from_list(list(levels.keys()), int(self.config.dict["logging"]["level"]))
-            return self.fhdhr.logger.getLevelName(level)
+            return logging.getLevelName(level)
         else:
             levels = self.sorted_levels("name")
             level = self.config.dict["logging"]["level"].upper()
