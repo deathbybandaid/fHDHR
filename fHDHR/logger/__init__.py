@@ -16,8 +16,6 @@ class Logger():
 
     def __init__(self, settings):
         self.custom_log_levels()
-        testlogger = TestLogger()
-        logger.addHandler(testlogger)
         logging_config = {
             'version': 1,
             'formatters': {
@@ -47,16 +45,14 @@ class Logger():
                         settings.internal["paths"]["logs_dir"], '.fHDHR.log'),
                     'when': 'midnight',
                     'formatter': 'fHDHR',
-                },
-                'testlogger': {
-                    'level': 'DEBUG',
-                    'class': 'testlogger',
-                    'formatter': 'fHDHR',
-                },
+                }
             },
         }
         dictConfig(logging_config)
         self.logger = logging.getLogger('fHDHR')
+
+        self.testlogger = TestLogger()
+        self.logger.addHandler(self.testlogger)
 
     def custom_log_levels(self):
 
