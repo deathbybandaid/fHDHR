@@ -100,9 +100,7 @@ class MemLogger(logging.StreamHandler):
         for record_item in dir(record):
             if not record_item.startswith("__"):
                 value = eval("record.%s" % record_item)
-                if not is_jsonable(value):
-                    print(record_item)
-                else:
+                if is_jsonable(value):
                     memlog.dict[record_number][record_item] = value
 
 
