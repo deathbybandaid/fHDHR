@@ -18,8 +18,7 @@ class Logger():
 
     def __init__(self, settings):
         self.custom_log_levels()
-        self.memlogger = MemLogger()
-        logging.MemLogger = self.memlogger
+        logging.MemLogger = MemLogger
         logging_config = {
             'version': 1,
             'formatters': {
@@ -53,7 +52,7 @@ class Logger():
                 # Memory Logging
                 'memlog': {
                     'level': 'DEBUG',
-                    'class': 'logging.MemLogger',
+                    'class': 'self.memlogger',
                     'formatter': 'fHDHR',
                 }
             },
