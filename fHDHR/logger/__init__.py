@@ -53,7 +53,6 @@ class Logger():
                 'memlog': {
                     'level': 'DEBUG',
                     'class': 'logging.MemLogger',
-                    'when': 'midnight',
                     'formatter': 'fHDHR',
                 }
             },
