@@ -4,7 +4,7 @@ import logging
 from logging.config import dictConfig
 
 
-from fHDHR.tools import isint
+from fHDHR.tools import isint, closest_int_from_list
 
 
 class MEMLogs():
@@ -83,11 +83,31 @@ class Logger():
         dictConfig(logging_config)
         self.logger = logging.getLogger('fHDHR')
         self.memory = memlog
-        print(sorted(logging._nameToLevel, key=lambda i: (logging._nameToLevel[i])))
+
+        levels = self.sorted_levels("number")
+        level = 20
+        print(closest_int_from_list(list(levels.keys()), int(level)))
+
+    def sorted_levels(self, method):
+        level_guide = {}
+        sorted_levels = sorted(logging._nameToLevel, key=lambda i: (logging._nameToLevel[i]))
+        if method == "name":
+            for level in sorted_levels:
+                level_guide[level] = logging._nameToLevel[level]
+        elif method == "number":
+            for level in sorted_levels:
+                level_guide[logging._nameToLevel[level]] = level
+        else:
+            return logging._nameToLevel
+        return level_guide
 
     def get_levelno(self, level):
+        levels = self.sorted_levels("number")
         if isint(level):
-            return int(level)
+            if level in list(levels.keys()):
+                return int(level)
+            else:
+                closest_int_from_list(list(levels.keys()), int(level))
         else:
             return self.fhdhr.logger.getLevelName(level.upper())
 
