@@ -41,8 +41,10 @@ class Logger():
 
     def __init__(self, settings):
         self.config = settings
+
         self.custom_log_levels()
         logging.MemLogger = MemLogger
+
         logging_config = {
             'version': 1,
             'formatters': {
@@ -84,9 +86,7 @@ class Logger():
         self.logger = logging.getLogger('fHDHR')
         self.memory = memlog
 
-        levels = self.sorted_levels("number")
-        level = 19
-        print(closest_int_from_list(list(levels.keys()), int(level)))
+        print(self.get_levelno("fart"))
 
     def sorted_levels(self, method):
         level_guide = {}
@@ -102,34 +102,62 @@ class Logger():
         return level_guide
 
     def get_levelno(self, level):
-        levels = self.sorted_levels("number")
         if isint(level):
+            levels = self.sorted_levels("number")
             if level in list(levels.keys()):
                 return int(level)
             else:
                 closest_int_from_list(list(levels.keys()), int(level))
         else:
+            levels = self.sorted_levels("name")
+            if level not in levels:
+                level = self.levelname
             return self.fhdhr.logger.getLevelName(level.upper())
 
     def get_levelname(self, level):
         if isint(level):
+            levels = self.sorted_levels("number")
+            if level in list(levels.keys()):
+                level = int(level)
+            else:
+                level = closest_int_from_list(list(levels.keys()), int(level))
             return self.fhdhr.logger.getLevelName(int(level))
         else:
+            levels = self.sorted_levels("name")
+            if level.upper() not in levels:
+                level = self.levelname
             return level.upper()
 
     @property
     def levelno(self):
         if isint(self.config.dict["logging"]["level"]):
-            return int(self.config.dict["logging"]["level"])
+            levels = self.sorted_levels("number")
+            if self.config.dict["logging"]["level"] in list(levels.keys()):
+                return int(self.config.dict["logging"]["level"])
+            else:
+                return closest_int_from_list(list(levels.keys()), int(self.config.dict["logging"]["level"]))
         else:
-            return self.fhdhr.logger.getLevelName(self.config.dict["logging"]["level"].upper())
+            levels = self.sorted_levels("name")
+            level = self.config.dict["logging"]["level"].upper()
+            if self.config.dict["logging"]["level"].upper() not in levels:
+                level = self.fhdhr.config.conf_default["logging"]["level"]["value"]
+            return self.fhdhr.logger.getLevelName(level)
 
     @property
     def levelname(self):
         if isint(self.config.dict["logging"]["level"]):
-            return self.fhdhr.logger.getLevelName(int(self.config.dict["logging"]["level"]))
+            levels = self.sorted_levels("number")
+            if self.config.dict["logging"]["level"] in list(levels.keys()):
+                level = int(self.config.dict["logging"]["level"])
+            else:
+                level = closest_int_from_list(list(levels.keys()), int(self.config.dict["logging"]["level"]))
+            return self.fhdhr.logger.getLevelName(level)
         else:
-            return self.config.dict["logging"]["level"].upper()
+            levels = self.sorted_levels("name")
+            level = self.config.dict["logging"]["level"].upper()
+            if self.config.dict["logging"]["level"].upper() not in levels:
+                level = self.fhdhr.config.conf_default["logging"]["level"]["value"]
+            return level
 
     def custom_log_levels(self):
 
