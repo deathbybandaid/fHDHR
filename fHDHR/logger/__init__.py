@@ -59,7 +59,7 @@ class MEMLogs():
 
         filterdict = self.dict.copy()
         if limit:
-            limit_entries = list(filterdict.keys()[-limit:])
+            limit_entries = list(filterdict.keys()[-int(limit):])
             filtereddict = {}
             for entry_item in limit_entries:
                 filtereddict[entry_item] = filterdict[entry_item]
