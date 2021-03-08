@@ -85,7 +85,7 @@ class Logger():
         self.memory = memlog
 
         levels = self.sorted_levels("number")
-        level = 20
+        level = 19
         print(closest_int_from_list(list(levels.keys()), int(level)))
 
     def sorted_levels(self, method):
