@@ -4,6 +4,9 @@ import logging
 from logging.config import dictConfig
 
 
+from fHDHR.tools import isint
+
+
 class MEMLogs():
 
     def __init__(self):
@@ -37,6 +40,7 @@ class Logger():
     LOG_LEVEL_CUSTOM_SSDP = 8
 
     def __init__(self, settings):
+        self.config = settings
         self.custom_log_levels()
         logging.MemLogger = MemLogger
         logging_config = {
@@ -49,7 +53,7 @@ class Logger():
             'loggers': {
                 # all purpose, fHDHR root logger
                 'fHDHR': {
-                    'level': settings.dict["logging"]["level"].upper(),
+                    'level': self.levelname,
                     'handlers': ['console', 'logfile', 'memlog'],
                 },
             },
@@ -65,7 +69,7 @@ class Logger():
                     'level': 'DEBUG',
                     'class': 'logging.handlers.TimedRotatingFileHandler',
                     'filename': os.path.join(
-                        settings.internal["paths"]["logs_dir"], '.fHDHR.log'),
+                        self.config.internal["paths"]["logs_dir"], '.fHDHR.log'),
                     'when': 'midnight',
                     'formatter': 'fHDHR',
                 },
@@ -79,6 +83,33 @@ class Logger():
         dictConfig(logging_config)
         self.logger = logging.getLogger('fHDHR')
         self.memory = memlog
+        print(self.logger._levelNames)
+
+    def get_levelno(self, level):
+        if isint(level):
+            return int(level)
+        else:
+            return self.fhdhr.logger.getLevelName(level.upper())
+
+    def get_levelname(self, level):
+        if isint(level):
+            return self.fhdhr.logger.getLevelName(int(level))
+        else:
+            return level.upper()
+
+    @property
+    def levelno(self):
+        if isint(self.config.dict["logging"]["level"]):
+            return int(self.config.dict["logging"]["level"])
+        else:
+            return self.fhdhr.logger.getLevelName(self.config.dict["logging"]["level"].upper())
+
+    @property
+    def levelname(self):
+        if isint(self.config.dict["logging"]["level"]):
+            return self.fhdhr.logger.getLevelName(int(self.config.dict["logging"]["level"]))
+        else:
+            return self.config.dict["logging"]["level"].upper()
 
     def custom_log_levels(self):
 
