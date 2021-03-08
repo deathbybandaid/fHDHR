@@ -3,6 +3,9 @@ import urllib.parse
 from io import StringIO
 
 
+from fHDHR.tools import isint
+
+
 class Logs():
     endpoints = ["/api/logs"]
     endpoint_name = "api_logs"
@@ -20,6 +23,10 @@ class Logs():
         redirect_url = request.args.get('redirect', default=None, type=str)
 
         if method == "text":
+
+            level = request.args.get('level', default=self.fhdhr.logger.level, type=str)
+            if not isint(level):
+                print(self.fhdhr.logger.getLevelName(level))
 
             fakefile = StringIO()
 
