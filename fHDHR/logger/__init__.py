@@ -2,6 +2,7 @@ import os
 from collections import OrderedDict
 import logging
 from logging.config import dictConfig
+import json
 
 
 from fHDHR.tools import isint, closest_int_from_list
@@ -12,6 +13,14 @@ from fHDHR.tools import isint, closest_int_from_list
 'message', 'module', 'msecs', 'msg', 'name', 'pathname', 'process', 'processName', 'relativeCreated',
 'stack_info', 'thread', 'threadName'
 """
+
+
+def is_jsonable(x):
+    try:
+        json.dumps(x)
+        return True
+    except Exception:
+        return False
 
 
 def sorted_levels(method):
@@ -90,9 +99,11 @@ class MemLogger(logging.StreamHandler):
 
         for record_item in dir(record):
             if not record_item.startswith("__"):
-                print(record_item)
-                print(type(eval("record.%s" % record_item)))
-                memlog.dict[record_number][record_item] = eval("record.%s" % record_item)
+                value = eval("record.%s" % record_item)
+                if not is_jsonable(value):
+                    print(record_item)
+                else:
+                    memlog.dict[record_number][record_item] = value
 
 
 class Logger():
