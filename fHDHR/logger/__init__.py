@@ -33,9 +33,11 @@ class MemLogger(logging.StreamHandler):
             record_number = list(memlog.dict.items())[-1] + 1
         print(record_number)
 
+        memlog.dict[record_number] = {}
+
         for record_item in dir(record):
             if not record_item.startswith("__"):
-                print(record_item)
+                memlog.dict[record_number][record_item] = eval("record.%s" % record_item)
         print(logging.getLevelName(record.levelno))
 
 
