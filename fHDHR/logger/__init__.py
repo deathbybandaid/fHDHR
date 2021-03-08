@@ -83,7 +83,7 @@ class Logger():
         dictConfig(logging_config)
         self.logger = logging.getLogger('fHDHR')
         self.memory = memlog
-        print(self.logger._levelNames)
+        print(logging._levelNames)
 
     def get_levelno(self, level):
         if isint(level):
