@@ -90,6 +90,8 @@ class MemLogger(logging.StreamHandler):
 
         for record_item in dir(record):
             if not record_item.startswith("__"):
+                print(record_item)
+                print(type(eval("record.%s" % record_item)))
                 memlog.dict[record_number][record_item] = eval("record.%s" % record_item)
 
 
