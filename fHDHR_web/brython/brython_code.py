@@ -90,7 +90,6 @@ def chan_edit_data(items, channel_id):
             chandict = {"id": element.value}
         if element.type == "checkbox":
             if element.name in ["enabled"]:
-                print(element.checked)
                 save_val = element.checked
             else:
                 save_val = int(element.checked)
@@ -108,6 +107,7 @@ def chan_edit_data(items, channel_id):
 
     if channel_id != "all":
         chanlist = [x for x in chanlist if x["id"] == channel_id]
+    print(chanlist)
 
     return chanlist
 
