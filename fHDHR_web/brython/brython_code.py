@@ -89,7 +89,6 @@ def chan_edit_data(items, channel_id):
 
             if len(chandict.keys()) >= 2 and "id" in list(chandict.keys()):
                 chanlist.append(chandict)
-                print(chandict)
 
             chandict = {"id": element.value}
 
@@ -107,8 +106,6 @@ def chan_edit_data(items, channel_id):
                 save_val = element.value
 
             if str(save_val) != str(cur_value):
-                print(cur_value)
-                print(save_val)
                 chandict[element.name] = save_val
 
     if channel_id != "all":
