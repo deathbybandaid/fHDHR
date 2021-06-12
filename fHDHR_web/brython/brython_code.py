@@ -101,6 +101,7 @@ def chan_edit_data(items, channel_id):
             if element.type == "checkbox":
                 if element.name in ["enabled"]:
                     cur_value = element.placeholder
+                    print(cur_value)
                 else:
                     cur_value = int(element.placeholder)
             if str(save_val) != str(cur_value):
