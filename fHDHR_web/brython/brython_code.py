@@ -89,6 +89,7 @@ def chan_edit_data(items, channel_id):
 
             if len(chandict.keys()) >= 2 and "id" in list(chandict.keys()):
                 chanlist.append(chandict)
+                print(chandict)
 
             chandict = {"id": element.value}
 
