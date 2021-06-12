@@ -80,7 +80,7 @@
             {% endif %}
             <input type="hidden" class="reset" name="enabled" value=True placeholder="{{ chan_dict["enabled"] }}">
 
-            {% if chan_dict["favorite"]  in [True, "True"] %}
+            {% if chan_dict["favorite"]  in [1, "1"] %}
               <td><input type="checkbox" class="channels" name="favorite" value=1 checked=True placeholder=1></td>
             {% else %}
               <td><input type="checkbox" class="channels" name="favorite" value=1 placeholder=0></td>
