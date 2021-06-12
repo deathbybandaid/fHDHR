@@ -84,26 +84,27 @@ def chan_edit_data(items, channel_id):
     chandict = {}
 
     for element in items:
+
         if element.name == "id":
+
             if len(chandict.keys()) >= 2 and "id" in list(chandict.keys()):
-                print(chandict)
                 chanlist.append(chandict)
+
             chandict = {"id": element.value}
-        if element.type == "checkbox":
-            if element.name in ["enabled"]:
-                save_val = element.checked
-            else:
-                save_val = int(element.checked)
+
         else:
-            save_val = element.value
-        if element.name != "id":
-            cur_value = element.placeholder
+
             if element.type == "checkbox":
                 if element.name in ["enabled"]:
+                    save_val = element.checked
                     cur_value = element.placeholder
-                    print(cur_value)
                 else:
+                    save_val = int(element.checked)
                     cur_value = int(element.placeholder)
+            else:
+                save_val = element.value
+                cur_value = element.placeholder
+
             if str(save_val) != str(cur_value):
                 chandict[element.name] = save_val
 
