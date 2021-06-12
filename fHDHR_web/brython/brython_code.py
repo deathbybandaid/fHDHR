@@ -107,6 +107,8 @@ def chan_edit_data(items, channel_id):
                 cur_value = element.placeholder
 
             if str(save_val) != str(cur_value):
+                print(cur_value)
+                print(save_val)
                 chandict[element.name] = save_val
 
     if channel_id != "all":
