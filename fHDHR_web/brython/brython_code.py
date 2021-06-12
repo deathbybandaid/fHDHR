@@ -85,7 +85,8 @@ def chan_edit_data(items, channel_id):
 
     for element in items:
         if element.name == "id":
-            if len(chandict.keys()) >= 2 and "id" in list(chandict.keys()):
+            if len(chandict.keys()) >= 1 and "id" in list(chandict.keys()):
+                print(chandict)
                 chanlist.append(chandict)
             chandict = {"id": element.value}
         if element.type == "checkbox":
@@ -107,7 +108,6 @@ def chan_edit_data(items, channel_id):
 
     if channel_id != "all":
         chanlist = [x for x in chanlist if x["id"] == channel_id]
-    print(chanlist)
 
     return chanlist
 
