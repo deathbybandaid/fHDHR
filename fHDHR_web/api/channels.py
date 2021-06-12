@@ -138,6 +138,7 @@ class Channels():
 
         elif method == "modify":
             channels_list = json.loads(request.form.get('channels', []))
+            print(channels_list)
             for channel in channels_list:
                 updatedict = {}
                 for key in list(channel.keys()):
