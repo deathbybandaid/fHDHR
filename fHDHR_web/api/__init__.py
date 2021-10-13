@@ -43,6 +43,7 @@ class fHDHR_API():
         self.debug = Debug_JSON(fhdhr)
         self.plugins = Plugins(fhdhr)
         self.ssdp = SSDP_API(fhdhr)
+        self.scheduler = Scheduler_API(fhdhr)
 
         self.route_list = Route_List(fhdhr)
 
