@@ -43,7 +43,8 @@ class Scheduler():
             if len(list(job_item.tags)):
                 jobsdict.append({
                     "name": list(job_item.tags)[0],
-                    "last_run": job_item.last_run
+                    "last_run": job_item.last_run,
+                    "next_run": job_item.next_run
                     })
         print(jobsdict)
 
