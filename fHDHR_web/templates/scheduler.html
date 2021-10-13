@@ -23,7 +23,7 @@
             <td>{{ jobdict["next_run"] }}</td>
             <td>
               <form method="post" action="/api/scheduler?method=run&redirect=/scheduler">
-                <input type="hidden" name="config_section" value="{{ jobdict["name"] }}">
+                <input type="hidden" name="job_tag" value="{{ jobdict["name"] }}">
                 <input type="submit" value="Run">
             </td>
           </tr>

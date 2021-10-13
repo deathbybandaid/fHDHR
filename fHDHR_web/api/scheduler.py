@@ -1,5 +1,6 @@
-from flask import request, redirect
+from flask import request, redirect, Response
 import urllib.parse
+import json
 
 
 class Scheduler_API():
@@ -18,8 +19,28 @@ class Scheduler_API():
 
     def get(self, *args):
 
+        method = request.args.get('method', default="get", type=str)
         redirect_url = request.args.get('redirect', default=None, type=str)
-        method = "Test"
+
+        if method == "get":
+            jobsdicts = self.fhdhr.scheduler.list_jobs()
+
+            return_json = json.dumps(jobsdicts, indent=4)
+
+            return Response(status=200,
+                            response=return_json,
+                            mimetype='application/json')
+
+        elif method == "run":
+            job_tag = request.form.get('job_tag', None)
+
+            if not job_tag:
+                if redirect_url:
+                    return redirect("%s?retmessage=%s" % (redirect_url, urllib.parse.quote("%s Failed" % method)))
+                else:
+                    return "%s Falied" % method
+
+            self.fhdhr.scheduler.run_from_tag(job_tag)
 
         if redirect_url:
             if "?" in redirect_url:
@@ -27,7 +48,4 @@ class Scheduler_API():
             else:
                 return redirect("%s?retmessage=%s" % (redirect_url, urllib.parse.quote("%s Success" % method)))
         else:
-            if method == "scan":
-                return redirect('/lineup_status.json')
-            else:
-                return "%s Success" % method
+            return "%s Success" % method
