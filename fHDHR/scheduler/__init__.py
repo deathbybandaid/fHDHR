@@ -54,7 +54,7 @@ class Scheduler():
             if len(list(job_item.tags)):
                 if runtag in list(job_item.tags):
                     self.logger.debug("Job %s was triggered to run." % list(job_item.tags)[0])
-                    job_item.run
+                    job_item.run()
 
     def run(self):
         """
