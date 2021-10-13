@@ -1,8 +1,9 @@
 import functools
+import threading
 import schedule
 import time
 
-from fHDHR.tools import humanized_time
+#from fHDHR.tools import humanized_time
 
 
 class Scheduler():
@@ -23,16 +24,15 @@ class Scheduler():
         def wrapper(*args, **kwargs):
 
             job_name = func.__name__
-            start_timestamp = time.time()
-
+            # start_timestamp = time.time()
             self.logger.debug('Running job: %s' % job_name)
-
-            result = func(*args, **kwargs)
-
-            total_time = humanized_time(time.time() - start_timestamp)
-            self.logger.debug('Job %s completed in %s seconds' % (job_name, total_time))
-
-            return result
+            thread = threading.Thread(target=func, args=args, kwargs=kwargs)
+            thread.start()
+            return thread
+            # result = func(*args, **kwargs)
+            # total_time = humanized_time(time.time() - start_timestamp)
+            # self.logger.debug('Job %s completed in %s seconds' % (job_name, total_time))
+            # return result
 
         return wrapper
 
