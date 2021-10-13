@@ -40,6 +40,7 @@ class Scheduler_API():
 
         elif method == "run":
             job_tag = request.form.get('job_tag', None)
+            print(job_tag)
 
             if not job_tag:
                 if redirect_url:
