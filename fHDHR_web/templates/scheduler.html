@@ -25,6 +25,7 @@
               <form method="post" action="/api/scheduler?method=run&redirect=/scheduler">
                 <input type="hidden" name="job_tag" value="{{ jobdict["name"] }}">
                 <input type="submit" value="Run">
+              </form>
             </td>
           </tr>
         {% endfor %}
