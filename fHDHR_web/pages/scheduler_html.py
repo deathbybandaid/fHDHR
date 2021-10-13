@@ -4,7 +4,7 @@ from flask import request, render_template, session
 class Scheduler_HTML():
     endpoints = ["/scheduler", "/scheduler.html"]
     endpoint_name = "page_scheduler_html"
-    endpoint_access_level = 3
+    endpoint_access_level = 2
     pretty_name = "Scheduler"
 
     def __init__(self, fhdhr):
