@@ -5,7 +5,6 @@ class Scheduler_HTML():
     endpoints = ["/scheduler", "/scheduler.html"]
     endpoint_name = "page_scheduler_html"
     endpoint_access_level = 3
-    endpoint_category = "tool_pages"
     pretty_name = "Scheduler"
 
     def __init__(self, fhdhr):
