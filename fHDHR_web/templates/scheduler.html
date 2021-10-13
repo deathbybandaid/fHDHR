@@ -11,6 +11,7 @@
           <th>Name</th>
           <th>Last Run</th>
           <th>Next Run</th>
+          <th>Action</th>
         </tr>
       </thead>
 
@@ -20,6 +21,11 @@
             <td>{{ jobdict["name"] }}</td>
             <td>{{ jobdict["last_run"] }}</td>
             <td>{{ jobdict["next_run"] }}</td>
+            <td>
+              <form method="post" action="/api/scheduler?method=run&redirect=/scheduler">
+                <input type="hidden" name="config_section" value="{{ jobdict["name"] }}">
+                <input type="submit" value="Run">
+            </td>
           </tr>
         {% endfor %}
       </tbody>
