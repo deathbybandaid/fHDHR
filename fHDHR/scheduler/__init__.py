@@ -18,7 +18,7 @@ class Scheduler():
         self.schedule = schedule
 
     def register_job(self, function, interval_seconds, name, *args, **kwargs):
-        return self.every(interval_seconds).seconds.do(self.job_wrapper(function), *args, **kwargs).tag(name)
+        return self.schedule.every(interval_seconds).seconds.do(self.job_wrapper(function), *args, **kwargs).tag(name)
 
     # This decorator can be applied to any job function
     def job_wrapper(self, func):
