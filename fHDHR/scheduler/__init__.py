@@ -40,7 +40,7 @@ class Scheduler():
         jobsdict = []
         joblist = self.jobs
         for job_item in joblist:
-            jobsdict.append(job_item.tags.keys()[0])
+            jobsdict.append(list(job_item.tags)[0])
             print(job_item)
             print(job_item.tags)
         print(jobsdict)
