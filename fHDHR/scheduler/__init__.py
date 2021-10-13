@@ -17,13 +17,15 @@ class Scheduler():
 
         self.schedule = schedule
 
+    def register_job(self, function, interval_seconds, name, *args, **kwargs):
+        return self.every(interval_seconds).seconds.do(self.job_wrapper(function), *args, **kwargs).tag(name)
+
     # This decorator can be applied to any job function
     def job_wrapper(self, func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
 
             job_name = func.__name__
-            print(dir(func.__func__))
             start_timestamp = time.time()
 
             self.logger.debug('Running job: %s' % job_name)
