@@ -42,7 +42,7 @@ class Versions():
 
         self.api = fhdhr.api
         self.scheduler.every(2).to(3).hours.do(
-            self.scheduler.job_wrapper(self.sched_update))
+            self.scheduler.job_wrapper(self.sched_update)).tag("Versions Update")
 
     def sched_update(self):
         """
