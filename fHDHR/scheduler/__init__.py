@@ -41,6 +41,8 @@ class Scheduler():
         Run all scheduled tasks.
         """
 
+        print(self.schedule.get_jobs())
+
         while True:
             self.schedule.run_pending()
             time.sleep(1)

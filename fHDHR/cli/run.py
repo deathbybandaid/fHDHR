@@ -49,7 +49,6 @@ def run(settings, logger, db, script_dir, fHDHR_web, plugins, versions, web, sch
 
         # Perform some actions now that HTTP Server is running
         fhdhr.api.get("/api/startup_tasks")
-        print("|here")
 
         # Start SSDP Thread
         if fhdhr.device.ssdp.multicast_address and "ssdp" in list(fhdhr.threads.keys()):
@@ -62,8 +61,6 @@ def run(settings, logger, db, script_dir, fHDHR_web, plugins, versions, web, sch
 
         # Run Scheduled Jobs thread
         fhdhr.scheduler.run()
-
-        print(fhdhr.scheduler.get_jobs())
 
         logger.noob("fHDHR and fHDHR_web should now be running and accessible via the web interface at %s" % fhdhr.api.base)
         if settings.dict["logging"]["level"].upper() == "NOOB":
