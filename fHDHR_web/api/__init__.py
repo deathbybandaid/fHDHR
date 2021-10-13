@@ -15,6 +15,7 @@ from .tuners import Tuners
 from .debug import Debug_JSON
 from .plugins import Plugins
 from .ssdp import SSDP_API
+from .scheduler import Scheduler_API
 
 from .route_list import Route_List
 

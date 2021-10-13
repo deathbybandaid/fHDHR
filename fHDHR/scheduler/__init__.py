@@ -23,7 +23,6 @@ class Scheduler():
         def wrapper(*args, **kwargs):
 
             job_name = func.__name__
-            print(dir(func))
             start_timestamp = time.time()
 
             self.logger.debug('Running job: %s' % job_name)
@@ -61,8 +60,6 @@ class Scheduler():
         """
         Run all scheduled tasks.
         """
-
-        self.run_from_tag('ustvgo Channel Scan')
 
         while True:
             self.schedule.run_pending()
