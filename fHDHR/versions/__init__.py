@@ -80,8 +80,6 @@ class Versions():
             self.logger.error("Online Plugin Information Check Failed: %s" % err)
             github_org_json = None
 
-        github_org_json = None
-
         if github_org_json:
             online_plugin_names = [x["name"] for x in github_org_json if x["name"].startswith("fHDHR_plugin_")]
             for plugin_name in online_plugin_names:
