@@ -36,12 +36,20 @@ class Scheduler():
 
         return wrapper
 
+    def list_jobs(self):
+        joblist = self.jobs[0]
+        print(joblist)
+
+        """
+        [Every 4 to 5 hours do threadget(url='/api/channels?method=scan&source=ustvgo') (last run: [never], next run: 2021-10-13 17:40:18), Every 43200 seconds do threadget(url='/api/epg?method=update&source=ustvgo') (last run: [never], next run: 2021-10-14 01:40:18), Every 1800 seconds do threadget(url='/api/ssdp?method=alive') (last run: [never], next run: 2021-10-13 14:10:18), Every 2 to 3 hours do sched_update() (last run: [never], next run: 2021-10-13 15:40:19)]
+        """
+
     def run(self):
         """
         Run all scheduled tasks.
         """
 
-        print(self.jobs)
+        self.list_jobs()
 
         while True:
             self.schedule.run_pending()
