@@ -46,6 +46,7 @@ class Scheduler():
             time.sleep(1)
 
     def do(self, job_func, *args, **kwargs):
+        print("here")
         self.logger.noob("Registering Job:  Interval %s" % job_func.interval)
         return self.schedule.do(job_func, *args, **kwargs)
 
