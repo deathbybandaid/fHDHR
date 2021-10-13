@@ -30,7 +30,8 @@ class SSDPServer():
 
                 self.ssdp_doalive_url = "/api/ssdp?method=alive"
 
-                self.fhdhr.scheduler.every(self.max_age).seconds.do(self.fhdhr.api.threadget, url=self.ssdp_doalive_url)
+                self.fhdhr.scheduler.every(self.max_age).seconds.do(
+                    self.scheduler.job_wrapper(self.fhdhr.api.threadget, url=self.ssdp_doalive_url))
 
                 self.ssdp_method_selfadd()
 
