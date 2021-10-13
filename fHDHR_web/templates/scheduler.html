@@ -4,5 +4,28 @@
 
   <h4 style="text-align: center;">Scheduler</h4>
 
+  <div class="container">
+    <table class="table-scroll">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Last Run</th>
+          <th>Next Run</th>
+        </tr>
+      </thead>
+
+      <tbody class="body-half-screen">
+        {% for jobdict in jobsdicts %}
+          <tr>
+            <td>
+            <td>{{ jobdict[]"name"] }}</td>
+            <td>{{ jobdict[]"last_run"] }}</td>
+            <td>{{ jobdict[]"next_run"] }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
 
 {% endblock %}

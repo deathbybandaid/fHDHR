@@ -15,4 +15,6 @@ class Scheduler_HTML():
 
     def get(self, *args):
 
-        return render_template('scheduler.html', request=request, session=session, fhdhr=self.fhdhr)
+        jobsdicts = self.fhdhr.scheduler.list_jobs()
+
+        return render_template('scheduler.html', request=request, session=session, fhdhr=self.fhdhr, jobsdicts=jobsdicts)
