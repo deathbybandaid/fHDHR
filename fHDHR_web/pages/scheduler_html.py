@@ -25,7 +25,7 @@ class Scheduler_HTML():
             for run_item in ["last_run", "next_run"]:
                 if job_dict[run_item]:
                     ts = job_dict[run_item].timestamp()
-                    if job_dict[run_item] > nowtime:
+                    if ts > nowtime:
                         job_dict[run_item] = humanized_time(ts - nowtime)
                     else:
                         job_dict[run_item] = humanized_time(nowtime - ts)
