@@ -23,6 +23,7 @@ class Scheduler():
         def wrapper(*args, **kwargs):
 
             job_name = func.__name__
+            print(dir(func))
             start_timestamp = time.time()
 
             self.logger.debug('Running job "%s"' % job_name)
@@ -30,7 +31,7 @@ class Scheduler():
             result = func(*args, **kwargs)
 
             total_time = humanized_time(time.time() - start_timestamp)
-            self.logger.debug('Job "%s" completed in %d seconds' % (job_name, total_time))
+            self.logger.debug('Job "%s" completed in %s seconds' % (job_name, total_time))
 
             return result
 
