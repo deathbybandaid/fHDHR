@@ -22,15 +22,16 @@ class Scheduler_HTML():
         formatted_jobsdicts = []
         nowtime = time.time()
         for job_dict in jobsdicts:
+            job_dict_copy = job_dict.copy()
             for run_item in ["last_run", "next_run"]:
-                if job_dict[run_item]:
-                    ts = job_dict[run_item].timestamp()
-                    if ts > nowtime:
-                        job_dict[run_item] = humanized_time(ts - nowtime)
+                if job_dict_copy[run_item]:
+                    job_dict_copy[run_item] = job_dict_copy[run_item].timestamp()
+                    if job_dict_copy[run_item] > nowtime:
+                        job_dict_copy[run_item] = humanized_time(job_dict_copy[run_item] - nowtime)
                     else:
-                        job_dict[run_item] = humanized_time(nowtime - ts)
+                        job_dict_copy[run_item] = humanized_time(nowtime - job_dict_copy[run_item])
                 else:
-                    job_dict[run_item] = "Never"
-            formatted_jobsdicts.append(job_dict)
+                    job_dict_copy[run_item] = "Never"
+            formatted_jobsdicts.append(job_dict_copy)
 
         return render_template('scheduler.html', request=request, session=session, fhdhr=self.fhdhr, jobsdicts=formatted_jobsdicts)
