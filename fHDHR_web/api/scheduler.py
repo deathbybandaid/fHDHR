@@ -1,7 +1,6 @@
 from flask import request, redirect, Response
 import urllib.parse
 import json
-import datetime
 
 
 class Scheduler_API():
@@ -30,7 +29,7 @@ class Scheduler_API():
             for job_dict in jobsdicts:
                 for run_item in ["last_run", "next_run"]:
                     if job_dict[run_item]:
-                        job_dict[run_item] = datetime.datetime(job_dict[run_item]).total_seconds()
+                        job_dict[run_item] =job_dict[run_item].total_seconds()
                 formatted_jobsdicts.append(job_dict)
 
             return_json = json.dumps(formatted_jobsdicts, indent=4)
