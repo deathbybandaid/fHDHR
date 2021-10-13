@@ -49,6 +49,7 @@ def run(settings, logger, db, script_dir, fHDHR_web, plugins, versions, web, sch
 
         # Perform some actions now that HTTP Server is running
         fhdhr.api.get("/api/startup_tasks")
+        print("|here")
 
         # Start SSDP Thread
         if fhdhr.device.ssdp.multicast_address and "ssdp" in list(fhdhr.threads.keys()):
