@@ -37,23 +37,31 @@ class Scheduler():
         return wrapper
 
     def list_jobs(self):
-        jobsdict = []
+        jobsdicts = []
         joblist = self.jobs
         for job_item in joblist:
             if len(list(job_item.tags)):
-                jobsdict.append({
+                jobsdicts.append({
                     "name": list(job_item.tags)[0],
                     "last_run": job_item.last_run,
                     "next_run": job_item.next_run
                     })
-        print(jobsdict)
+        return jobsdicts
+
+    def run_from_tag(self, runtag):
+        joblist = self.jobs
+        for job_item in joblist:
+            if len(list(job_item.tags)):
+                if runtag in list(job_item.tags):
+                    self.logger.debug("Job %s was triggered to run." % list(job_item.tags)[0])
+                    job_item.run
 
     def run(self):
         """
         Run all scheduled tasks.
         """
 
-        self.list_jobs()
+        self.run_from_tag('ustvgo Channel Scan')
 
         while True:
             self.schedule.run_pending()
