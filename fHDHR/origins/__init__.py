@@ -94,4 +94,4 @@ class Origins():
                     # Set Origin attributes if missing
                     if not hasattr(self.origins_dict[method], default_setting):
                         self.fhdhr.logger.debug("Setting %s %s attribute to: %s" % (method, default_setting, self.fhdhr.config.dict[method][default_setting]))
-                        setattr(self.origins_dict[method], default_setting, property(lambda self: self.fhdhr.config.dict[method][default_setting]
+                        setattr(self.origins_dict[method], default_setting, property(lambda self: self.fhdhr.config.dict[method][default_setting]))
