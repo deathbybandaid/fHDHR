@@ -96,5 +96,5 @@ class Origins():
                         self.fhdhr.logger.debug("Setting %s %s attribute to: %s" % (method, default_setting, self.fhdhr.config.dict[method][default_setting]))
 
                         class Holder:
-                            p = property(lambda self: default_setting, self.fhdhr.config.dict[method][default_setting])
+                            p = property(lambda self: self.fhdhr.config.dict[method][default_setting])
                         setattr(self.origins_dict[method], default_setting, Holder().p)

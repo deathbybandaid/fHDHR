@@ -29,7 +29,6 @@ class Channels():
 
         for origin in list(self.list.keys()):
             chanscan_interval = self.origins.origins_dict[origin].chanscan_interval
-            print(chanscan_interval)
             if chanscan_interval:
                 self.fhdhr.scheduler.every(chanscan_interval).seconds.do(
                     self.fhdhr.scheduler.job_wrapper(self.get_channels), origin=origin, forceupdate=True).tag("%s Channel Scan" % origin)
