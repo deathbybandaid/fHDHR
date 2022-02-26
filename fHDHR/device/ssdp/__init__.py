@@ -137,10 +137,8 @@ class SSDPServer():
 
         notify_list = []
         for ssdp_handler in list(self.ssdp_handling.keys()):
-            print([x for x in dir(self.ssdp_handling[ssdp_handler]) if not x.startswith("__")])
             if self.ssdp_handling[ssdp_handler].enabled and hasattr(self.ssdp_handling[ssdp_handler], 'notify'):
                 notify_data = self.ssdp_handling[ssdp_handler].notify
-                print(notify_data)
                 if isinstance(notify_data, list):
                     notify_list.extend(notify_data)
                 else:
