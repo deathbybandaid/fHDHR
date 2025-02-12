@@ -55,7 +55,6 @@ class EPG_Handlers():
         """
         Import EPG_Handlers.
         """
-        print("--------------------------------------------------")
 
         self.fhdhr.logger.info("Detecting and Opening any found epg_handler plugins.")
         for plugin_name in self.fhdhr.plugins.search_by_type("alt_epg"):
@@ -64,5 +63,3 @@ class EPG_Handlers():
             method = plugin.name.lower()
             self.fhdhr.logger.info("Found EPG_Handler: %s" % method)
             self.epg_handlers_dict[method] = EPG_Handler(self.fhdhr, plugin)
-
-        print("--------------------------------------------------")

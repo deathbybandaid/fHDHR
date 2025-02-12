@@ -15,11 +15,12 @@ class EPG_Handler():
     A wrapper for epg method to maintain consistancy.
     """
 
-    def __init__(self, fhdhr, plugin, channels):
+    def __init__(self, fhdhr, plugin, origins):
         self.fhdhr = fhdhr
         self.plugin = plugin
         self.plugin_utils = self.plugin.plugin_utils
-        self.channels = channels
+        self.origins = origins
+        self.channels = origins.channels
 
         self._epgdict = {}
 

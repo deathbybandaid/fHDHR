@@ -7,3 +7,5 @@ class EPG_Handler():
 
     def __init__(self, fhdhr, plugin):
         self.fhdhr = fhdhr
+
+        self.plugin = plugin
