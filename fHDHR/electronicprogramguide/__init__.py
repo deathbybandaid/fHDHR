@@ -26,6 +26,6 @@ class EPG_Handlers():
             plugin = self.fhdhr.plugins.plugins[plugin_name]
             method = plugin.name.lower()
             self.fhdhr.logger.info("Found EPG_Handler: %s" % method)
-            self.epg_handlers_dict[method] = EPG_Handler(self.fhdhr, plugin, self.id_system)
+            self.epg_handlers_dict[method] = EPG_Handler(self.fhdhr, plugin)
 
         print("--------------------------------------------------")
