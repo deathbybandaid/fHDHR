@@ -3,7 +3,7 @@
 from .device import fHDHR_Device
 from .api import fHDHR_API_URLs
 from .origins import Origins
-from .electronicprogramguide import ElectronicProgramGuide
+from .electronicprogramguide import EPG_Handlers
 
 from .streammanager import StreamManager
 
@@ -63,7 +63,7 @@ class fHDHR_OBJ():
 
         self.fhdhr.origins = Origins(self.fhdhr)
 
-        self.fhdhr.electronicprogramguide = ElectronicProgramGuide(self.fhdhr)
+        self.fhdhr.epg = EPG_Handlers(self.fhdhr)
 
         self.device = fHDHR_Device(self.fhdhr, self.fhdhr.origins)
 
