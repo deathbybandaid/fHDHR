@@ -14,7 +14,7 @@ class EPG_Handlers():
 
         self.selfadd_epg_handlers()
 
-        print(list_epg_handlers)
+        print(self.list_epg_handlers)
 
     @property
     def list_epg_handlers(self):
