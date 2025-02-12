@@ -20,7 +20,7 @@ class EPG_Handler():
         self.plugin = plugin
         self.plugin_utils = self.plugin.plugin_utils
         self.origins = origins
-        self.channels = origins.channels
+        self.channels = origins[0].channels
 
         print(self.channels.list)
 
