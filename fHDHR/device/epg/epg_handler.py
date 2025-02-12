@@ -22,6 +22,8 @@ class EPG_Handler():
         self.origins = origins
         self.channels = origins.channels
 
+        print(self.channels.list)
+
         self._epgdict = {}
 
         # Attempt to setup EPG Plugin
