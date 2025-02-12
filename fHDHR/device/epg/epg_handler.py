@@ -22,7 +22,7 @@ class EPG_Handler():
         self.origins = origins
         self.channels = origins.channels
 
-        print(self.channels.get_channel_list())
+        print(self.channels.get_channel_list("nextpvr"))
 
         self._epgdict = {}
 
